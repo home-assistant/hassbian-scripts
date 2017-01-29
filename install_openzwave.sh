@@ -20,7 +20,7 @@ deactivate
 EOF
 
 echo "Changing to pi user"
-sudo -u homeassistant -H /bin/bash << EOF
+sudo -u pi -H /bin/bash << EOF
 
 echo "Downloading HASSbian helper scripts"
 cd /home/pi
