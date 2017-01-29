@@ -4,7 +4,7 @@ echo "Home Assistant install script for Hassbian"
 echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
 
 echo "Changing to homeassistant user"
-sudo -u homeassistant -H /bin/bash <<EOF
+sudo -u homeassistant -H /bin/bash << EOF
 
 echo "Creating Home Assistant venv"
 python3 -m venv /srv/homeassistant
