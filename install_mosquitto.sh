@@ -36,7 +36,7 @@ apt-get install -y mosquitto mosquitto-clients
 echo "Writing default configuration"
 cd /etc/mosquitto
 mv mosquitto.conf mosquitto.conf.backup
-cp /home/pi/scripts/files/mosquitto.conf /etc/mosquitto/mosquitto.conf
+cp /home/pi/hassbian-scripts/files/mosquitto.conf /etc/mosquitto/mosquitto.conf
 chown mosquitto:mosquitto mosquitto.conf
 
 echo "Initializing password file"
