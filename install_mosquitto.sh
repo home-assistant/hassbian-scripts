@@ -8,8 +8,7 @@ echo "Copyright(c) 2016 Dale Higgs <https://gitter.im/dale3h>"
 echo
 
 echo "Adding mosquitto user"
-adduser subversion --system --group
-
+adduser mosquitto --system --group
 
 echo "Creating pid file"
 touch /var/run/mosquitto.pid
