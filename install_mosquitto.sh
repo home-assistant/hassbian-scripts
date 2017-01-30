@@ -1,10 +1,8 @@
 #!/bin/bash
 
-# Install by running:
-# wget -Nnv https://raw.githubusercontent.com/dale3h/homeassistant-config/master/wizard/mosquitto-wizard.sh && sudo bash mosquitto-wizard.sh
-
 echo
 echo "Mosquitto Installer for Hassbian"
+echo "Modified by Landrash for use with Hassbian.
 echo "Copyright(c) 2016 Dale Higgs <https://gitter.im/dale3h>"
 echo
 
