@@ -1,44 +1,86 @@
-#!/bin/sh
+#!/bin/bash
 
-echo "Home Assistant install script for Hassbian"
-echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
+echo 
+echo "Open Z-Wave Installer for Hassbian"
+echo "Copyright(c) 2016 Dale Higgs <https://gitter.im/dale3h>"
+echo 
+
+echo "Running apt-get preparation"
+apt-get update
+apt-get upgrade -y
+apt-get install -y make python3-dev libudev-dev python3-sphinx python3-setuptools libgnutlsxx28 libgnutls28-dev libssl-dev
 
 echo "Changing to homeassistant user"
-sudo -u homeassistant -H /bin/bash << EOF
+sudo -u homeassistant -H /bin/bash <<EOF
 
-echo "Creating Home Assistant venv"
-python3 -m venv /srv/homeassistant
-
-echo "Changing to Home Assistant venv"
+echo "Activating virtualenv"
 source /srv/homeassistant/bin/activate
 
-echo "Install latest version of Home Assistant"
-pip3 install homeassistant
+echo "Installing latest version of cython"
+### Currently locked to this version since build fails for later versions.
+pip3 install --upgrade cython==0.24.1
+
+echo "Creating source directory"
+mkdir -p /srv/homeassistant/src
+chown -R homeassistant:homeassistant /srv/homeassistant/src
+
+echo "Cloning python-openzwave"
+cd /srv/homeassistant/src
+git clone  https://github.com/OpenZWave/python-openzwave.git
+
+echo "Building python-openzwave"
+chown homeassistant:homeassistant python-openzwave
+cd python-openzwave
+git checkout python3
+make build
+make install
 
 echo "Deactivating virtualenv"
 deactivate
 EOF
 
-echo "Changing to pi user"
-sudo -u pi -H /bin/bash << EOF
+echo "Creating libmicrohttpd directory"
+cd /srv/homeassistant/src
+mkdir libmicrohttpd
+chown homeassistant:homeassistant libmicrohttpd
+cd /srv/homeassistant/src/libmicrohttpd
 
-echo "Downloading HASSbian helper scripts"
-cd /home/pi
-git clone https://github.com/Landrash/hassbian-scripts.git
-EOF
+echo "Downloading libmicrohttpd-0.9.19"
+wget ftp://ftp.gnu.org/gnu/libmicrohttpd/libmicrohttpd-0.9.19.tar.gz
+chown homeassistant:homeassistant libmicrohttpd-0.9.19.tar.gz
+tar zxvf libmicrohttpd-0.9.19.tar.gz
+chown homeassistant:homeassistant libmicrohttpd-0.9.19
 
-echo "Enable Home Assistant service"
-systemctl enable home-assistant@homeassistant.service
-sync
+echo "Building libmicrohttpd-0.9.19"
+cd libmicrohttpd-0.9.19
+./configure
+make
+make install
 
-echo "Disable and remove Home Assitant install"
-systemctl disable install_homeassistant
-rm /etc/systemd/system/install_homeassistant.service
-rm /usr/local/bin/install_homeassistant.sh
-systemctl daemon-reload
+echo "Cloning open-zwave-control-panel"
+cd /srv/homeassistant/src
+git clone https://github.com/OpenZWave/open-zwave-control-panel.git
+chown -R homeassistant:homeassistant open-zwave-control-panel
 
-echo "Start Home Assistant"
-systemctl start home-assistant@homeassistant.service
+echo "Building open-zwave-control-panel"
+cd open-zwave-control-panel
+rm Makefile
+wget https://raw.githubusercontent.com/home-assistant/fabric-home-assistant/master/Makefile
+chown homeassistant:homeassistant Makefile
+make
 
-echo "Installation done. To continue have a look at "
-echo "If this script failed then this Raspberry Pi most likely did not have a fully functioning internet connection."
+echo "Linking ozwcp config directory"
+ln -sd /srv/homeassistant/lib/python3.*/site-packages/libopenzwave-0.*-linux*.egg/config
+chown -R homeassistant:homeassistant /srv/homeassistant/src
+
+echo "Linking Home Assistant OpenZWave config directory"
+cd /home/homeassistant/.homeassistant
+sudo -u homeassistant ln -sd /srv/homeassistant/lib/python3.*/site-packages/libopenzwave-*-linux*.egg/config
+chown -R homeassistant:homeassistant /home/homeassistant/.homeassistant
+
+echo
+echo "Installation done!"
+echo
+echo "Changes to suit Hassbian has been made by @Landrash. Contact him on gitter.im if this script breaks"
+echo "Original script by @Dal3h on gitter.im"
+echo 
