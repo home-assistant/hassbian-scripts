@@ -20,7 +20,7 @@ deactivate
 
 echo "Downloading HASSbian helper scripts"
 cd /home/pi
-git clone https://github.com/Landrash/hassbian-scripts.git
+git clone https://github.com/home-assistant/hassbian-scripts.git
 
 EOF
 
