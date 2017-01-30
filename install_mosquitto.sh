@@ -1,8 +1,9 @@
-#!/bin/bash
+k#!/bin/bash
 
 # Install by running:
 # wget -Nnv https://raw.githubusercontent.com/dale3h/homeassistant-config/master/wizard/mosquitto-wizard.sh && sudo bash mosquitto-wizard.sh
 
+echo
 echo "Mosquitto Installer for Hassbian"
 echo "Copyright(c) 2016 Dale Higgs <https://gitter.im/dale3h>"
 echo
@@ -19,9 +20,10 @@ mkdir -p /var/lib/mosquitto
 chown mosquitto:mosquitto /var/lib/mosquitto
 
 echo "Installing repository key"
-cd /srv/hass/src
+cd /srv/homeassistant/src
 wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
 apt-key add mosquitto-repo.gpg.key
+rm mosquitto-repo.gpg.key
 
 echo "Adding repository"
 cd /etc/apt/sources.list.d
@@ -39,9 +41,9 @@ cp /home/pi/hassbian-scripts/files/mosquitto.conf /etc/mosquitto/mosquitto.conf
 chown mosquitto:mosquitto mosquitto.conf
 
 echo "Initializing password file"
-touch passwd
-chown mosquitto:mosquitto passwd
-chmod 0600 passwd
+touch pwfile
+chown mosquitto:mosquitto pwfile
+chmod 0600 pwfile
 
 echo
 echo "Please take a moment to setup your first MQTT user"
@@ -61,7 +63,7 @@ if [ ! "$mqtt_password" ]; then
 fi
 
 echo "Creating password entry for user $mqtt_username"
-mosquitto_passwd -b passwd "$mqtt_username" "$mqtt_password"
+mosquitto_passwd -b pwfile "$mqtt_username" "$mqtt_password"
 
 echo "Restarting Mosquitto service"
 systemctl restart mosquitto.service
