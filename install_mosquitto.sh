@@ -1,4 +1,4 @@
-k#!/bin/bash
+#!/bin/bash
 
 # Install by running:
 # wget -Nnv https://raw.githubusercontent.com/dale3h/homeassistant-config/master/wizard/mosquitto-wizard.sh && sudo bash mosquitto-wizard.sh
