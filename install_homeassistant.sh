@@ -17,11 +17,14 @@ pip3 install homeassistant
 
 echo "Deactivating virtualenv"
 deactivate
+EOF
+
+echo "Changing to pi user"
+sudo -u pi -H /bin/bash << EOF
 
 echo "Downloading HASSbian helper scripts"
 cd /home/pi
 git clone https://github.com/home-assistant/hassbian-scripts.git
-
 EOF
 
 echo "Enable Home Assistant service"
@@ -37,5 +40,6 @@ systemctl daemon-reload
 echo "Start Home Assistant"
 systemctl start home-assistant@homeassistant.service
 
-echo "Installation done. To continue have a look at "
+echo "Installation done. To continue have a look at https://home-assistant.io/getting-started/configuration"
 echo "If this script failed then this Raspberry Pi most likely did not have a fully functioning internet connection."
+
