@@ -1,7 +1,9 @@
 #!/bin/bash
 
-echo 
+
+echo
 echo "Open Z-Wave Installer for Hassbian"
+echo "Modified by Landrash for use with Hassbian."
 echo "Copyright(c) 2016 Dale Higgs <https://gitter.im/dale3h>"
 echo 
 
@@ -81,6 +83,8 @@ chown -R homeassistant:homeassistant /home/homeassistant/.homeassistant
 echo
 echo "Installation done!"
 echo
-echo "Changes to suit Hassbian has been made by @Landrash. Contact him on gitter.im if this script breaks"
-echo "Original script by @Dal3h on gitter.im"
-echo 
+echo "If you have issues with this script, please contact @Landrash on gitter.im"
+echo "Original script by @dale3h on gitter.im"
+echo
+
+

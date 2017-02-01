@@ -2,7 +2,7 @@
 
 echo
 echo "Mosquitto Installer for Hassbian"
-echo "Modified by Landrash for use with Hassbian.
+echo "Modified by Landrash for use with Hassbian."
 echo "Copyright(c) 2016 Dale Higgs <https://gitter.im/dale3h>"
 echo
 
