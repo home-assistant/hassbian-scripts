@@ -8,7 +8,8 @@ To update the scripts after install, run the following command from inside the s
 ``` shell
 git pull
 ```
-
+  
+  
 ## The included scripts
 The following scripts are currently included.  You can view the documentation below for usage and instructions.
 
@@ -27,12 +28,18 @@ sudo ./hassbian-scripts/install_mosquitto.sh
 After this script has been run, add MQTT to your `configuration.yaml` file as usual.
 
 This script was originaly contributed by [@dale3h](https://github.com/dale3h) and has been modified by [@Landrash](https://github.com/Landrash).
+<<<<<<< a14584d64c5981ab86212cddc7716ee7ddc5ca5e
 
 ### Install Mosquitto *(install_mosquitto.sh)*
 <<<<<<< ab59f500201d7f1c342adbd08df123670871a0f2
 This script installs the MQTT Mosquitto server. Repository from the Mosquitto project is added to package system and the offical packages for Debain are installed.
 Additionally, this script helps you create your first MQTT user that can be used with Home Assistant.
 =======
+=======
+  
+  
+### Install CEC support *(install_libcec.sh)*
+>>>>>>> Update README.md
 This script installs libcec and it dependencies.Futher more this script symlinks the system wide packages to the Home Assistant venv so they can be used with Home Assistant.
 >>>>>>> Update README.md
 
@@ -44,6 +51,7 @@ After this script has been run, add CEC to your `configuration.yaml` file as usu
 
 This script was originaly contributed by [@Landrash](https://github.com/Landrash).
 
+
 ### Install OpenZWave *(install_openzwave.sh)*
 This script compiles OpenZWave, installs OZWCP(open-zwave-control-panel) and add symlinks the library and the OpenZWave configuration directory for easy usage.
 
@@ -54,10 +62,12 @@ sudo ./hassbian-scripts/install_openzwave.sh
 After this script has been run, add ZWave to your `configuration.yaml` file as usual.
 
 This script was originaly contributed by [@dale3h](https://github.com/dale3h) and has been modified by [@Landrash](https://github.com/Landrash).
-
+  
+  
 ### Install Home Assistant *(install_homeassistant.sh)*
 This is a copy of the installation script run during first boot of your Raspberry Pi.
 This script is downloaded when the HASSbian image is built and is shipped on the Hassbian image.
 Usually this script is not run after installation but could be used with some modifications to reinstall Home Assistant.
 
 This script was originaly contributed by [@Landrash](https://github.com/landrash).
+  
