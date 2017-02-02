@@ -6,13 +6,13 @@ echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
 echo
 
 if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run as root or use \"sudo ${0} ${*}\"" 1>&2
+   echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
    exit 1
 fi
 
 echo "Running apt-get preparation"
 apt-get update
-apt-get install -y install cmake libudev-dev libxrandr-dev python-dev swig
+apt-get install -y cmake libudev-dev libxrandr-dev python-dev swig
 
 echo "Changing to homeassistant user"
 sudo -u homeassistant -H /bin/bash <<EOF
@@ -23,7 +23,7 @@ chown -R homeassistant:homeassistant /srv/homeassistant/src
 
 echo "Cloning Pulse-Eight platform"
 cd /srv/homeassistant/src
-git clone git clone https://github.com/Pulse-Eight/platform.git
+git clone https://github.com/Pulse-Eight/platform.git
 chown homeassistant:homeassistant platform
 
 echo "Building Pulse-Eight platform"
@@ -34,6 +34,7 @@ make
 EOF
 
 echo "Installing Pulse-Eight platform"
+cd /srv/homeassistant/src/platform/build
 sudo make install
 
 echo "Changing back to homeassistant user"
@@ -52,10 +53,18 @@ make -j4
 EOF
 
 echo "Installing Pulse-Eight libcec"
+cd /srv/homeassistant/src/libcec/build
 sudo make install
 sudo ldconfig
 
+echo "Linking libcec to venv site packages"
+sudo -u homeassistant ln -s /usr/local/lib/python3.*/site-packages/cec /srv/homeassistant/lib/python3.*/site-packages/
+
+echo
 echo "Installation done."
 echo
+echo "If you have issues with this script, please contact @Landrash on gitter.im"
+echo
 echo "To continue have a look at https://home-assistant.io/components/hdmi_cec/"
+echo "It's recomended that you restart your Pi before continuing with testing libcec."
 echo
