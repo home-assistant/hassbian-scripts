@@ -1,11 +1,15 @@
 #!/bin/bash
 
-
 echo
 echo "Open Z-Wave Installer for Hassbian"
 echo "Modified by Landrash for use with Hassbian."
 echo "Copyright(c) 2016 Dale Higgs <https://gitter.im/dale3h>"
 echo 
+
+if [ "$(id -u)" != "0" ]; then
+echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
+exit 1
+fi
 
 echo "Running apt-get preparation"
 apt-get update
