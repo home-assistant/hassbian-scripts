@@ -1,7 +1,6 @@
 #!/bin/bash
 
 SUITE_INSTALL_DIR=/home/pi/hassbian-scripts
-SUITE_INSTALL_DIR=/home/dave/Projects/hassbian/hassbian-scripts
 
 function usage {
 	echo $0: usage:
