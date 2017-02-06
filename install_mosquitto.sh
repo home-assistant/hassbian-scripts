@@ -93,3 +93,5 @@ echo "If you have issues with this script, please contact @Landrash on gitter.im
 echo "Original script by @dale3h on gitter.im"
 echo
 }
+
+[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config install instead"

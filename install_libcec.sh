@@ -80,3 +80,5 @@ echo "To continue have a look at https://home-assistant.io/components/hdmi_cec/"
 echo "It's recomended that you restart your Pi before continuing with testing libcec."
 echo
 }
+
+[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config install instead"
