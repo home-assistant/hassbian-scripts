@@ -20,6 +20,7 @@ function show-suite-info {
 
 function show-suites {
 	echo List of suites available for installation: 
+    # inhibit the homeassistant suite from being displayed, to discourage its (re-)installation.
 	suites=$(ls $SUITE_INSTALL_DIR/install_*.sh | grep -Po "install_\K(.*)\.sh$" | awk -F. '!/homeassistant/ {print $1}')
 
 	for i in $suites
