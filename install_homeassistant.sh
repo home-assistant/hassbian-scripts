@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 function homeassistant-show-short-info {
-	echo "Home Assistant install script for Hassbian"
+    echo "Home Assistant install script for Hassbian"
 }
 
 function homeassistant-show-long-info {
-	echo "Installs the libcec package for controlling CEC devices from this Pi"
+    echo "Installs the libcec package for controlling CEC devices from this Pi"
 }
 
 function homeassistant-show-copyright-info {
@@ -66,4 +66,5 @@ echo "If you still have issues with this script, please contact @Landrash on git
 echo
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config install instead"
+# Make this script function as it always has if run standalone, rather than issue a warning and do nothing.
+[[ $_ == $0 ]] && homeassistant-install-package
