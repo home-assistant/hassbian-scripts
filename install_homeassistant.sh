@@ -4,7 +4,7 @@ function homeassistant-show-short-info {
 }
 
 function homeassistant-show-long-info {
-    echo "Installs the libcec package for controlling CEC devices from this Pi"
+    echo "Installs the base homeassistant package onto this system."
 }
 
 function homeassistant-show-copyright-info {
