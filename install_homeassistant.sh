@@ -1,8 +1,19 @@
-#!/bin/sh
-echo
-echo "Home Assistant install script for Hassbian"
-echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
-echo
+#!/bin/bash
+function homeassistant-show-short-info {
+    echo "Home Assistant install script for Hassbian"
+}
+
+function homeassistant-show-long-info {
+    echo "Installs the base homeassistant package onto this system."
+}
+
+function homeassistant-show-copyright-info {
+    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
+}
+
+function homeassistant-install-package {
+homeassistant-show-short-info
+homeassistant-show-copyright-info
 
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
@@ -53,5 +64,7 @@ echo
 echo "If this script failed then this Raspberry Pi most likely did not have a fully functioning internet connection."
 echo "If you still have issues with this script, please contact @Landrash on gitter.im"
 echo
+}
 
-
+# Make this script function as it always has if run standalone, rather than issue a warning and do nothing.
+[[ $_ == $0 ]] && homeassistant-install-package

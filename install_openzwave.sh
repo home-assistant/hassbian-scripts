@@ -1,9 +1,23 @@
 #!/bin/bash
 
+function openzwave-show-short-info {
+    echo "Open Z-Wave Installer for Hassbian"
+}
+
+function openzwave-show-long-info {
+	echo "Installs the Open Z-wave package for setting up your zwave network"
+}
+
+function openzwave-show-copyright-info {
+    echo "Copyright(c) 2016 Dale Higgs <https://gitter.im/dale3h>"
+    echo "Modified by Landrash for use with Hassbian."
+}
+
+function openzwave-install-package {
+openzwave-show-short-info
+openzwave-show-copyright-info
+
 echo
-echo "Open Z-Wave Installer for Hassbian"
-echo "Modified by Landrash for use with Hassbian."
-echo "Copyright(c) 2016 Dale Higgs <https://gitter.im/dale3h>"
 echo 
 
 if [ "$(id -u)" != "0" ]; then
@@ -90,5 +104,6 @@ echo
 echo "If you have issues with this script, please contact @Landrash on gitter.im"
 echo "Original script by @dale3h on gitter.im"
 echo
+}
 
-
+[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config install instead"

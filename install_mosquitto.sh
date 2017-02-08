@@ -1,10 +1,21 @@
 #!/bin/bash
 
-echo
-echo "Mosquitto Installer for Hassbian"
-echo "Modified by Landrash for use with Hassbian."
-echo "Copyright(c) 2016 Dale Higgs <https://gitter.im/dale3h>"
-echo
+function mosquitto-show-short-info {
+    echo "Mosquitto Installer for Hassbian"
+}
+
+function mosquitto-show-long-info {
+	echo "Installs the Mosquitto package for setting up a local MQTT server"
+}
+
+function mosquitto-show-copyright-info {
+    echo "Copyright(c) 2016 Dale Higgs <https://gitter.im/dale3h>"
+    echo "Modified by Landrash for use with Hassbian."
+}
+
+function mosquitto-install-package {
+mosquitto-show-short-info
+mosquitto-show-copyright-info
 
 if [ "$(id -u)" != "0" ]; then
 echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
@@ -81,3 +92,6 @@ echo
 echo "If you have issues with this script, please contact @Landrash on gitter.im"
 echo "Original script by @dale3h on gitter.im"
 echo
+}
+
+[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config install instead"

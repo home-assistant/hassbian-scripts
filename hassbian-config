@@ -1,0 +1,87 @@
+#!/bin/bash
+
+SUITE_INSTALL_DIR=/home/pi/hassbian-scripts
+
+function usage {
+   echo $0: usage:
+   echo
+   echo $0 \<command\> \<suite\>
+   echo where \<command\> is one of:
+   echo     install  - installs a software suite
+   echo     show     - shows software suites available
+   echo and \<suite\> is the name of a software component to operate on.
+   echo
+}
+
+function show-suite-info {
+   source $SUITE_INSTALL_DIR/install_$1.sh
+   $1-show-long-info
+}
+
+function show-suites {
+   echo List of suites available for installation:
+   # inhibit the homeassistant suite from being displayed, to discourage its (re-)installation.
+   suites=$(ls $SUITE_INSTALL_DIR/install_*.sh | grep -Po "install_\K(.*)\.sh$" | awk -F. '!/homeassistant/ {print $1}')
+
+   for i in $suites
+   do
+      echo $i: $(show-suite-info $i)
+   done
+}
+
+function show-suite-long-info {
+   # Shows long info for the suite.
+   source $SUITE_INSTALL_DIR/install_$1.sh
+   $1-show-short-info
+   $1-show-long-info
+   $1-show-copyright-info
+}
+
+function install-suite {
+   # Having got here, the installer script exists; source it, then run the installer function.
+   source $SUITE_INSTALL_DIR/install_$1.sh
+   $1-install-package
+}
+
+function verify-suite {
+   # Check that the suite specified actually exists
+   if [ ! -f "$SUITE_INSTALL_DIR/install_$1.sh" ]
+   then
+      echo "Cannot find suite $1."
+      echo "Try running the show command to see all available suites"
+      exit
+   fi
+}
+
+if [ $# -lt 1 ]
+then
+   usage
+   exit
+fi
+COMMAND=$1
+SUITE=$2
+
+
+case $COMMAND in
+"show")
+   if [ "$SUITE" != "" ]
+   then
+      verify-suite $SUITE
+      show-suite-long-info $SUITE
+   else
+      show-suites
+   fi
+   ;;
+"install")
+   verify-suite $SUITE
+   install-suite $SUITE
+   exit
+   ;;
+"info")
+   verify-suite $SUITE
+    info-suite $SUITE
+    ;;
+*)
+   usage
+   ;;
+esac
