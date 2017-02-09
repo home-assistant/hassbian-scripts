@@ -1,16 +1,16 @@
 #!/bin/bash
 
 function samba-show-short-info {
-	echo "Samba install script for Hassbian"
+    echo "Samba install script for Hassbian"
 }
 
 function samba-show-long-info {
-	echo "Installs the samba package for sharing the hassbian configuration files"
-	echo "over the Pi's network."
+    echo "Installs the samba package for sharing the hassbian configuration files"
+    echo "over the Pi's network."
 }
 
 function samba-show-copyright-info {
-	echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
+    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
 }
 
 function samba-install-package {
@@ -19,7 +19,7 @@ samba-show-copyright-info
 
 if [ "$(id -u)" != "0" ]; then
    echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-   exit 1
+   return 1
 fi
 
 echo "Running apt-get preparation"
@@ -61,6 +61,7 @@ echo "If you have issues with this script, please contact @Landrash on gitter.im
 echo
 echo "Configuration is now available as a Samba share at \\\\$ip_address\homeassistant"
 echo
+return 0
 }
 
 [[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config install instead"

@@ -64,6 +64,7 @@ echo
 echo "If this script failed then this Raspberry Pi most likely did not have a fully functioning internet connection."
 echo "If you still have issues with this script, please contact @Landrash on gitter.im"
 echo
+return 0
 }
 
 # Make this script function as it always has if run standalone, rather than issue a warning and do nothing.

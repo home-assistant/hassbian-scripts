@@ -5,7 +5,7 @@ function mosquitto-show-short-info {
 }
 
 function mosquitto-show-long-info {
-	echo "Installs the Mosquitto package for setting up a local MQTT server"
+    echo "Installs the Mosquitto package for setting up a local MQTT server"
 }
 
 function mosquitto-show-copyright-info {
@@ -19,7 +19,7 @@ mosquitto-show-copyright-info
 
 if [ "$(id -u)" != "0" ]; then
 echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-exit 1
+return 1
 fi
 
 echo "Adding mosquitto user"
@@ -92,6 +92,7 @@ echo
 echo "If you have issues with this script, please contact @Landrash on gitter.im"
 echo "Original script by @dale3h on gitter.im"
 echo
+return 0
 }
 
 [[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config install instead"
