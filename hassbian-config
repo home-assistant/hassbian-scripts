@@ -4,11 +4,6 @@ SUITE_INSTALL_DIR=/home/pi/hassbian-scripts
 SUITE_INSTALL_DB=/etc/hassbian/suite-states
 SUITE_INSTALL_DB_LOCK=/etc/hassbian/suite-states.lock
 
-# @kxtcd950 - debug entries
-SUITE_INSTALL_DIR=/home/dave/Projects/hassbian/hassbian-scripts
-SUITE_INSTALL_DB=/home/dave/Projects/hassbian/suite-states
-SUITE_INSTALL_DB_LOCK=/home/dave/Projects/hassbian/suite-states.lock
-
 function usage {
    echo $0: usage:
    echo
@@ -154,7 +149,7 @@ function get-suite-state-info {
       then
          suiteinfo=$(show-suite-info $suite)
       else
-         suiteinfo="Unavailable information for suite \"$suite\""
+         suiteinfo="Unavailable information for suite '$suite'"
       fi
       # No good way to do this, so quick-n-dirty:
       json=" { \"$suite\" : [ $(make-json-entity "state" $suitestate), $(make-json-entity "description" "$suiteinfo") ] } "
