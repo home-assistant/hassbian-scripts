@@ -109,12 +109,13 @@ function install-suite {
 
 function verify-suite {
    # Check that the suite specified actually exists
-   if [ ! -f "$SUITE_INSTALL_DIR/install_$1.sh" ]
+   if [ -f "$SUITE_INSTALL_DIR/install_$1.sh" ]
    then
-      return 0
+      retval=0 # beware - 0 is true in bash.
    else
-      return 1
+      retval=1
    fi
+   return $retval
 }
 
 function make-json-entity {
@@ -147,8 +148,10 @@ function get-suite-state-info {
       suitestate=$(get-suite-state $suite)
       if verify-suite $suite
       then
+         >&2 echo "Using show-suite-info"
          suiteinfo=$(show-suite-info $suite)
       else
+         >&2 echo "Using string"
          suiteinfo="Unavailable information for suite '$suite'"
       fi
       # No good way to do this, so quick-n-dirty:
