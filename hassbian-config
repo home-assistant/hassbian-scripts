@@ -4,6 +4,11 @@ SUITE_INSTALL_DIR=/home/pi/hassbian-scripts
 SUITE_INSTALL_DB=/etc/hassbian/suite-states
 SUITE_INSTALL_DB_LOCK=/etc/hassbian/suite-states.lock
 
+# @kxtcd950 - debug entries
+SUITE_INSTALL_DIR=/home/dave/Projects/hassbian/hassbian-scripts
+SUITE_INSTALL_DB=/home/dave/Projects/hassbian/suite-states
+SUITE_INSTALL_DB_LOCK=/home/dave/Projects/hassbian/suite-states.lock
+
 function usage {
    echo $0: usage:
    echo
@@ -20,11 +25,14 @@ function show-suite-info {
    $1-show-long-info
 }
 
+function get-all-suite-installers {
+   echo $(ls $SUITE_INSTALL_DIR/install_*.sh | grep -Po "install_\K(.*)\.sh$" | awk -F. '!/homeassistant/ {print $1}')
+}
+
 function show-suites {
    echo List of suites available for installation:
    # inhibit the homeassistant suite from being displayed, to discourage its (re-)installation.
-   suites=$(ls $SUITE_INSTALL_DIR/install_*.sh | grep -Po "install_\K(.*)\.sh$" | awk -F. '!/homeassistant/ {print $1}')
-
+   suites=get-all-suite-installers
    for i in $suites
    do
       echo $i: $(show-suite-info $i)
@@ -40,11 +48,13 @@ function show-suite-long-info {
 }
 
 function get-database-lock {
+   # Create a file descriptor (we shouldn't have 300 files open already) and use it to lock the database
    exec 300> $SUITE_INSTALL_DB_LOCK
    flock -n 300 || exit 1
 }
 
 function release-database-lock {
+   # This is how to close a file descriptor.
    exec 300>&-
 }
 
@@ -72,7 +82,7 @@ function update-suite-state {
 }
 
 function get-suite-state {
-   suitestate="Unknown"
+   suitestate="Uninstalled"
    get-database-lock
    while read suite state
    do
@@ -128,16 +138,19 @@ function get-suite-state-info {
    # Get the state of one suite (non empty parameter) or all suites (empty parameter)
    if [ "$1" != "" ]
    then
-      operation=$1
+      suiteops=$1
    else
-      operation=$(get-suites-from-db)
+      installed=$(get-suites-from-db)
+      available=$(get-all-suite-installers)
+      # Now get all unique items from both these env vars.
+      suiteops=$(echo "$installed $available" | tr ' ' '\n' | sort -u )
    fi
    # now start the JSON build - I've left spaces in the text to make it clearer.
    json=""
    frag='{ "suites" : [ '
    first=1
    # One or more space separated suites in $operation, loop round one by one
-   for suite in $operation
+   for suite in $suiteops
    do
       if [ $first -eq 0 ]
       then
@@ -148,10 +161,8 @@ function get-suite-state-info {
       suitestate=$(get-suite-state $suite)
       if verify-suite $suite
       then
-         >&2 echo "Using show-suite-info"
          suiteinfo=$(show-suite-info $suite)
       else
-         >&2 echo "Using string"
          suiteinfo="Unavailable information for suite '$suite'"
       fi
       # No good way to do this, so quick-n-dirty:
