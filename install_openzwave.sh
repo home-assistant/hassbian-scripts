@@ -5,7 +5,7 @@ function openzwave-show-short-info {
 }
 
 function openzwave-show-long-info {
-    echo "Installs the Open Z-wave package for setting up your zwave network"
+	echo "Installs the Open Z-wave package for setting up your zwave network"
 }
 
 function openzwave-show-copyright-info {

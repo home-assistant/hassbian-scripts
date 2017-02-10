@@ -1,16 +1,16 @@
 #!/bin/bash
 
 function samba-show-short-info {
-    echo "Samba install script for Hassbian"
+	echo "Samba install script for Hassbian"
 }
 
 function samba-show-long-info {
-    echo "Installs the samba package for sharing the hassbian configuration files"
-    echo "over the Pi's network."
+	echo "Installs the samba package for sharing the hassbian configuration files"
+	echo "over the Pi's network."
 }
 
 function samba-show-copyright-info {
-    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
+	echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
 }
 
 function samba-install-package {

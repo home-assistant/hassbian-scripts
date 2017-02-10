@@ -5,7 +5,7 @@ function libcec-show-short-info {
 }
 
 function libcec-show-long-info {
-    echo "Installs the libcec package for controlling CEC devices from this Pi"
+	echo "Installs the libcec package for controlling CEC devices from this Pi"
 }
 
 function libcec-show-copyright-info {

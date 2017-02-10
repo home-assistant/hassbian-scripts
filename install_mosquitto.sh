@@ -5,7 +5,7 @@ function mosquitto-show-short-info {
 }
 
 function mosquitto-show-long-info {
-    echo "Installs the Mosquitto package for setting up a local MQTT server"
+	echo "Installs the Mosquitto package for setting up a local MQTT server"
 }
 
 function mosquitto-show-copyright-info {
