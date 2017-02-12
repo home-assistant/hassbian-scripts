@@ -4,6 +4,10 @@ SUITE_INSTALL_DIR=/home/pi/hassbian-scripts
 SUITE_INSTALL_DB=/etc/hassbian/suite-states
 SUITE_INSTALL_DB_LOCK=/etc/hassbian/suite-states.lock
 
+SUITE_INSTALL_DIR=/home/dave/Projects/hassbian/hassbian-scripts
+SUITE_INSTALL_DB=/home/dave/Projects/hassbian/suite-states
+SUITE_INSTALL_DB_LOCK=/home/dave/Projects/hassbian/suite-states.lock
+
 function usage {
    echo $0: usage:
    echo
@@ -142,7 +146,7 @@ function get-suite-state-info {
    fi
    # now start the JSON build - I've left spaces in the text to make it clearer.
    json=""
-   frag='{ "suites" : [ '
+   frag='{ "suites": {'
    first=1
    # One or more space separated suites in $operation, loop round one by one
    for suite in $suiteops
@@ -161,11 +165,11 @@ function get-suite-state-info {
          suiteinfo="Unavailable information for suite '$suite'"
       fi
       # No good way to do this, so quick-n-dirty:
-      json=" { \"$suite\" : [ $(make-json-entity "state" $suitestate), $(make-json-entity "description" "$suiteinfo") ] } "
+      json="\"$suite\": { \"state\": \"$suitestate\", \"description\": \"$suiteinfo\" } "
       frag="$frag $json"
    done
    # Finish off the JSON fragment, closing all that we opened above
-   json="$frag ] }"
+   json="$frag } }"
    echo $json
 }
 
