@@ -123,12 +123,6 @@ function verify-suite {
    return $retval
 }
 
-function make-json-entity {
-   # wraps the entity name (first parameter) and the data (second parameter)
-   # with a tiny amount of JSON encoding.
-   echo "{ \"$1\": \"$2\" }"
-}
-
 function get-suite-state-info {
    # Get the state of one suite (non empty parameter) or all suites (empty parameter)
    if [ "$1" != "" ]
