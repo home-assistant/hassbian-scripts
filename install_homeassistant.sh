@@ -32,7 +32,7 @@ echo "Enabling Home Assistant service"
 systemctl enable home-assistant@homeassistant.service
 sync
 
-echo "Disabling and removing the Home Assitant install script"
+echo "Disabling and removing the Home Assistant install script"
 systemctl disable install_homeassistant
 rm /etc/systemd/system/install_homeassistant.service
 rm /usr/local/bin/install_homeassistant.sh
