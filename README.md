@@ -13,6 +13,29 @@ git pull
 ## The included scripts
 The following scripts are currently included. You can view the documentation below for usage and instructions.
 
+### hassbian-config (hassbian-config)
+This script is a package handler for the hassbian scripts; all interactions for installing software should be handled through this script; running the individual scripts to install software will no longer work as expected.
+#### Usage
+The hassbian-config script is invoked with:
+./hassbian-scripts/hassbian-config *command* *suite*
+
+where command is one of:
+- install
+- show
+- info
+
+##### install
+The install command takes one argument and will attempt to install the indicated suite of software.
+Generally, this means that the invocation of the hassbian-config script should be run as root, with:
+sudo ./hassbian-scripts/hassbian-config install *suite*
+##### show
+The show command takes no arguments, and lists all available suites which can be (re-)installed.
+##### info
+The info command takes the name of a suite, and shows information about the suite.
+
+## Installer script components
+All scripts listed below are helper scripts for the hassbian-config script, and shouldn't be run directly.  The documentation has been kept for explanatory purposes only.
+
 ### Install Home Assistant *(install_homeassistant.sh)*
 This is a copy of the installation script run during first boot of your Raspberry Pi.
 This script is downloaded when the HASSbian image is built and is shipped on the Hassbian image.

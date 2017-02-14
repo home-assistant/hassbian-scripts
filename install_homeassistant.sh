@@ -1,8 +1,19 @@
 #!/bin/sh
-echo
-echo "Home Assistant install script for Hassbian"
-echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
-echo
+function homeassistant-show-short-info {
+	echo "Home Assistant install script for Hassbian"
+}
+
+function homeassistant-show-long-info {
+	echo "Installs the libcec package for controlling CEC devices from this Pi"
+}
+
+function homeassistant-show-copyright-info {
+    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
+}
+
+function homeassistant-install-package {
+homeassistant-show-short-info
+homeassistant-show-copyright-info
 
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
@@ -53,5 +64,6 @@ echo
 echo "If this script failed then this Raspberry Pi most likely did not have a fully functioning internet connection."
 echo "If you still have issues with this script, please contact @Landrash on gitter.im"
 echo
+}
 
-
+[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config install instead"
