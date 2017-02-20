@@ -33,6 +33,8 @@ sudo patch <<'EOF'
 +create mask = 0644
 +directory mask = 0755
 +force user = homeassistant
++follow symlinks = yes
++wide links = yes
 +
 EOF
 
