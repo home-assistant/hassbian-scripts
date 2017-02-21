@@ -18,7 +18,7 @@ libcec-show-copyright-info
 
 if [ "$(id -u)" != "0" ]; then
    echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-   exit 1
+   return 1
 fi
 
 echo "Running apt-get preparation"
@@ -79,6 +79,7 @@ echo
 echo "To continue have a look at https://home-assistant.io/components/hdmi_cec/"
 echo "It's recomended that you restart your Pi before continuing with testing libcec."
 echo
+return 0
 }
 
 [[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config install instead"

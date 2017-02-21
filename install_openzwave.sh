@@ -22,7 +22,7 @@ echo
 
 if [ "$(id -u)" != "0" ]; then
 echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-exit 1
+return 1
 fi
 
 echo "Running apt-get preparation"
@@ -104,6 +104,7 @@ echo
 echo "If you have issues with this script, please contact @Landrash on gitter.im"
 echo "Original script by @dale3h on gitter.im"
 echo
+return 0
 }
 
 [[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config install instead"
