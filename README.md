@@ -66,3 +66,13 @@ sudo ./hassbian-scripts/install_samba.sh
 After this script has been run, the configuration directory used by Home Assistant is available over Samba and can be accessed from example Windows to edit with your favorite editor.
 
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
+
+### Upgrade Home Assistant *(upgrade_homeassistant.sh)*
+This script will upgrade home assistant to the latest version.
+
+Script is run as the `pi` user with the following command. 
+```
+sudo ./hassbian-scripts/upgrade_homeassistant.sh
+```
+This script was originally contributed by [@superm1](https://github.com/superm1).
+
