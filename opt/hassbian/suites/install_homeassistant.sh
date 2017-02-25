@@ -25,19 +25,21 @@ echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
 echo "Installing latest version of Home Assistant"
-pip3 install homeassistant
+pip3 install homeassistant hassbian
 
 echo "Deactivating virtualenv"
 deactivate
 EOF
 
-echo "Changing to the pi user"
-sudo -u pi -H /bin/bash << EOF
+######### REPLACE WITH HASSBIAN deb package #########
 
-echo "Downloading HASSbian helper scripts"
-cd /home/pi
-git clone https://github.com/home-assistant/hassbian-scripts.git
-EOF
+#echo "Changing to the pi user"
+#sudo -u pi -H /bin/bash << EOF
+
+#echo "Downloading HASSbian helper scripts"
+#cd /home/pi
+#git clone https://github.com/home-assistant/hassbian-scripts.git
+#EOF
 
 echo "Enabling Home Assistant service"
 systemctl enable home-assistant@homeassistant.service
@@ -57,9 +59,9 @@ ip_address=$(ifconfig | awk -F':' '/inet addr/&&!/127.0.0.1/{split($2,_," ");pri
 echo 
 echo "Installation done."
 echo
-echo "Your Home Assistant installation is running at $ip_address:8123"
+echo "Your Home Assistant installation is running at $ip_address:8123 or if prefered http://hassbian.local:8123"
 echo
-echo "To continue have a look at https://home-assistant.io/getting-started/configuration"
+echo "To continue have a look at https://home-assistant.io/getting-started/configuration/"
 echo
 echo "If this script failed then this Raspberry Pi most likely did not have a fully functioning internet connection."
 echo "If you still have issues with this script, please contact @Landrash on gitter.im"
@@ -68,4 +70,4 @@ return 0
 }
 
 # Make this script function as it always has if run standalone, rather than issue a warning and do nothing.
-[[ $_ == $0 ]] && homeassistant-install-package
+[[ $0 == "$BASH_SOURCE" ]] && homeassistant-install-package

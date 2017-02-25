@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SUITE_INSTALL_DIR=/home/pi/hassbian-scripts
+SUITE_INSTALL_DIR=/opt/hassbian/suites
 SUITE_INSTALL_DB=/etc/hassbian/suite-states
 SUITE_INSTALL_DB_LOCK=/etc/hassbian/suite-states.lock
 

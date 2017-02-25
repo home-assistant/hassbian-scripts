@@ -51,7 +51,7 @@ apt-get install -y mosquitto mosquitto-clients
 echo "Writing default configuration"
 cd /etc/mosquitto
 mv mosquitto.conf mosquitto.conf.backup
-cp /home/pi/hassbian-scripts/files/mosquitto.conf /etc/mosquitto/mosquitto.conf
+cp /opt/hassbian/suites/files/mosquitto.conf /etc/mosquitto/mosquitto.conf
 chown mosquitto:mosquitto mosquitto.conf
 
 echo "Initializing password file"
@@ -87,7 +87,9 @@ ip_address=$(ifconfig | awk -F':' '/inet addr/&&!/127.0.0.1/{split($2,_," ");pri
 echo
 echo "Installation done!"
 echo
-echo "Your MQTT broker is running at $ip_address:1883"
+echo "Your MQTT broker is running at $ip_address:1883 or if prefered hassbian.local"
+echo
+echo "To continue have a look at https://home-assistant.io/docs/mqtt/"
 echo
 echo "If you have issues with this script, please contact @Landrash on gitter.im"
 echo "Original script by @dale3h on gitter.im"

@@ -1,0 +1,2 @@
+%homeassistant ALL= NOPASSWD: /usr/bin/hassbian-config show *
+%homeassistant ALL= NOPASSWD: /usr/bin/hassbian-config install *
