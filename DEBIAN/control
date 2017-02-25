@@ -1,0 +1,9 @@
+Package: hassbian-scripts
+Architecture: all
+Maintainer: Fredrik Lindqvist <github.com/Landrash>
+Depends: bash, wget
+Priority: optional
+Homepage: www.home-assistant.io
+Version: 0.2
+Description: HASSbian scripts
+ A set of tools for installing and maintaining a HASSbian installation.

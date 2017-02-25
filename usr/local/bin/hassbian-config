@@ -1,8 +1,8 @@
 #!/bin/bash
 
 SUITE_INSTALL_DIR=/opt/hassbian/suites
-SUITE_INSTALL_DB=/etc/hassbian/suite-states
-SUITE_INSTALL_DB_LOCK=/etc/hassbian/suite-states.lock
+SUITE_INSTALL_DB=/srv/homeassistant/hassbian/suite-states
+SUITE_INSTALL_DB_LOCK=/srv/homeassistant/hassbian/suite-states.lock
 
 function usage {
    echo $0: usage:

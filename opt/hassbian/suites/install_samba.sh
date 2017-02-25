@@ -24,7 +24,7 @@ fi
 
 echo "Running apt-get preparation"
 apt-get update
-apt-get install samba
+apt-get install -y samba
 
 echo "Adding homeassistant Samba user"
 sudo smbpasswd -a homeassistant -n

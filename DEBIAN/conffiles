@@ -1,0 +1,3 @@
+etc/hassbian/suite-states
+etc/hassbian/suite-states.lock
+etc/sudoers.d/020_homeassistant_hassbian-scripts

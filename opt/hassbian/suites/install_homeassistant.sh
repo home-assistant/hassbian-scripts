@@ -31,24 +31,12 @@ echo "Deactivating virtualenv"
 deactivate
 EOF
 
-######### REPLACE WITH HASSBIAN deb package #########
-
-#echo "Changing to the pi user"
-#sudo -u pi -H /bin/bash << EOF
-
-#echo "Downloading HASSbian helper scripts"
-#cd /home/pi
-#git clone https://github.com/home-assistant/hassbian-scripts.git
-#EOF
-
 echo "Enabling Home Assistant service"
 systemctl enable home-assistant@homeassistant.service
 sync
 
 echo "Disabling and removing the Home Assistant install script"
 systemctl disable install_homeassistant
-rm /etc/systemd/system/install_homeassistant.service
-rm /usr/local/bin/install_homeassistant.sh
 systemctl daemon-reload
 
 echo "Starting Home Assistant"
