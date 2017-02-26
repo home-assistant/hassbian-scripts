@@ -27,7 +27,7 @@ function get-all-suite-installers {
 function show-suites {
    echo List of suites available for installation:
    # inhibit the homeassistant suite from being displayed, to discourage its (re-)installation.
-   suites=get-all-suite-installers
+   suites=$(get-all-suite-installers)
    for i in $suites
    do
       echo $i: $(show-suite-info $i)
