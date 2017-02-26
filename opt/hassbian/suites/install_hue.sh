@@ -1,21 +1,21 @@
 #!/bin/bash
 
-function samba-show-short-info {
+function hue-show-short-info {
 	echo "Echo/Home/Mycroft Emulated Hue install script for Hassbian"
 }
 
-function samba-show-long-info {
+function hue-show-long-info {
 	echo "Configures the Python executable to allow usage of low numbered"
 	echo "ports for use with Amazon Echo, Google Home and Mycroft.ai."
 }
 
-function samba-show-copyright-info {
+function hue-show-copyright-info {
 	echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
 }
 
-function samba-install-package {
-samba-show-short-info
-samba-show-copyright-info
+function hue-install-package {
+hue-show-short-info
+hue-show-copyright-info
 
 echo "Setting permissions for Python 3.4"
 sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3.4
