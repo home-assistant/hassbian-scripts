@@ -35,7 +35,7 @@ echo "Enabling Home Assistant service"
 systemctl enable home-assistant@homeassistant.service
 sync
 
-echo "Disabling and removing the Home Assistant install script"
+echo "Disabling the Home Assistant install script"
 systemctl disable install_homeassistant
 systemctl daemon-reload
 
