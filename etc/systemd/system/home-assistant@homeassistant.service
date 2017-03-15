@@ -1,7 +1,7 @@
-# This is a simple service file for systems with systemd to tun HA as user.
 #
-# For details please check https://home-assistant.io/getting-started/autostart/
+# Service file for systems with systemd to run Home Assistant as the homeassistant user.
 #
+
 [Unit]
 Description=Home Assistant for %i
 After=network.target
@@ -14,5 +14,3 @@ SendSIGKILL=no
 
 [Install]
 WantedBy=multi-user.target
-
-
