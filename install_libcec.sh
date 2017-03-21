@@ -58,7 +58,7 @@ sudo make install
 sudo ldconfig
 
 echo "Linking libcec to venv site packages"
-sudo -u homeassistant ln -s /usr/local/lib/python3.*/site-packages/cec /srv/homeassistant/lib/python3.*/site-packages/
+sudo -u homeassistant ln -s /usr/local/lib/python3.*/dist-packages/cec /srv/homeassistant/lib/python3.*/site-packages/
 
 echo
 echo "Installation done."
