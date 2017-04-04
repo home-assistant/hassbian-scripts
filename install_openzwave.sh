@@ -6,6 +6,12 @@ echo "Modified by Landrash for use with Hassbian."
 echo "Copyright(c) 2016 Dale Higgs <https://gitter.im/dale3h>"
 echo 
 
+# Exit script if an error occurs
+set -e
+
+# Print commands if DEBUG is set
+[ -n "$DEBUG" ] && set -x
+
 if [ "$(id -u)" != "0" ]; then
 echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
 exit 1
