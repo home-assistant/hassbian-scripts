@@ -4,6 +4,12 @@ echo "Home Assistant install script for Hassbian"
 echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
 echo
 
+# Exit script if an error occurs
+set -e
+
+# Print commands if DEBUG is set
+[ -n "$DEBUG" ] && set -x
+
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
 

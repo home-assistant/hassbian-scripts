@@ -5,6 +5,12 @@ echo "libcec install script for Hassbian"
 echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
 echo
 
+# Exit script if an error occurs
+set -e
+
+# Print commands if DEBUG is set
+[ -n "$DEBUG" ] && set -x
+
 if [ "$(id -u)" != "0" ]; then
    echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
    exit 1
