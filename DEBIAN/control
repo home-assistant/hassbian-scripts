@@ -1,9 +1,9 @@
 Package: hassbian-scripts
 Architecture: all
 Maintainer: Fredrik Lindqvist <github.com/Landrash>
-Depends: bash, wget
+Depends: bash, wget, git, python3, python3-venv, python3-pip, bluetooth, libbluetooth-dev, avahi-daemon 
 Priority: optional
 Homepage: www.home-assistant.io
-Version: 0.2
+Version: 0.3
 Description: HASSbian scripts
  A set of tools for installing and maintaining a HASSbian installation.
