@@ -5,7 +5,7 @@ function openzwave-show-short-info {
 }
 
 function openzwave-show-long-info {
-	echo "Installs the Open Z-wave package for setting up your zwave network"
+	echo "Installs the Open Z-wave package and OZWCP for setting up your zwave network"
 }
 
 function openzwave-show-copyright-info {
@@ -51,7 +51,6 @@ git clone  https://github.com/OpenZWave/python-openzwave.git
 echo "Building python-openzwave"
 chown homeassistant:homeassistant python-openzwave
 cd python-openzwave
-git checkout python3
 make build
 make install
 
@@ -103,6 +102,11 @@ echo "Installation done!"
 echo
 echo "If you have issues with this script, please contact @Landrash on gitter.im"
 echo "Original script by @dale3h on gitter.im"
+echo
+echo "To continue have a look at https://home-assistant.io/components/zwave/"
+echo
+echo "It's recomended that you set the optional config parameter for zwave."
+echo "to config_path: ozw_config ."
 echo
 return 0
 }
