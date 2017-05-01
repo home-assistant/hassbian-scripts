@@ -90,12 +90,12 @@ chown homeassistant:homeassistant Makefile
 make
 
 echo "Linking ozwcp config directory"
-ln -sd /srv/homeassistant/lib/python3.*/site-packages/libopenzwave-0.*-linux*.egg/config
+ln -sd /srv/homeassistant/lib/python3.*/site-packages/python_openzwave/ozw_config
 chown -R homeassistant:homeassistant /srv/homeassistant/src
 
 echo "Linking Home Assistant OpenZWave config directory"
 cd /home/homeassistant/.homeassistant
-sudo -u homeassistant ln -sd /srv/homeassistant/lib/python3.*/site-packages/libopenzwave-*-linux*.egg/config
+sudo -u homeassistant ln -sd /srv/homeassistant/lib/python3.*/site-packages/python_openzwave/ozw_config
 chown -R homeassistant:homeassistant /home/homeassistant/.homeassistant
 
 echo
