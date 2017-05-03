@@ -28,6 +28,12 @@ The show command can be run without arguments, and lists all available suites wh
 ## Installer script components
 All scripts listed below are helper scripts for the `hassbian-config` command, and shouldn't be run directly.  The documentation has been kept for explanatory purposes only.
 
+### InstallHue *(install_hue.sh)*
+Configures the Python executable to allow usage of low numbered port numbers for use with Amazon Echo, Google Home and Mycroft.ai.
+
+This script was originally contributed by [@Landrash](https://github.com/landrash).
+
+
 ### Install Home Assistant *(install_homeassistant.sh)*
 This is a copy of the installation script run during first boot of your Raspberry Pi.
 Usually this script is not run after installation but could be used with some modifications to reinstall Home Assistant.
@@ -89,3 +95,23 @@ sudo hassbian-config install samba
 After this script has been run, the configuration directory used by Home Assistant is available over Samba and can be accessed from example Windows to edit with your favorite editor.
 
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
+
+
+### Use a Tellstick *(install_tellstick.sh)*
+This script installs the dependencies for using a Tellstick with Home Assistant. Manual configuration of Tellstick is still needed since it's outside of Home Assistant.
+
+Script is run as the `pi` user with the following command. Normal runtime for this script is about 5 minutes.
+```
+sudo hassbian-config install tellstick
+```
+This script was originally contributed by [@Landrash](https://github.com/Landrash).
+
+### Share configuration with Samba *(install_tradfri.sh)*
+This script installs the dependencies for discovering and using a IKEA Trådfri Gateway with Home Assistant. It's recommeded to restart your Trådfri Gateway after this install has been done.
+
+Script is run as the `pi` user with the following command. Normal runtime for this script is about 5 minutes.
+```
+sudo hassbian-config install tradfri
+```
+This script was originally contributed by [@Landrash](https://github.com/Landrash).
+
