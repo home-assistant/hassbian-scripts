@@ -89,7 +89,7 @@ chown homeassistant:homeassistant Makefile
 make
 
 echo "Linking ozwcp config directory"
-ln -sd /srv/homeassistant/lib/python3.*/site-packages/python_openzwave/ozw_config
+ln -s /srv/homeassistant/lib/python3.*/site-packages/python_openzwave/ozw_config config
 chown -R homeassistant:homeassistant /srv/homeassistant/src
 
 echo "Linking Home Assistant OpenZWave config directory"
