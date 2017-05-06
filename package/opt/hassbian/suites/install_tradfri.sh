@@ -37,14 +37,14 @@ cd /srv/homeassistant/src
 git clone --depth 1 --recursive -b dtls https://github.com/home-assistant/libcoap.git
 chown -R homeassistant:homeassistant libcoap
 
-echo "Building Pulse-Eight platform"
+echo "Building lib-coap library"
 cd libcoap
 ./autogen.sh
 ./configure --disable-documentation --disable-shared --without-debug CFLAGS="-D COAP_DEBUG_FD=stderr"
 make
 EOF
 
-echo "Installing Pulse-Eight platform"
+echo "Installing lib-coap library"
 cd /srv/homeassistant/src/libcoap
 sudo make install
 
