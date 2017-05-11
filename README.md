@@ -64,13 +64,14 @@ After this script has been run, add CEC to your `configuration.yaml` file as usu
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
 
 ### Install OpenZWave-pip *(install_openzwave-pip.sh)*
-This script installs Python_OpenZWae and symlinks the OpenZWave configuration directory for easy usage.
+This script installs `python_openzwave` and symlinks the OpenZWave configuration directory for easy usage.
 
 Script is run with as the `pi` user with the following command. Normal runtime for this scripts is about 15 minutes.
 ```
 sudo hassbian-config install openzwave-pip
 ```
 After this script has been run, add ZWave to your `configuration.yaml` file as usual.
+This script should not be needed after Home Assistant 0.46 since it's intergrated in Home Assistant.
 
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
 
@@ -82,6 +83,7 @@ Script is run with as the `pi` user with the following command. Normal runtime f
 sudo hassbian-config install openzwave
 ```
 After this script has been run, add ZWave to your `configuration.yaml` file as usual.
+This script should not be needed after Home Assistant 0.46 since `python-openzwave` has been intergrated in Home Assistant and a Z-Wave configuration panel will be available to accommodate thoose who needs the OZWCP functionality.
 
 This script was originally contributed by [@dale3h](https://github.com/dale3h) and has been modified by [@Landrash](https://github.com/Landrash).
 
