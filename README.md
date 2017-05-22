@@ -57,7 +57,7 @@ This script installs libcec and it dependencies.Further more this script symlink
 
 Script is run as the `pi` user with the following command. Normal runtime for this script is about 10 minutes.
 ```
-sudo hassbian-config install ibcec
+sudo hassbian-config install libcec
 ```
 After this script has been run, add CEC to your `configuration.yaml` file as usual.
 
@@ -108,7 +108,7 @@ sudo hassbian-config install tellstick
 ```
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
 
-### Share configuration with Samba *(install_tradfri.sh)*
+### Install Trådfri Gateway Support *(install_tradfri.sh)*
 This script installs the dependencies for discovering and using a IKEA Trådfri Gateway with Home Assistant. It's recommeded to restart your Trådfri Gateway after this install has been done.
 
 Script is run as the `pi` user with the following command. Normal runtime for this script is about 5 minutes.
