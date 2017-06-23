@@ -255,6 +255,12 @@ function show-installed-suites {
   return 0
 }
 
+if (( $EUID != 0 ))
+then
+  echo "Error: hassbian-config must be as root (with sudo)"
+  exit 1
+fi
+
 if [ $# -lt 1 ]; then
   usage
   exit 0
