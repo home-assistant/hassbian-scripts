@@ -1,20 +1,20 @@
 #!/bin/bash
-function homeassistant-upgrade-show-short-info {
+function home-assistant-show-short-info {
     echo "Home Assistant upgrade script for Hassbian"
 }
 
-function homeassistant-upgrade-show-long-info {
-    echo "Upgrade the base homeassistant package onto this system."
+function home-assistant-show-long-info {
+    echo "Upgrade the base home assistant package onto this system."
 }
 
-function homeassistant-upgrade-show-copyright-info {
+function home-assistant-show-copyright-info {
     echo "Original consept by Landrash <https://github.com/Landrash>"
     echo "Modyfied by Ludeeus <https://github.im/Ludeeus>"
 }
 
-function homeassistant-upgrade-package {
-homeassistant-upgrade-show-short-info
-homeassistant-upgrade-show-copyright-info
+function home-assistant-package {
+home-assistant-show-short-info
+home-assistant-show-copyright-info
 
 
 echo "Stopping Home Assistant"
@@ -50,4 +50,4 @@ return 0
 }
 
 # Make this script function as it always has if run standalone, rather than issue a warning and do nothing.
-[[ $0 == "$BASH_SOURCE" ]] && homeassistant-upgrade-package
+[[ $0 == "$BASH_SOURCE" ]] && home-assistant-package
