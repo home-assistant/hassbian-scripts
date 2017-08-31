@@ -22,7 +22,7 @@ function show-suite-info {
 }
 
 function get-all-suite-installers {
-   echo $(ls /opt/hassbian/suites/*.sh | grep -v 'install_homeassistant.sh' | awk -F'/|_' ' {print $NF}' | awk -F. '{print $1}')
+   echo $(ls $SUITE_INSTALL_DIR/*.sh | grep -v 'install_homeassistant.sh' | awk -F'/|_' ' {print $NF}' | awk -F. '{print $1}')
 }
 
 function show-suites {
@@ -127,7 +127,7 @@ function upgrade-suite {
 
 function verify-suite {
    # Check that the suite specified actually exists
-   if [ -f "$SUITE_INSTALL_DIR/install_$1.sh" ]; 
+   if [ -f "$SUITE_INSTALL_DIR/install_$1.sh" ]
    then
       retval=0 # beware - 0 is true in bash.
    elif [ -f "$SUITE_INSTALL_DIR/upgrade_$1.sh" ]
