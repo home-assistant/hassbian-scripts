@@ -12,7 +12,7 @@ function home-assistant-show-copyright-info {
     echo "Modyfied by Ludeeus <https://github.im/Ludeeus>"
 }
 
-function home-assistant-package {
+function home-assistant-upgrade-package {
 home-assistant-show-short-info
 home-assistant-show-copyright-info
 
@@ -50,4 +50,4 @@ return 0
 }
 
 # Make this script function as it always has if run standalone, rather than issue a warning and do nothing.
-[[ $0 == "$BASH_SOURCE" ]] && home-assistant-package
+[[ $0 == "$BASH_SOURCE" ]] && home-assistant-upgrade-package
