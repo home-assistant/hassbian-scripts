@@ -16,12 +16,17 @@ hassbian-config *command* *suite*
 ```
 where command is one of:
 - `install`
+- `upgrade`
 - `show`
 
 ##### install
 The install command takes one argument and will attempt to install the indicated suite of software.
 Generally, this means that the invocation of `hassbian-config` should be run as root, with:
 `sudo hassbian-config install *suite*`
+##### upgrade
+The install command takes one argument and will attempt to install the indicated suite of software.
+Generally, this means that the invocation of `hassbian-config` should be run as root, with:
+`sudo hassbian-config upgrade *suite*`
 ##### show
 The show command can be run without arguments, and lists all available suites which can be installed or with a *suite* name as argument and shows information about the suite .
 
