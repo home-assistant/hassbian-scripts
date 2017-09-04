@@ -52,7 +52,7 @@ EOF
 echo "Restarting Samba service"
 sudo systemctl restart smbd.service
 
-ip_address=$(ifconfig | awk -F':' '/inet addr/&&!/127.0.0.1/{split($2,_," ");print _[1]}')
+ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
 
 echo
 echo "Installation done."
