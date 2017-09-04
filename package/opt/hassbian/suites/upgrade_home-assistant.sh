@@ -4,11 +4,11 @@ function home-assistant-show-short-info {
 }
 
 function home-assistant-show-long-info {
-    echo "Upgrade the base home assistant package onto this system."
+    echo "Upgrade the base Home Assistant package onto this system."
 }
 
 function home-assistant-show-copyright-info {
-    echo "Original consept by Landrash <https://github.com/Landrash>"
+    echo "Original concept by Landrash <https://github.com/Landrash>"
     echo "Modyfied by Ludeeus <https://github.im/Ludeeus>"
 }
 
@@ -36,12 +36,12 @@ echo "Deactivating virtualenv"
 deactivate
 EOF
 
-echo "Starting Home Assistant"
+echo "Restarting Home Assistant"
 systemctl start home-assistant@homeassistant.service
 
 echo
 echo "Uppgrade is now done."
-echo "Note that sometimes it takes a while to start up after an upgrade."
+echo "Note tha it may take some time to start up after an upgrade."
 echo
 echo
 echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
