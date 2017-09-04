@@ -25,7 +25,7 @@ echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
 echo "Installing latest version of Home Assistant"
-pip3 install homeassistant hassbian
+pip3 install homeassistant
 
 echo "Deactivating virtualenv"
 deactivate

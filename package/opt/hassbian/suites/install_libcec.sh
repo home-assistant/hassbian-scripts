@@ -23,7 +23,7 @@ fi
 
 echo "Running apt-get preparation"
 apt-get update
-apt-get install -y cmake libudev-dev libxrandr-dev python-dev swig
+apt-get install -y cmake libudev-dev libxrandr-dev swig
 
 echo "Changing to homeassistant user"
 sudo -u homeassistant -H /bin/bash <<EOF
@@ -47,6 +47,7 @@ EOF
 echo "Installing Pulse-Eight platform"
 cd /srv/homeassistant/src/platform/build
 sudo make install
+sudo ldconfig
 
 echo "Changing back to homeassistant user"
 sudo -u homeassistant -H /bin/bash <<EOF
