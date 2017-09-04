@@ -34,19 +34,15 @@ mkdir -p /var/lib/mosquitto
 chown mosquitto:mosquitto /var/lib/mosquitto
 
 echo "Installing repository key"
-cd /srv/homeassistant/src
-wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
-apt-key add mosquitto-repo.gpg.key
-rm mosquitto-repo.gpg.key
+wget -O - http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
 
 echo "Adding repository"
 cd /etc/apt/sources.list.d
-wget http://repo.mosquitto.org/debian/mosquitto-jessie.list
+wget http://repo.mosquitto.org/debian/mosquitto-stretch.list
 
 echo "Installing mosquitto"
 apt-get update
-apt-cache search mosquitto
-apt-get install -y mosquitto mosquitto-clients
+apt install -y mosquitto mosquitto-clients
 
 echo "Writing default configuration"
 cd /etc/mosquitto
@@ -61,6 +57,7 @@ chmod 0600 pwfile
 
 echo
 echo "Please take a moment to setup your first MQTT user"
+echo "If no choice is made a default account will be created"
 echo
 
 echo -n "Username: "

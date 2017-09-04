@@ -17,8 +17,8 @@ function hue-install-package {
 hue-show-short-info
 hue-show-copyright-info
 
-echo "Setting permissions for Python 3.4"
-sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3.4
+echo "Setting permissions for Python 3.5"
+sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3.5
 
 if [ "$(id -u)" != "0" ]; then
    echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
