@@ -8,14 +8,14 @@ function hassbian-script-show-long-info {
 }
 
 function hassbian-script-show-copyright-info {
-    echo "Original consept by Ludeeus <https://github.im/Ludeeus>"
+    echo "Original concept by Ludeeus <https://github.im/Ludeeus>"
 }
 
 function hassbian-script-upgrade-package {
 hassbian-script-show-short-info
 hassbian-script-show-copyright-info
 
-echo "Moving to temp folder"
+echo "Moving to temporary folder"
 cd /tmp
 
 echo "Downloading newest release"
