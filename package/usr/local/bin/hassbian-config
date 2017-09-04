@@ -163,6 +163,12 @@ function get-suite-state-info {
    echo $json
 }
 
+if (( $EUID != 0 ))
+then
+  echo "Error: hassbian-config must be as root (with sudo)"
+  exit 1
+fi
+
 if [ $# -lt 1 ]
 then
    usage
