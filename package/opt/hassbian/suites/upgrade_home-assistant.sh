@@ -4,7 +4,7 @@ function home-assistant-show-short-info {
 }
 
 function home-assistant-show-long-info {
-    echo "Upgrade the base Home Assistant package onto this system."
+    echo "Upgrade the Home Assistant installation on this system"
 }
 
 function home-assistant-show-copyright-info {
@@ -23,9 +23,6 @@ systemctl stop home-assistant@homeassistant.service
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
 
-echo "Creating Home Assistant venv"
-python3 -m venv /srv/homeassistant
-
 echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
@@ -40,9 +37,9 @@ echo "Restarting Home Assistant"
 systemctl start home-assistant@homeassistant.service
 
 echo
-echo "Uppgrade is now done."
-echo "Note tha it may take some time to start up after an upgrade."
+echo "Uppgrade complete."
 echo
+echo "Note that it may take some time to start up after an upgrade."
 echo
 echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
 echo

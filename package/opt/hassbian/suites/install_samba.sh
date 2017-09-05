@@ -6,7 +6,7 @@ function samba-show-short-info {
 
 function samba-show-long-info {
 	echo "Installs the samba package for sharing the hassbian configuration files"
-	echo "over the Pi's network."
+	echo "over the network."
 }
 
 function samba-show-copyright-info {
@@ -57,7 +57,7 @@ ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $
 echo
 echo "Installation done."
 echo
-echo "If you have issues with this script, please contact @Landrash on gitter.im"
+echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
 echo
 echo "Configuration is now available as a Samba share at \\\\$ip_address\homeassistant"
 echo

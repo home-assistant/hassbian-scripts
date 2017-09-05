@@ -104,7 +104,7 @@ function get-suites-from-db {
 function check-permission {
    if (( $EUID != 0 ))
    then
-      echo "Error: hassbian-config must be as root (with sudo)"
+      echo "Error: hassbian-config must be run as root (with sudo) for this to be possible"
       exit 1
    fi
 }

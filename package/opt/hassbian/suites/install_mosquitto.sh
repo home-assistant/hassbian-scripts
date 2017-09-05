@@ -88,7 +88,7 @@ echo "Your MQTT broker is running at $ip_address:1883 or if prefered hassbian.lo
 echo
 echo "To continue have a look at https://home-assistant.io/docs/mqtt/"
 echo
-echo "If you have issues with this script, please contact @Landrash on gitter.im"
+echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
 echo "Original script by @dale3h on gitter.im"
 echo
 return 0

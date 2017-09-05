@@ -51,7 +51,7 @@ sudo make install
 echo
 echo "Installation done."
 echo
-echo "If you have issues with this script, please contact @Landrash on gitter.im"
+echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
 echo
 echo "To continue have a look at https://home-assistant.io/components/tradfri/"
 echo "It's recomended that you restart your Tradfri Gateway before continuing."

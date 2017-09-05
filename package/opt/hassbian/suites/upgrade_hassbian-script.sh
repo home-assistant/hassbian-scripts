@@ -4,7 +4,7 @@ function hassbian-script-show-short-info {
 }
 
 function hassbian-script-show-long-info {
-    echo "Upgrade hassbian-scripts."
+    echo "Upgrade hassbian-scripts"
 }
 
 function hassbian-script-show-copyright-info {
@@ -15,16 +15,16 @@ function hassbian-script-upgrade-package {
 hassbian-script-show-short-info
 hassbian-script-show-copyright-info
 
-echo "Moving to temporary folder"
+echo "Changing to temporary folder"
 cd /tmp
 
 echo "Downloading newest release"
 curl https://api.github.com/repos/home-assistant/hassbian-scripts/releases/latest | grep "browser_download_url.*deb" | cut -d : -f 2,3 | tr -d \" | wget -qi -
 
-echo "Setting package name"
+# Setting package name
 HASSBIAN_PACKAGE=$(ls | grep 'hassbian*')
 
-echo "Installing the package"
+echo "Installing newest release"
 sudo dpkg -i $HASSBIAN_PACKAGE
 
 echo "Cleanup"
