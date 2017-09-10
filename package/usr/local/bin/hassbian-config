@@ -22,17 +22,28 @@ function show-suite-info {
 }
 
 function get-all-suite-installers {
-   echo $(ls $SUITE_INSTALL_DIR/*.sh | grep -v 'install_homeassistant.sh' | awk -F'/|_' ' {print $NF}' | awk -F. '{print $1}')
+   echo $(find $SUITE_INSTALL_DIR/ -maxdepth 1 -type f -name 'install_*' | grep -v 'install_homeassistant.sh' | awk -F'/|_' ' {print $NF}' | awk -F. '{print $1}')
+}
+
+function get-all-suite-upgrades {
+   echo $(find $SUITE_INSTALL_DIR/ -maxdepth 1 -type f -name 'upgrade*' | awk -F'/|_' ' {print $NF}' | awk -F. '{print $1}')
 }
 
 function show-suites {
-   echo List of suites available for installation:
-   # inhibit the homeassistant suite from being displayed, to discourage its (re-)installation.
-   suites=$(get-all-suite-installers)
-   for i in $suites
-   do
-      echo $i: $(show-suite-info $i)
-   done
+	echo -e "Install scripts: (Usage 'sudo hassbian-config install \e[32msuite-name\e[0m')"
+	installers=$(get-all-suite-installers)
+	for i in $installers
+	do
+	  printf "\e[32m%-20s\e[0m %s\n" "$i:" "$(show-suite-info $i)"
+	done
+
+	echo -e ""
+	echo -e "Upgrade scripts: (Usage 'sudo hassbian-config upgrade \e[32msuite-name\e[0m')"
+	upgrades=$(get-all-suite-upgrades)
+	for i in $upgrades
+	do
+	  printf "\e[32m%-20s\e[0m %s\n" "$i:" "$(show-suite-info $i)"
+	done
 }
 
 function show-suite-long-info {
