@@ -45,53 +45,6 @@ Usually this script is not run after installation but could be used with some mo
 
 This script was originally contributed by [@Landrash](https://github.com/landrash).
 
-### Install Mosquitto *(install_mosquitto.sh)*
-This script installs the MQTT Mosquitto server. Repository from the Mosquitto project is added to package system and the official packages for Debain are installed.
-Additionally, this script helps you create your first MQTT user that can be used with Home Assistant.
-
-
-Script is run as the `pi` user with the following command. Normal runtime for this script is about 10 minutes.
-```
-sudo hassbian-config install mosquitto
-```
-
-This script was originally contributed by [@dale3h](https://github.com/dale3h) and has been modified by [@Landrash](https://github.com/Landrash).
-  
-### Install CEC support *(install_libcec.sh)*
-This script installs libcec and it dependencies.Further more this script symlinks the system wide packages to the Home Assistant venv so they can be used with Home Assistant.
-
-Script is run as the `pi` user with the following command. Normal runtime for this script is about 10 minutes.
-```
-sudo hassbian-config install libcec
-```
-After this script has been run, add CEC to your `configuration.yaml` file as usual.
-
-This script was originally contributed by [@Landrash](https://github.com/Landrash).
-
-### Install OpenZWave-pip *(install_openzwave-pip.sh)*
-This script installs `python_openzwave` and symlinks the OpenZWave configuration directory for easy usage.
-
-Script is run with as the `pi` user with the following command. Normal runtime for this scripts is about 15 minutes.
-```
-sudo hassbian-config install openzwave-pip
-```
-After this script has been run, add ZWave to your `configuration.yaml` file as usual.
-This script should not be needed after Home Assistant 0.46 since it's intergrated in Home Assistant.
-
-This script was originally contributed by [@Landrash](https://github.com/Landrash).
-
-### Install OpenZWave *(install_openzwave.sh)*
-This script compiles OpenZWave, installs OZWCP(open-zwave-control-panel) and symlinks the library and the OpenZWave configuration directory for easy usage.
-
-Script is run with as the `pi` user with the following command. Normal runtime for this scripts is about 90 minutes.
-```
-sudo hassbian-config install openzwave
-```
-After this script has been run, add ZWave to your `configuration.yaml` file as usual.
-This script should not be needed after Home Assistant 0.46 since `python-openzwave` has been intergrated in Home Assistant and a Z-Wave configuration panel will be available to accommodate thoose who needs the OZWCP functionality.
-
-This script was originally contributed by [@dale3h](https://github.com/dale3h) and has been modified by [@Landrash](https://github.com/Landrash).
-
 ### Share configuration with Samba *(install_samba.sh)*
 This script installs samba and it dependencies. It also set up a share for Home Assistant's configuration. **This is potentially unsafe and generally not recommended.**
 
@@ -103,16 +56,6 @@ After this script has been run, the configuration directory used by Home Assista
 
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
 
-
-### Use a Tellstick *(install_tellstick.sh)*
-This script installs the dependencies for using a Tellstick with Home Assistant. Manual configuration of Tellstick is still needed since it's outside of Home Assistant.
-
-Script is run as the `pi` user with the following command. Normal runtime for this script is about 5 minutes.
-```
-sudo hassbian-config install tellstick
-```
-This script was originally contributed by [@Landrash](https://github.com/Landrash).
-
 ### Install Trådfri Gateway Support *(install_tradfri.sh)*
 This script installs the dependencies for discovering and using a IKEA Trådfri Gateway with Home Assistant. It's recommeded to restart your Trådfri Gateway after this install has been done.
 
@@ -120,5 +63,28 @@ Script is run as the `pi` user with the following command. Normal runtime for th
 ```
 sudo hassbian-config install tradfri
 ```
+This script was originally contributed by [@Landrash](https://github.com/Landrash).
+
+### Install Mosquitto *(install_mosquitto.sh)*
+**This scipt is currently brooken upstream since packages are not available for Debian Stretch.** This script installs the MQTT Mosquitto server. Repository from the Mosquitto project is added to package system and the official packages for Debain are installed.
+Additionally, this script helps you create your first MQTT user that can be used with Home Assistant.
+
+
+Script is run as the `pi` user with the following command. Normal runtime for this script is about 10 minutes.
+```
+sudo hassbian-config install mosquitto
+```
+
+This script was originally contributed by [@dale3h](https://github.com/dale3h) and has been modified by [@Landrash](https://github.com/Landrash).
+  
+### Install CEC support *(install_libcec.sh)*
+**This scipt is currently brooken upstream since it currently doesnt build properly for Python >3.4** This script installs libcec and it dependencies.Further more this script symlinks the system wide packages to the Home Assistant venv so they can be used with Home Assistant.
+
+Script is run as the `pi` user with the following command. Normal runtime for this script is about 10 minutes.
+```
+sudo hassbian-config install libcec
+```
+After this script has been run, add CEC to your `configuration.yaml` file as usual.
+
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
 
