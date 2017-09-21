@@ -88,3 +88,19 @@ After this script has been run, add CEC to your `configuration.yaml` file as usu
 
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
 
+### Install an web terminal for easy access to ssh in an web browser *(install_webterminal.sh)*
+This script installs an web terminal called 'shellinabox' to you system that give you SHH access in you web browser.
+
+Script is run as the `pi` user with the following command:
+```
+sudo hassbian-config install webterminal
+```
+Example config for Home-Assistant:
+```yaml
+panel_iframe:
+  terminal:
+    title: 'Terminal'
+    icon: mdi:console
+    url: 'http://192.168.1.2:4200'
+```
+This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
