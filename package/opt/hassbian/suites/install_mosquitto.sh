@@ -48,6 +48,7 @@ apt install -y mosquitto mosquitto-clients
 if [[ $? > 0 ]]
 then
    echo "First try failed, adding dependencies and trying again."
+   echo "This is an workaround and will be omited once it's fixed upstream."
    echo "Downloading dependencies"
    cd
    wget http://ftp.se.debian.org/debian/pool/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u6_armhf.deb
