@@ -1,10 +1,10 @@
 #!/bin/bash
 function duckdns-show-short-info {
-echo -e "Setup for duckdns auto renewal"
+echo -e "Setup for Duck DNS auto renewal"
 }
 
 function duckdns-show-long-info {
-echo -e "This script adds an cron job to uppdate you duckdns IP address."
+echo -e "This script adds an cron job to auto uppdate you the WAN IP address for the defined domain."
 }
 
 function duckdns-show-copyright-info {
@@ -33,8 +33,9 @@ if [ ! "$token" ]; then
   exit
 fi
 
-echo "Changing back to pi user..."
-sudo -u pi -H /bin/bash << EOF
+echo "Changing back to homeassistant user..."
+sudo -u homeassistant -H /bin/bash << EOF
+cd
 
 echo "Creating duckdns foler..."
 mkdir duckdns
@@ -49,11 +50,11 @@ chmod 700 duck.sh
 echo "Creating cron job..."
 (crontab -l ; echo "*/5 * * * * ~/duckdns/duck.sh >/dev/null 2>&1")| crontab -
 
-echo "Moving back to root..."
+echo "Changing back to root user..."
 EOF
 
-echo "Starting cron service..."
-sudo service cron start
+echo "Resarting cron service..."
+sudo systemctl restart cron.service
 
 echo
 echo "Installation done."
