@@ -1,6 +1,6 @@
 #!/bin/bash
 function duckdns-show-short-info {
-echo -e "Setup for Duck DNS auto renewal"
+echo -e "Setup for Duck DNS auto renewal."
 }
 
 function duckdns-show-long-info {
@@ -8,7 +8,7 @@ echo -e "This script adds an cron job to auto uppdate you the WAN IP address for
 }
 
 function duckdns-show-copyright-info {
-	echo "Original consept by Ludeeus <https://github.com/ludeeus>"
+	echo "Original concept by Ludeeus <https://github.com/ludeeus>"
 }
 
 function duckdns-install-package {
@@ -37,11 +37,11 @@ echo "Changing back to homeassistant user..."
 sudo -u homeassistant -H /bin/bash << EOF
 cd
 
-echo "Creating duckdns foler..."
+echo "Creating duckdns folder..."
 mkdir duckdns
 cd duckdns
 
-echo "Creating a script file to be used by cron"
+echo "Creating a script file to be used by cron."
 echo "echo url='https://www.duckdns.org/update?domains=$domain&token=$token&ip=' | curl -k -o ~/duckdns/duck.log -K -" > duck.sh
 
 echo "Setting premissions..."
@@ -53,7 +53,7 @@ echo "Creating cron job..."
 echo "Changing back to root user..."
 EOF
 
-echo "Resarting cron service..."
+echo "Restarting cron service..."
 sudo systemctl restart cron.service
 
 echo
