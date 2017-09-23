@@ -18,7 +18,7 @@ function usage {
 
 function show-suite-info {
    source $SUITE_INSTALL_DIR/*_$1.sh
-   $1-show-long-info
+   $1-show-short-info
 }
 
 function get-all-suite-installers {
@@ -44,6 +44,8 @@ function show-suites {
 	do
 	  printf "\e[32m%-20s\e[0m %s\n" "$i:" "$(show-suite-info $i)"
 	done
+    echo
+    echo -e "To view more info about a suite type: 'hassbian-config show \e[32msuite-name\e[0m'"
 }
 
 function show-suite-long-info {
