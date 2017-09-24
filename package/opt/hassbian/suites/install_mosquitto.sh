@@ -9,7 +9,7 @@ function mosquitto-show-long-info {
 }
 
 function mosquitto-show-copyright-info {
-    echo "Copyright(c) 2016 Dale Higgs <https://gitter.im/dale3h>"
+    echo "Copyright(c) 2016 Dale Higgs <https://github.com/dale3h>"
     echo "Modified by Landrash for use with Hassbian."
 }
 
@@ -113,7 +113,7 @@ echo
 echo "To continue have a look at https://home-assistant.io/docs/mqtt/"
 echo
 echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
-echo "Original script by @dale3h on gitter.im"
+echo "Original script by @dale3h"
 echo
 return 0
 }
