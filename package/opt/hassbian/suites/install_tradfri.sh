@@ -9,7 +9,7 @@ function tradfri-show-long-info {
 }
 
 function tradfri-show-copyright-info {
-    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
+    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
 }
 
 function tradfri-install-package {
