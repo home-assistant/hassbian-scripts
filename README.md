@@ -66,7 +66,7 @@ sudo hassbian-config install tradfri
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
 
 ### Install Mosquitto *(install_mosquitto.sh)*
-**This scipt is currently brooken upstream since packages are not available for Debian Stretch.** This script installs the MQTT Mosquitto server. Repository from the Mosquitto project is added to package system and the official packages for Debain are installed.
+**This script was broken since packages are not available for Debian Stretch, but we have implemented an workaround that make sure this will run as intended on HASSbian Stretch.** This script installs the MQTT Mosquitto server. Repository from the Mosquitto project is added to package system and the official packages for Debain are installed.
 Additionally, this script helps you create your first MQTT user that can be used with Home Assistant.
 
 
@@ -88,6 +88,14 @@ After this script has been run, add CEC to your `configuration.yaml` file as usu
 
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
 
+### Install Duck DNS auto renewal *(install_duckdns.sh)*
+This script adds an cron job to auto uppdate you the WAN IP address for the defined domain.
+Before running this script you should already have an Duck DNS account, during the installation you will be asked to supply your domain name and the token for your account.
+```
+sudo hassbian-config install duckdns
+```
+This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
+
 ### Install an web terminal for easy access to ssh in an web browser *(install_webterminal.sh)*
 This script installs an web terminal called 'shellinabox' to you system that give you SHH access in you web browser.
 
@@ -102,5 +110,36 @@ panel_iframe:
     title: 'Terminal'
     icon: mdi:console
     url: 'http://192.168.1.2:4200'
+```
+This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
+
+## Uppgrade script components
+
+### Uppgrade your Home Assistant installation *(uppgrade_home-assistant.sh)*
+This script will automate the process of uppgrading your Home Assistant to the newest version.
+```
+sudo hassbian-config uppgrade home-assistant
+```
+This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
+
+### Uppgrade your HASSbian installation *(uppgrade_hassbian.sh)*
+This script will uppdate the base OS on the system.
+```
+sudo hassbian-config uppgrade hassbian
+```
+This script was originally contributed by [@Landrash](https://github.com/Landrash).
+
+### Uppgrade HASSbian-scripts *(uppgrade_hassbian-script.sh)*
+This will download and install the newest published version of HASSBian-scripts.
+```
+sudo hassbian-config uppgrade hassbian-script
+```
+This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
+
+### Uppgrade HASSbian-scripts from dev brach *(uppgrade_hassbian-script-dev.sh)*
+This will download and install the newest additions to the dev branch of HASSbian-Scripts.
+_Note that this is intended on people who like living on the 'bleeding edge', it is not recomended using this in a production setup._
+```
+sudo hassbian-config uppgrade hassbian-script
 ```
 This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).

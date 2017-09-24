@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function hue-show-short-info {
-	echo "Echo/Home/Mycroft Emulated Hue install script for Hassbian"
+	echo "Echo/Home/Mycroft Emulated Hue install script for Hassbian."
 }
 
 function hue-show-long-info {
@@ -10,7 +10,7 @@ function hue-show-long-info {
 }
 
 function hue-show-copyright-info {
-	echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
+	echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
 }
 
 function hue-install-package {
