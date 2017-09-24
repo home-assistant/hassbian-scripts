@@ -5,7 +5,8 @@ function hassbian-script-dev-show-short-info {
 
 function hassbian-script-dev-show-long-info {
     echo "This scripts downloads new scripts directly from the dev branch on github."
-    echo "you can use this to be on the 'bleeding edge of the development.'"
+    echo "you can use this to be on the 'bleeding edge of the development of Hassbian.'"
+    echo "This is not recomended for daily use."
 }
 
 function hassbian-script-dev-show-copyright-info {
