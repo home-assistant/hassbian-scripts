@@ -8,7 +8,7 @@ function homeassistant-show-long-info {
 }
 
 function homeassistant-show-copyright-info {
-    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.im/Landrash>"
+    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
 }
 
 function homeassistant-install-package {
