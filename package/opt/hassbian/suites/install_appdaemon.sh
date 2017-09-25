@@ -38,6 +38,7 @@ pip3 install appdaemon
 
 echo "Copying AppDaemon config file"
 cp /opt/hassbian/suites/files/appdaemon.conf /home/homeassistant/appdaemon/appdaemon.yaml
+touch /home/homeassistant/appdaemon/apps.yaml
 
 echo "Deactivating virtualenv"
 deactivate
