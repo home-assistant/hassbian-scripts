@@ -101,7 +101,9 @@ echo "Creating password entry for user $mqtt_username"
 mosquitto_passwd -b pwfile "$mqtt_username" "$mqtt_password"
 
 echo "Restarting Mosquitto service"
+systemctl enable mosquitto.service
 systemctl restart mosquitto.service
+
 
 ip_address=$(ifconfig | awk -F':' '/inet addr/&&!/127.0.0.1/{split($2,_," ");print _[1]}')
 
