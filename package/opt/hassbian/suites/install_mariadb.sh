@@ -23,7 +23,7 @@ fi
 
 echo "Running apt-get preparation"
 apt-get update
-apt-get install -y mariadb-server
+apt-get install -y mariadb-server libmariadbclient-dev
 
 echo "Changing to homeassistant user"
 sudo -u homeassistant -H /bin/bash <<EOF
