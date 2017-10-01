@@ -5,7 +5,7 @@ function mariadb-show-short-info {
 }
 
 function mariadb-show-long-info {
-	echo "Installs the Maria database engine and dependecies for use with the recorder in Home Assistant"
+	echo "Installs the MariaDB database engine and dependecies for use with the recorder in Home Assistant"
 }
 
 function mariadb-show-copyright-info {
