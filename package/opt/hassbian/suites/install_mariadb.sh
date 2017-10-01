@@ -41,7 +41,7 @@ EOF
 echo
 echo "Installation done."
 echo
-echo "Database and user for Home Assistant has not been created and is required to be created manually."
+echo "No database or database user is created during this setup and will need to be created manually."
 echo
 echo "To continue have a look at https://home-assistant.io/components/recorder/"
 echo
