@@ -49,6 +49,14 @@ This script was originally contributed by [@Landrash](https://github.com/landras
 This script installs MariaDB and it's dependencies for use with the [recorder](https://home-assistant.io/components/recorder/) component in Home Assistant.
 No database or database user is created during this setup and will need to be created manually.
 
+#### Example for creating database  
+```$ mysql -u root -p```  
+```$ CREATE DATABASE homeassistant;```  
+```$ CREATE USER 'homeassistantuser' IDENTIFIED BY 'password';```  
+```$ GRANT ALL PRIVILEGES ON homeassistant.* TO 'homeassistantuser';```  
+```$ FLUSH PRIVILEGES;``` 
+```$ exit ``` 
+
 This script was originally contributed by [@Landrash](https://github.com/landrash).
 
 ### Share configuration with Samba *(install_samba.sh)*
