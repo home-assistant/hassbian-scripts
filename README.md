@@ -45,6 +45,20 @@ Usually this script is not run after installation but could be used with some mo
 
 This script was originally contributed by [@Landrash](https://github.com/landrash).
 
+### Install MariaDB *(install_mariadb.sh)*
+This script installs MariaDB and it's dependencies for use with the [recorder](https://home-assistant.io/components/recorder/) component in Home Assistant.
+No database or database user is created during this setup and will need to be created manually.
+
+#### Example for creating database  
+```$ sudo mysql -u root -p```  
+```$ CREATE DATABASE homeassistant;```  
+```$ CREATE USER 'homeassistantuser' IDENTIFIED BY 'password';```  
+```$ GRANT ALL PRIVILEGES ON homeassistant.* TO 'homeassistantuser';```  
+```$ FLUSH PRIVILEGES;``` 
+```$ exit ``` 
+
+This script was originally contributed by [@Landrash](https://github.com/landrash).
+
 ### Share configuration with Samba *(install_samba.sh)*
 This script installs samba and it dependencies. It also set up a share for Home Assistant's configuration. **This is potentially unsafe and generally not recommended.**
 
@@ -57,7 +71,7 @@ After this script has been run, the configuration directory used by Home Assista
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
 
 ### Install Trådfri Gateway Support *(install_tradfri.sh)*
-This script installs the dependencies for discovering and using a IKEA Trådfri Gateway with Home Assistant. It's recommeded to restart your Trådfri Gateway after this install has been done.
+This script installs the dependencies for discovering and using a IKEA Trådfri Gateway with Home Assistant. It's recommended to restart your Trådfri Gateway after this install has been done.
 
 Script is run as the `pi` user with the following command. Normal runtime for this script is about 5 minutes.
 ```
@@ -66,7 +80,7 @@ sudo hassbian-config install tradfri
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
 
 ### Install Mosquitto *(install_mosquitto.sh)*
-**This script was broken since packages are not available for Debian Stretch, but we have implemented an workaround that make sure this will run as intended on HASSbian Stretch.** This script installs the MQTT Mosquitto server. Repository from the Mosquitto project is added to package system and the official packages for Debain are installed.
+**This script was broken since packages are not available for Debian Stretch, but we have implemented an workaround that make sure this will run as intended on HASSbian Stretch.** This script installs the MQTT Mosquitto server. Repository from the Mosquitto project is added to package system and the official packages for Debian are installed.
 Additionally, this script helps you create your first MQTT user that can be used with Home Assistant.
 
 
@@ -78,7 +92,7 @@ sudo hassbian-config install mosquitto
 This script was originally contributed by [@dale3h](https://github.com/dale3h) and has been modified by [@Landrash](https://github.com/Landrash).
   
 ### Install CEC support *(install_libcec.sh)*
-**This scipt is currently brooken upstream since it currently doesnt build properly for Python >3.4** This script installs libcec and it dependencies.Further more this script symlinks the system wide packages to the Home Assistant venv so they can be used with Home Assistant.
+**This scipt is currently brooken upstream since it currently doesn't build properly for Python >3.4** This script installs libcec and it dependencies. Further more this script symlinks the system wide packages to the Home Assistant venv so they can be used with Home Assistant.
 
 Script is run as the `pi` user with the following command. Normal runtime for this script is about 10 minutes.
 ```
@@ -89,7 +103,7 @@ After this script has been run, add CEC to your `configuration.yaml` file as usu
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
 
 ### Install Duck DNS auto renewal *(install_duckdns.sh)*
-This script adds an cron job to auto uppdate you the WAN IP address for the defined domain.
+This script adds an cron job to auto update you the WAN IP address for the defined domain.
 Before running this script you should already have an Duck DNS account, during the installation you will be asked to supply your domain name and the token for your account.
 ```
 sudo hassbian-config install duckdns
@@ -113,33 +127,33 @@ panel_iframe:
 ```
 This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
 
-## Uppgrade script components
+## Upgrade script components
 
-### Uppgrade your Home Assistant installation *(uppgrade_home-assistant.sh)*
-This script will automate the process of uppgrading your Home Assistant to the newest version.
+### Upgrade your Home Assistant installation *(uppgrade_home-assistant.sh)*
+This script will automate the process of upgrading your Home Assistant to the newest version.
 ```
-sudo hassbian-config uppgrade home-assistant
+sudo hassbian-config upgrade home-assistant
 ```
 This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
 
-### Uppgrade your HASSbian installation *(uppgrade_hassbian.sh)*
-This script will uppdate the base OS on the system.
+### Upgrade your HASSbian installation *(uppgrade_hassbian.sh)*
+This script will update the base OS on the system.
 ```
-sudo hassbian-config uppgrade hassbian
+sudo hassbian-config upgrade hassbian
 ```
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
 
-### Uppgrade HASSbian-scripts *(uppgrade_hassbian-script.sh)*
+### Upgrade HASSbian-scripts *(uppgrade_hassbian-script.sh)*
 This will download and install the newest published version of HASSBian-scripts.
 ```
-sudo hassbian-config uppgrade hassbian-script
+sudo hassbian-config upgrade hassbian-script
 ```
 This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
 
-### Uppgrade HASSbian-scripts from dev brach *(uppgrade_hassbian-script-dev.sh)*
+### Upgrade HASSbian-scripts from dev branch *(uppgrade_hassbian-script-dev.sh)*
 This will download and install the newest additions to the dev branch of HASSbian-Scripts.
-_Note that this is intended on people who like living on the 'bleeding edge', it is not recomended using this in a production setup._
+_Note that this is intended on people who like living on the 'bleeding edge', it is not recommended using this in a production setup._
 ```
-sudo hassbian-config uppgrade hassbian-script
+sudo hassbian-config upgrade hassbian-script
 ```
 This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
