@@ -50,7 +50,7 @@ This script installs MariaDB and it's dependencies for use with the [recorder](h
 No database or database user is created during this setup and will need to be created manually.
 
 #### Example for creating database  
-```$ mysql -u root -p```  
+```$ sudo mysql -u root -p```  
 ```$ CREATE DATABASE homeassistant;```  
 ```$ CREATE USER 'homeassistantuser' IDENTIFIED BY 'password';```  
 ```$ GRANT ALL PRIVILEGES ON homeassistant.* TO 'homeassistantuser';```  
