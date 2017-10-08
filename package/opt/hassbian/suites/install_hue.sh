@@ -1,36 +1,36 @@
 #!/bin/bash
 
-function razberry-show-short-info {
-	echo "Disables Bluetooth for the use of a RaZberry with Hassbian."
+function hue-show-short-info {
+    echo "Echo/Home/Mycroft Emulated Hue install script for Hassbian."
 }
 
-function razberry-show-long-info {
-	echo "Disables Bluetooth for the use of a RaZberry with Hassbian."
-    echo "This will disable the use of Bluetooth and BLE devices."
-    echo " "
-    echo "Original script from http://razberry.z-wave.me/install"
+function hue-show-long-info {
+    echo "Configures the Python executable to allow usage of low numbered"
+    echo "ports for use with Amazon Echo, Google Home and Mycroft.ai."
 }
 
-function razberry-show-copyright-info {
-    echo "Original script from http://razberry.z-wave.me/install"
+function hue-show-copyright-info {
+    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
 }
 
-function razberry-install-package {
-razberry-show-short-info
-razberry-show-copyright-info
+function hue-install-package {
+hue-show-short-info
+hue-show-copyright-info
 
-echo "Checking for version of Raspberry Pi"
-RPI_BOARD_REVISION=`grep Revision /proc/cpuinfo | cut -d: -f2 | tr -d " "`
-if [[ $RPI_BOARD_REVISION ==  "a02082" || $RPI_BOARD_REVISION == "a22082" ]]
-then
-    echo "Raspberry Pi 3 Detected. Disabling Bluetooth"
-    systemctl disable hciuart
-    if [[ ! `grep "dtoverlay=pi3-miniuart-bt" /boot/config.txt` ]]
-    then
-        echo "Adding 'dtoverlay=pi3-miniuart-bt' to /boot/config.txt"
-        echo "dtoverlay=pi3-miniuart-bt" >> /boot/config.txt
-    fi
+echo "Setting permissions for Python"
+if [ -d "/usr/lib/python3.5" ]; then
+    echo "Setting permissions for Python 3.5"
+    sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3.5
+    else
+    echo "Setting permissions for Python 3.4"
+    sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3.4
 fi
+
+if [ "$(id -u)" != "0" ]; then
+    echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
+    return 1
+fi
+
 
 echo
 echo "Installation done."

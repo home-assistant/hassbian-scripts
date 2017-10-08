@@ -156,6 +156,16 @@ panel_iframe:
 ```
 This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
 
+### Install Razberry *(install_razberry.sh)*
+This script disables Bluetooth for the use of a RaZberry with Hassbian.
+Code is adapted from the Razberry install script found at http://razberry.z-wave.me/install.
+This will disable the use of Bluetooth and Bluetooth Low Energy devices.
+```
+sudo hassbian-config install razberry
+```
+This script was originally contributed by [@Landrash](https://github.com/Landrash).
+
+
 ## Upgrade script components
 
 ### Upgrade your Home Assistant installation *(uppgrade_home-assistant.sh)*
