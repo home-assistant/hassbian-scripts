@@ -45,17 +45,46 @@ Usually this script is not run after installation but could be used with some mo
 
 This script was originally contributed by [@Landrash](https://github.com/landrash).
 
-### Install MariaDB *(install_mariadb.sh)*
+### Install databases
+The following scripts are meant for use with the [recorder](https://home-assistant.io/components/recorder/) component in Home Assistant and install databases and/or tools required for using them. 
+
+#### Install MariaDB *(install_mariadb.sh)*
 This script installs MariaDB and it's dependencies for use with the [recorder](https://home-assistant.io/components/recorder/) component in Home Assistant.
 No database or database user is created during this setup and will need to be created manually.
 
-#### Example for creating database  
+##### Example for creating database  
 ```$ sudo mysql -u root -p```  
 ```$ CREATE DATABASE homeassistant;```  
 ```$ CREATE USER 'homeassistantuser' IDENTIFIED BY 'password';```  
 ```$ GRANT ALL PRIVILEGES ON homeassistant.* TO 'homeassistantuser';```  
 ```$ FLUSH PRIVILEGES;``` 
 ```$ exit ``` 
+
+This script was originally contributed by [@Landrash](https://github.com/landrash).
+
+#### Install MySQL *(install_mysql.sh)*
+This script installs MySQL and it's dependencies for use with the [recorder](https://home-assistant.io/components/recorder/) component in Home Assistant.
+No database or database user is created during this setup and will need to be created manually.
+
+##### Example for creating database  
+```$ sudo mysql -u root -p```  
+```$ CREATE DATABASE homeassistant;```  
+```$ CREATE USER 'homeassistantuser' IDENTIFIED BY 'password';```  
+```$ GRANT ALL PRIVILEGES ON homeassistant.* TO 'homeassistantuser';```  
+```$ FLUSH PRIVILEGES;``` 
+```$ exit ``` 
+
+This script was originally contributed by [@Landrash](https://github.com/landrash).
+
+#### Install PostgreSQL *(install_postgresql.sh)*
+This script installs PostgreSQL and it's dependencies for use with the [recorder](https://home-assistant.io/components/recorder/) component in Home Assistant.
+No database or database user is created during this setup and will need to be created manually.
+
+This script was originally contributed by [@Landrash](https://github.com/landrash).
+
+#### Install MS SQL *(install_mssql.sh)*
+This script installs the tools needed to connect to a MS SQL databse and it's dependencies for use with the [recorder](https://home-assistant.io/components/recorder/) component in Home Assistant.
+No database or database user is created during this setup and will need to be created manually.
 
 This script was originally contributed by [@Landrash](https://github.com/landrash).
 
