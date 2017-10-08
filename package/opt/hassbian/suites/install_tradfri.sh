@@ -28,6 +28,7 @@ apt-get install -y libtool autoconf
 echo "Changing to homeassistant user"
 sudo -u homeassistant -H /bin/bash <<EOF
 
+
 echo "Creating source directory"
 mkdir -p /srv/homeassistant/src
 chown -R homeassistant:homeassistant /srv/homeassistant/src
@@ -49,7 +50,6 @@ python3 setup.py install
 
 echo "Deactivating virtualenv"
 deactivate
-
 
 echo "Cloning modified lib-coap library"
 cd /srv/homeassistant/src
