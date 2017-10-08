@@ -1,16 +1,16 @@
 #!/bin/bash
 
 function hue-show-short-info {
-	echo "Echo/Home/Mycroft Emulated Hue install script for Hassbian."
+    echo "Echo/Home/Mycroft Emulated Hue install script for Hassbian."
 }
 
 function hue-show-long-info {
-	echo "Configures the Python executable to allow usage of low numbered"
-	echo "ports for use with Amazon Echo, Google Home and Mycroft.ai."
+    echo "Configures the Python executable to allow usage of low numbered"
+    echo "ports for use with Amazon Echo, Google Home and Mycroft.ai."
 }
 
 function hue-show-copyright-info {
-	echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
+    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
 }
 
 function hue-install-package {
