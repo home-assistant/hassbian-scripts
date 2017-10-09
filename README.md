@@ -2,7 +2,7 @@
 
 These are the scripts used in the [HASSbian](https://github.com/home-assistant/pi-gen) image.
 The scripts in this repository where made to be used with the HASSbian image and the included Home Assistant instance.  
-  
+
 ## The included scripts
 The following scripts are currently included. You can view the documentation below for usage and instructions.
 
@@ -33,7 +33,7 @@ The show command can be run without arguments, and lists all available suites wh
 ## Installer script components
 All scripts listed below are helper scripts for the `hassbian-config` command, and shouldn't be run directly.  The documentation has been kept for explanatory purposes only.
 
-### InstallHue *(install_hue.sh)*
+### Install Hue *(install_hue.sh)*
 Configures the Python executable to allow usage of low numbered port numbers for use with Amazon Echo, Google Home and Mycroft.ai.
 
 This script was originally contributed by [@Landrash](https://github.com/landrash).
@@ -46,7 +46,7 @@ Usually this script is not run after installation but could be used with some mo
 This script was originally contributed by [@Landrash](https://github.com/landrash).
 
 ### Install databases
-The following scripts are meant for use with the [recorder](https://home-assistant.io/components/recorder/) component in Home Assistant and install databases and/or tools required for using them. 
+The following scripts are meant for use with the [recorder](https://home-assistant.io/components/recorder/) component in Home Assistant and install databases and/or tools required for using them.
 
 #### Install MariaDB *(install_mariadb.sh)*
 This script installs MariaDB and it's dependencies for use with the [recorder](https://home-assistant.io/components/recorder/) component in Home Assistant.
@@ -57,8 +57,8 @@ No database or database user is created during this setup and will need to be cr
 ```$ CREATE DATABASE homeassistant;```  
 ```$ CREATE USER 'homeassistantuser' IDENTIFIED BY 'password';```  
 ```$ GRANT ALL PRIVILEGES ON homeassistant.* TO 'homeassistantuser';```  
-```$ FLUSH PRIVILEGES;``` 
-```$ exit ``` 
+```$ FLUSH PRIVILEGES;```
+```$ exit ```
 
 This script was originally contributed by [@Landrash](https://github.com/landrash).
 
@@ -105,7 +105,7 @@ sudo hassbian-config install mosquitto
 ```
 
 This script was originally contributed by [@dale3h](https://github.com/dale3h) and has been modified by [@Landrash](https://github.com/Landrash).
-  
+
 ### Install CEC support *(install_libcec.sh)*
 **This scipt is currently brooken upstream since it currently doesn't build properly for Python >3.4** This script installs libcec and it dependencies. Further more this script symlinks the system wide packages to the Home Assistant venv so they can be used with Home Assistant.
 
@@ -126,7 +126,7 @@ sudo hassbian-config install duckdns
 This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
 
 ### Install an web terminal for easy access to ssh in an web browser *(install_webterminal.sh)*
-This script installs an web terminal called 'shellinabox' to you system that give you SHH access in you web browser.
+This script installs an web terminal called 'shellinabox' to you system that give you SSH access in you web browser.
 
 Script is run as the `pi` user with the following command:
 ```
