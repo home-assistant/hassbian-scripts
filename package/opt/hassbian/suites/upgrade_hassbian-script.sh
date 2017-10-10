@@ -15,10 +15,6 @@ function hassbian-script-upgrade-package {
 hassbian-script-show-short-info
 hassbian-script-show-copyright-info
 
-echo "Installing dependencies."
-deps=$(curl -s https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/DEBIAN/control | grep Depends | cut -d : -f 2,3 | sed 's/,//g')
-sudo apt install $deps
-
 echo "Changing to temporary folder"
 cd /tmp
 
@@ -29,7 +25,7 @@ curl https://api.github.com/repos/home-assistant/hassbian-scripts/releases/lates
 HASSBIAN_PACKAGE=$(ls | grep 'hassbian*')
 
 echo "Installing newest release"
-sudo dpkg -i $HASSBIAN_PACKAGE
+sudo apt install -y /tmp/$HASSBIAN_PACKAGE
 
 echo "Cleanup"
 rm $HASSBIAN_PACKAGE
