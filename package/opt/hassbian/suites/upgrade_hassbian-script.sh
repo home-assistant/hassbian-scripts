@@ -8,12 +8,16 @@ function hassbian-script-show-long-info {
 }
 
 function hassbian-script-show-copyright-info {
-    echo "Original concept by Ludeeus <https://github.im/Ludeeus>"
+    echo "Original concept by Ludeeus <https://github.com/ludeeus>"
 }
 
 function hassbian-script-upgrade-package {
 hassbian-script-show-short-info
 hassbian-script-show-copyright-info
+
+echo "Installing dependencies."
+deps=$(curl -s https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/DEBIAN/control | grep Depends | cut -d : -f 2,3 | sed 's/,//g')
+sudo apt install $deps
 
 echo "Changing to temporary folder"
 cd /tmp
