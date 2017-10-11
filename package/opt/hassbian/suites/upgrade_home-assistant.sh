@@ -27,6 +27,7 @@ echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
 echo "Installing latest version of Home Assistant"
+pip3 install --upgrade setuptools wheel
 pip3 install --upgrade homeassistant
 
 echo "Deactivating virtualenv"
