@@ -1,6 +1,6 @@
 #!/bin/bash
 function hassbian-show-short-info {
-    echo "Home Assistant upgrade script for Hassbian"
+    echo "Upgrade the base OS installation on this system"
 }
 
 function hassbian-show-long-info {
