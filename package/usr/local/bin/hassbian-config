@@ -1,17 +1,18 @@
 #!/bin/bash
-
 SUITE_INSTALL_DIR=/opt/hassbian/suites
 SUITE_INSTALL_DB=/srv/homeassistant/hassbian/suite-states
 SUITE_INSTALL_DB_LOCK=/srv/homeassistant/hassbian/suite-states.lock
+SUITE_CONTROL_DIR=/opt/hassbian/control
 
 function usage {
    echo $0: usage:
    echo
    echo $0 \<command\> \<suite\>
    echo where \<command\> is one of:
-   echo     install  - installs a software suite
-   echo     upgrade  - upgrades a software suite
-   echo     show     - shows software suites available
+   echo     install        - installs a software suite
+   echo     upgrade        - upgrades a software suite
+   echo     show           - shows software suites available
+   echo     show-installed - list all packages installed with `hassbian-config`
    echo and \<suite\> is the name of a software component to operate on.
    echo
 }
@@ -202,6 +203,18 @@ function get-suite-state-info {
    echo $json
 }
 
+function show-installed-suites {
+  INSTALLERS=$(find $SUITE_CONTROL_DIR/ -maxdepth 1 -type f | grep -v 'homeassistant' | awk -F'/|_' ' {print $NF}' | awk -F. '{print $1}')
+  for i in $INSTALLERS
+  do
+  STATE=$(cat $SUITE_CONTROL_DIR/$i | grep SCRIPTSTATE=installed | awk -F'=' '{print $2}')
+  if [ "$STATE" != "" ]; then
+  echo "$i:" $STATE
+  fi
+  done
+  return 0
+}
+
 if [ $# -lt 1 ]
 then
    usage
@@ -251,8 +264,9 @@ case $COMMAND in
    fi
    exit
    ;;
-"state")
-   get-suite-state-info $SUITE
+"show-installed")
+   show-installed-suites
+   exit
    ;;
 *)
    usage
