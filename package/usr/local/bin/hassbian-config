@@ -264,6 +264,9 @@ case $COMMAND in
    fi
    exit
    ;;
+"state")
+   get-suite-state-info $SUITE
+   ;;
 "show-installed")
    show-installed-suites
    exit
