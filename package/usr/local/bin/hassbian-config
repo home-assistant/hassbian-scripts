@@ -124,16 +124,26 @@ function check-permission {
 }
 
 function install-suite {
-   # Having got here, the installer script exists; source it, then run the installer function.
-   check-permission
-   update-suite-state "$1" "installing"
-   source $SUITE_INSTALL_DIR/install_$1.sh
-   if $1-install-package
-   then
-      update-suite-state "$1" "installed"
-   else
-      update-suite-state "$1" "failed"
-   fi
+  if [ ! -f $SUITE_CONTROL_DIR/$1 ]; then
+    touch $SUITE_CONTROL_DIR/$1
+    echo "SCRIPTSTATE=uninstalled" > $SUITE_CONTROL_DIR/$1
+  fi
+  SUITESTATE=$(cat $SUITE_CONTROL_DIR/$1 | grep SCRIPTSTATE | awk -F'=' '{print $2}')
+  if [ "$SUITESTATE" == "installed" ]; then
+    echo "$1 is already installed..."
+    echo -n "Do you want to proceed? [y/N]"
+    read response
+    if [ "$response" == "y" ]; then
+      source $SUITE_INSTALL_DIR/install_$1.sh
+      $1-install-package
+      sed -i -- 's/SCRIPTSTATE='$SUITESTATE'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/$1
+    fi
+  else
+    source $SUITE_INSTALL_DIR/install_$1.sh
+    $1-install-package
+    sed -i -- 's/SCRIPTSTATE='$SUITESTATE'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/$1
+  fi
+  return 0
 }
 
 function upgrade-suite {
