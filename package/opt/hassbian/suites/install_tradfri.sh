@@ -23,7 +23,7 @@ fi
 
 echo "Running apt-get preparation"
 apt-get update
-apt-get install -y cython3 dh-autoreconf
+apt-get install -y dh-autoreconf
 
 echo "Changing to homeassistant user"
 sudo -u homeassistant -H /bin/bash <<EOF
@@ -31,34 +31,13 @@ sudo -u homeassistant -H /bin/bash <<EOF
 echo "Activating to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
-echo "Cloning modified tinydtls library to a temporary folder."
+echo "Installing dependencies for Tradfri."
 python3 -m pip install --upgrade pip setuptools wheel
 python3 -m pip install cython
-cd
-cd /tmp/
-git clone --depth 1 https://git.fslab.de/jkonra2m/tinydtls.git
-cd tinydtls
-cp configure.in configure.ac
-rm configure.in
-autoreconf
-./configure --with-ecc --without-debug
-cd cython
-python3 setup.py install
-cd ../..
-
-echo "Cloning modified lib-coap library"
-git clone https://github.com/chrysn/aiocoap
-cd aiocoap
-git reset --hard 3286f48f0b949901c8b5c04c0719dc54ab63d431
-python3 -m pip install .
 
 echo "Deactivating virtualenv"
 deactivate
 EOF
-
-echo "Cleanup..."
-sudo rm -R /tmp/tinydtls
-sudo rm -R /tmp/aiocoap
 
 echo
 echo "Installation done."
