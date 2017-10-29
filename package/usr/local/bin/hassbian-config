@@ -1,7 +1,5 @@
 #!/bin/bash
 SUITE_INSTALL_DIR=/opt/hassbian/suites
-SUITE_INSTALL_DB=/srv/homeassistant/hassbian/suite-states
-SUITE_INSTALL_DB_LOCK=/srv/homeassistant/hassbian/suite-states.lock
 SUITE_CONTROL_DIR=/opt/hassbian/control
 
 function usage {
@@ -12,7 +10,6 @@ function usage {
    echo     install        - installs a software suite
    echo     upgrade        - upgrades a software suite
    echo     show           - shows software suites available
-   echo     show-installed - list all packages installed with `hassbian-config`
    echo and \<suite\> is the name of a software component to operate on.
    echo
 }
@@ -35,7 +32,13 @@ function show-suites {
 	installers=$(get-all-suite-installers)
 	for i in $installers
 	do
-	  printf "\e[32m%-20s\e[0m %s\n" "$i:" "$(show-suite-info $i)"
+    if [ ! -f $SUITE_CONTROL_DIR/$i ]; then
+      SUITESTATE=""
+    else
+      SUITESTATE=$(cat $SUITE_CONTROL_DIR/$i | grep SCRIPTSTATE | awk -F'=' '{printf $2}')
+      SUITESTATE=$(printf "\e[34m $SUITESTATE%-7s")
+    fi
+	  printf "\e[32m%-20s\e[0m %s\n" "$i$SUITESTATE" "$(show-suite-info $i)"
 	done
 
 	echo -e ""
@@ -43,7 +46,7 @@ function show-suites {
 	upgrades=$(get-all-suite-upgrades)
 	for i in $upgrades
 	do
-	  printf "\e[32m%-20s\e[0m %s\n" "$i:" "$(show-suite-info $i)"
+	  printf "\e[32m%-20s\e[0m %s\n" "$i" "$(show-suite-info $i)"
 	done
     echo
     echo -e "To view more info about a suite type: 'hassbian-config show \e[32msuite-name\e[0m'"
@@ -55,64 +58,6 @@ function show-suite-long-info {
    $1-show-short-info
    $1-show-long-info
    $1-show-copyright-info
-}
-
-function get-database-lock {
-   # Create a file descriptor (we shouldn't have 300 files open already) and use it to lock the database
-   exec 300> $SUITE_INSTALL_DB_LOCK
-   flock -n 300 || exit 1
-}
-
-function release-database-lock {
-   # This is how to close a file descriptor.
-   exec 300>&-
-}
-
-# We cannot eliminate disk writes without a tmpfs
-# however, operation is likely so infrequent wear won't matter.
-function update-suite-state {
-   get-database-lock
-   # We are now the "owner" of the lockfile.
-   # Truncate or create an empty temporary file
-   >| $SUITE_INSTALL_DB.tmp
-   while read suite state
-   do
-      if [ "$suite" == "$1" ]
-      then
-         echo "$suite $2" >> $SUITE_INSTALL_DB.tmp
-      else
-         echo "$suite $state" >> $SUITE_INSTALL_DB.tmp
-      fi
-   done < $SUITE_INSTALL_DB
-
-   # And put the database back where it should be.
-   mv $SUITE_INSTALL_DB.tmp $SUITE_INSTALL_DB
-
-   release-database-lock
-}
-
-function get-suite-state {
-   suitestate="Uninstalled"
-   get-database-lock
-   while read suite state
-   do
-      if [ "$suite" == "$1" ]
-      then
-         suitestate=$state
-      fi
-   done < $SUITE_INSTALL_DB
-   release-database-lock
-   echo $suitestate
-}
-
-function get-suites-from-db {
-   get-database-lock
-   while read suite state
-   do
-      suites=$suites" "$suite
-   done < $SUITE_INSTALL_DB
-   release-database-lock
-   echo $suites
 }
 
 function check-permission {
@@ -137,6 +82,9 @@ function install-suite {
       source $SUITE_INSTALL_DIR/install_$1.sh
       $1-install-package
       sed -i -- 's/SCRIPTSTATE='$SUITESTATE'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/$1
+    else
+      echo "This installer will now exit..."
+      return 0
     fi
   else
     source $SUITE_INSTALL_DIR/install_$1.sh
@@ -171,46 +119,6 @@ function verify-suite {
       retval=1
    fi
    return $retval
-}
-
-function get-suite-state-info {
-   # Get the state of one suite (non empty parameter) or all suites (empty parameter)
-   if [ "$1" != "" ]
-   then
-      suiteops=$1
-   else
-      installed=$(get-suites-from-db)
-      available=$(get-all-suite-installers)
-      # Now get all unique items from both these env vars.
-      suiteops=$(echo "$installed $available" | tr ' ' '\n' | sort -u )
-   fi
-   # now start the JSON build - I've left spaces in the text to make it clearer.
-   json=""
-   frag='{ "suites": {'
-   first=1
-   # One or more space separated suites in $operation, loop round one by one
-   for suite in $suiteops
-   do
-      if [ $first -eq 0 ]
-      then
-         # If this isn't the first entity we've added, append a comma.
-         frag="$frag,"
-      fi
-      first=0
-      suitestate=$(get-suite-state $suite)
-      if verify-suite $suite
-      then
-         suiteinfo=$(show-suite-info $suite)
-      else
-         suiteinfo="Unavailable information for suite '$suite'"
-      fi
-      # No good way to do this, so quick-n-dirty:
-      json="\"$suite\": { \"state\": \"$suitestate\", \"description\": \"$suiteinfo\" } "
-      frag="$frag $json"
-   done
-   # Finish off the JSON fragment, closing all that we opened above
-   json="$frag } }"
-   echo $json
 }
 
 function show-installed-suites {
