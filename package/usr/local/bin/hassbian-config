@@ -97,14 +97,8 @@ function install-suite {
 function upgrade-suite {
    # Having got here, the installer script exists; source it, then run the installer function.
    check-permission
-   update-suite-state "$1" "upgrading"
    source $SUITE_INSTALL_DIR/upgrade_$1.sh
-   if $1-upgrade-package
-   then
-      update-suite-state "$1" "upgraded"
-   else
-      update-suite-state "$1" "failed"
-   fi
+   $1-upgrade-package
 }
 
 function verify-suite {
