@@ -29,16 +29,16 @@ echo "Changing to AppDaemon venv"
 source /srv/appdaemon/bin/activate
 
 echo "Creating directory for AppDaemon configuration file"
-mkdir /home/homeassistant/appdaemon
-mkdir /home/homeassistant/appdaemon/apps
+mkdir /home/homeassistant/.homeassistant/appdaemon
+mkdir /home/homeassistant/.homeassistant/appdaemon/apps
 
 echo "Installing latest version of AppDaemon"
 pip3 install wheel
 pip3 install appdaemon
 
 echo "Copying AppDaemon config file"
-cp /opt/hassbian/suites/files/appdaemon.conf /home/homeassistant/appdaemon/appdaemon.yaml
-touch /home/homeassistant/appdaemon/apps.yaml
+cp /opt/hassbian/suites/files/appdaemon.conf /home/homeassistant/.homeassistant/appdaemon/appdaemon.yaml
+touch /home/homeassistant/.homeassistant/appdaemon/apps.yaml
 
 echo "Deactivating virtualenv"
 deactivate
