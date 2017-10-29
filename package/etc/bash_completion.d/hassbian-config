@@ -1,0 +1,27 @@
+_hassbian-config() 
+{
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="install upgrade show"
+
+    case "${prev}" in
+        install)
+            local inst=$(find /opt/hassbian/suites/ -maxdepth 1 -type f -name 'install_*' | grep -v 'install_homeassistant.sh' | awk -F'/|_' ' {print $NF}' | awk -F. '{print $1}')
+            COMPREPLY=( $(compgen -W "${inst}" -- ${cur}) )
+            return 0
+            ;;
+        upgrade)
+            local upd=$(find /opt/hassbian/suites/ -maxdepth 1 -type f -name 'upgrade*' | awk -F'/|_' ' {print $NF}' | awk -F. '{print $1}')
+            COMPREPLY=( $(compgen -W "${upd}" -- ${cur}) )
+            return 0
+            ;;
+        *)
+        ;;
+    esac
+
+   COMPREPLY=($(compgen -W "${opts}" -- ${cur}))  
+   return 0
+}
+complete -F _hassbian-config hassbian-config
