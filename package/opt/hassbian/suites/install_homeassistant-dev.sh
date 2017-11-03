@@ -4,7 +4,7 @@ function homeassistant-dev-show-short-info {
 }
 
 function homeassistant-dev-show-long-info {
-    echo "Installs Home Assistant from the developement from github onto this system."
+    echo "Installs Home Assistant from the developement branch from github onto this system."
 }
 
 function homeassistant-dev-show-copyright-info {
