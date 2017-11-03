@@ -45,6 +45,13 @@ Usually this script is not run after installation but could be used with some mo
 
 This script was originally contributed by [@Landrash](https://github.com/landrash).
 
+### Install Home Assistant Development Branch *(install_homeassistant-dev.sh)*
+This will install the current development branch of Home Assistant.
+This is not recommended for daily use and should only be used if you know what your doing.
+
+This script was originally contributed by [@Landrash](https://github.com/landrash).
+
+
 ### Install databases
 The following scripts are meant for use with the [recorder](https://home-assistant.io/components/recorder/) component in Home Assistant and install databases and/or tools required for using them.
 
