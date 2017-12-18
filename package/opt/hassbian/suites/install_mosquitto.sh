@@ -51,15 +51,15 @@ then
    echo "This is an workaround and will be omited once it's fixed upstream."
    echo "Downloading dependencies"
    cd
-   wget http://ftp.se.debian.org/debian/pool/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u6_armhf.deb
+   wget http://ftp.se.debian.org/debian/pool/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u7_armhf.deb
    wget http://ftp.se.debian.org/debian/pool/main/libw/libwebsockets/libwebsockets3_1.2.2-1_armhf.deb
 
    echo "Installing dependencies"
-   sudo dpkg -i libssl1.0.0_1.0.1t-1+deb8u6_armhf.deb
+   sudo dpkg -i libssl1.0.0_1.0.1t-1+deb8u7_armhf.deb
    sudo dpkg -i libwebsockets3_1.2.2-1_armhf.deb
 
    echo "Cleanup dependencies"
-   rm libssl1.0.0_1.0.1t-1+deb8u6_armhf.deb
+   rm libssl1.0.0_1.0.1t-1+deb8u7_armhf.deb
    rm libwebsockets3_1.2.2-1_armhf.deb
    
    echo "Retrying installation of mosquitto"
