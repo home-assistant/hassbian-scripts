@@ -256,7 +256,7 @@ case $COMMAND in
    get-suite-state-info $SUITE
    ;;
 "log")
-   cat $LOGFILE | a=$(cat); curl -X POST -s -d "$a" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}'
+   a=$(cat $LOGFILE); curl -X POST -s -d "$a" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}'
    ;;
 *)
    usage
