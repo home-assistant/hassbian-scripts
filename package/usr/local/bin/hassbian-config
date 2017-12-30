@@ -1,5 +1,5 @@
 #!/bin/bash
-
+LOGFILE=/tmp/hassbian.log
 SUITE_INSTALL_DIR=/opt/hassbian/suites
 SUITE_INSTALL_DB=/srv/homeassistant/hassbian/suite-states
 SUITE_INSTALL_DB_LOCK=/srv/homeassistant/hassbian/suite-states.lock
@@ -12,6 +12,7 @@ function usage {
    echo     install  - installs a software suite
    echo     upgrade  - upgrades a software suite
    echo     show     - shows software suites available
+   echo     log      - generates an hastebin link of last operation
    echo and \<suite\> is the name of a software component to operate on.
    echo
 }
@@ -228,7 +229,7 @@ case $COMMAND in
 "install")
    if verify-suite $SUITE
    then
-      install-suite $SUITE
+      install-suite $SUITE | tee $LOGFILE
    else
       echo "suite $SUITE doesn't exist."
    fi
@@ -245,7 +246,7 @@ case $COMMAND in
 "upgrade")
    if verify-suite $SUITE
    then
-      upgrade-suite $SUITE
+      upgrade-suite $SUITE | tee $LOGFILE
    else
       echo "suite $SUITE doesn't exist."
    fi
@@ -253,6 +254,10 @@ case $COMMAND in
    ;;
 "state")
    get-suite-state-info $SUITE
+   ;;
+"log")
+   haste() { a=$(cat); curl -X POST -s -d "$a" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}'; }
+   cat $LOGFILE | haste
    ;;
 *)
    usage
