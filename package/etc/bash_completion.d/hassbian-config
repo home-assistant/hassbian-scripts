@@ -4,7 +4,7 @@ _hassbian-config()
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="install upgrade show"
+    opts="install upgrade show log"
 
     case "${prev}" in
         install)
