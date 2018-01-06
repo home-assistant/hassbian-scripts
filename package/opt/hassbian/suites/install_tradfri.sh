@@ -23,7 +23,11 @@ fi
 
 echo "Running apt-get preparation"
 apt-get update
+<<<<<<< HEAD
 apt-get install -y cython3 dh-autoreconf
+=======
+apt-get install -y dh-autoreconf
+>>>>>>> pr/1
 
 echo "Changing to homeassistant user"
 sudo -u homeassistant -H /bin/bash <<EOF
@@ -31,6 +35,7 @@ sudo -u homeassistant -H /bin/bash <<EOF
 echo "Activating to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
+<<<<<<< HEAD
 echo "Cloning modified tinydtls library to a temporary folder."
 python3 -m pip install --upgrade pip setuptools wheel
 python3 -m pip install cython
@@ -51,6 +56,11 @@ git clone https://github.com/chrysn/aiocoap
 cd aiocoap
 git reset --hard 3286f48f0b949901c8b5c04c0719dc54ab63d431
 python3 -m pip install .
+=======
+echo "Installing dependencies for Tradfri."
+python3 -m pip install --upgrade pip setuptools wheel
+python3 -m pip install cython
+>>>>>>> pr/1
 
 echo "Deactivating virtualenv"
 deactivate

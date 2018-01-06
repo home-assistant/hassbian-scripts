@@ -8,7 +8,7 @@ function hassbian-script-show-long-info {
 }
 
 function hassbian-script-show-copyright-info {
-    echo "Original concept by Ludeeus <https://github.im/Ludeeus>"
+    echo "Original concept by Ludeeus <https://github.com/ludeeus>"
 }
 
 function hassbian-script-upgrade-package {
@@ -25,7 +25,7 @@ curl https://api.github.com/repos/home-assistant/hassbian-scripts/releases/lates
 HASSBIAN_PACKAGE=$(ls | grep 'hassbian*')
 
 echo "Installing newest release"
-sudo dpkg -i $HASSBIAN_PACKAGE
+sudo apt install -y /tmp/$HASSBIAN_PACKAGE
 
 echo "Cleanup"
 rm $HASSBIAN_PACKAGE

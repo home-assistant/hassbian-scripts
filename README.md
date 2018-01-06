@@ -182,3 +182,11 @@ _Note that this is intended on people who like living on the 'bleeding edge', it
 sudo hassbian-config upgrade hassbian-script
 ```
 This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
+
+## Raspbian Jessie
+If this package is used with a Debian Jessie based distrbution then you need to uncomment the source repositores in  `/etc/apt/sources.list`
+
+```text
+# Uncomment line below then 'apt-get update' to enable 'apt-get source'
+deb-src http://archive.raspbian.org/raspbian/ jessie main contrib non-free rpi
+```
