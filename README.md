@@ -19,6 +19,7 @@ where command is one of:
 - `upgrade`
 - `show`
 - `log`
+- `share-log`
 
 ##### install
 The install command takes one argument and will attempt to install the indicated suite of software.
@@ -31,6 +32,8 @@ Generally, this means that the invocation of `hassbian-config` should be run as 
 ##### show
 The show command can be run without arguments, and lists all available suites which can be installed or with a *suite* name as argument and shows information about the suite .
 ##### log
+This command shows the log from the last `hassbian-config` operation.
+##### share-log
 This command creates an easy to share hastebin link of your last `hassbian-config` operation.
 
 ## Installer script components
