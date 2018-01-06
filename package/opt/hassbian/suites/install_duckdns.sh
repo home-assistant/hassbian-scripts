@@ -45,8 +45,7 @@ if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
 	echo $domain".duckdns.org" | tee domains.txt
 	echo "CHALLENGETYPE='dns-01'" | tee -a config
 	echo "HOOK='./hook.sh'" | tee -a config
-	#sudo curl -o ./hook.sh https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/opt/hassbian/suites/files/ssl_hook.sh
-	cp /home/homeassistant/hook.sh /home/homeassistant/dehydrated/hook.sh
+	sudo curl -o ./hook.sh https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/opt/hassbian/suites/files/ssl_hook.sh
 	sed -i 's/myhome/'$domain'/g' ./hook.sh
 	sed -i 's/your-duckdns-token/'$token'/g' ./hook.sh
 	chmod 755 hook.sh
