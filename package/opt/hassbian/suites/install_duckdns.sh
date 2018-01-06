@@ -1,10 +1,11 @@
 #!/bin/bash
 function duckdns-show-short-info {
-echo -e "Setup for Duck DNS auto renewal."
+echo -e "Setup for Duck DNS auto renewal, and generates SSL certificate."
 }
 
 function duckdns-show-long-info {
 echo -e "This script adds an cron job to auto uppdate you the WAN IP address for the defined domain."
+echo -e "This script could also generate SSL certificate for https with  Let’s Encrypt."
 }
 
 function duckdns-show-copyright-info {
@@ -32,10 +33,26 @@ echo
 if [ ! "$token" ]; then
   exit
 fi
+read -p "Do you want to generate certificates to use SSL(https)? [N/y] : " SSL_RESPONSE
 
-echo "Changing back to homeassistant user..."
+echo "Changing to homeassistant user..."
 sudo -u homeassistant -H /bin/bash << EOF
 cd
+
+if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
+	git clone https://github.com/lukas2511/dehydrated.git
+	cd dehydrated
+	echo $domain".duckdns.org" | tee domains.txt
+	echo "CHALLENGETYPE='dns-01'" | tee -a config
+	echo "HOOK='./hook.sh'" | tee -a config
+	#sudo curl -o ./hook.sh https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/opt/hassbian/suites/files/ssl_hook.sh
+	cp /home/homeassistant/hook.sh /home/homeassistant/dehydrated/hook.sh
+	sed -i 's/myhome/'$domain'/g' ./hook.sh
+	sed -i 's/your-duckdns-token/'$token'/g' ./hook.sh
+	chmod 755 hook.sh
+	./dehydrated --register  --accept-terms
+	./dehydrated -c
+fi
 
 echo "Creating duckdns folder..."
 mkdir duckdns
@@ -49,8 +66,11 @@ chmod 700 duck.sh
 
 echo "Creating cron job..."
 (crontab -l ; echo "*/5 * * * * ~/duckdns/duck.sh >/dev/null 2>&1")| crontab -
+if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
+(crontab -l ; echo "0 1 1 * * /home/homeassistant/dehydrated/dehydrated -c")| crontab -
+fi
 
-echo "Changing back to root user..."
+echo "Changing to root user..."
 EOF
 
 echo "Restarting cron service..."
@@ -59,7 +79,12 @@ sudo systemctl restart cron.service
 echo
 echo "Installation done."
 echo
-echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
+if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
+echo "Remember to update your configuration.yaml to take advantage of SSL!"
+echo "Documentation for this can be found here <https://home-assistant.io/components/http/>."
+fi
+echo
+echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 echo
 return 0
 }
