@@ -116,7 +116,7 @@ if [ "$validation" != "0" ]; then
 	echo "For more information see this repo:"
 	echo "https://github.com/home-assistant/homebridge-homeassistant#customization"
 	echo
-	echo "If you have issues with this script, please say something in the #hassbian channel on Discord."
+	echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 	echo
 else
 	echo -e "\e[31mInstallation failed..."
