@@ -116,7 +116,7 @@ function verify-suite {
 }
 
 function show-installed-suites {
-  INSTALLERS=$(find $SUITE_CONTROL_DIR/ -maxdepth 1 -type f | grep -v 'homeassistant' | awk -F'/|_' ' {print $NF}' | awk -F. '{print $1}')
+  INSTALLERS=$(find $SUITE_CONTROL_DIR/ -maxdepth 1 -type f | awk -F'/|_' ' {print $NF}' | grep -v 'homeassistant' | awk -F. '{print $1}')
   for i in $INSTALLERS
   do
   STATE=$(cat $SUITE_CONTROL_DIR/$i | grep SCRIPTSTATE=installed | awk -F'=' '{print $2}')
