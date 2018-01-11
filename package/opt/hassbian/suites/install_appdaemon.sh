@@ -57,6 +57,8 @@ systemctl start appdaemon@homeassistant.service
 echo 
 echo "Installation done."
 echo
+echo "You may find the appdaemon configuration files in:"
+echo "/home/homeassistant/appdaemon"
 echo "To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
 echo
 echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
