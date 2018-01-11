@@ -1,6 +1,6 @@
 #!/bin/bash
 SUITE_INSTALL_DIR=/opt/hassbian/suites
-SUITE_CONTROL_DIR=/opt/hassbian/control
+SUITE_CONTROL_DIR=/srv/homeassistant/hassbian/control
 
 function usage {
    echo $0: usage:
