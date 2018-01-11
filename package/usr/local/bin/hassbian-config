@@ -78,7 +78,7 @@ function install-suite {
     echo "$1 is already installed..."
     echo -n "Do you want to proceed? [y/N]"
     read response
-    if [ "$response" == "y" ]; then
+    if [ "$response" == "y" ] || [ "$response" == "Y" ]; then
       source $SUITE_INSTALL_DIR/install_$1.sh
       $1-install-package
       sed -i -- 's/SCRIPTSTATE='$SUITESTATE'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/$1
