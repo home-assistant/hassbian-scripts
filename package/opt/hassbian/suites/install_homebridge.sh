@@ -10,7 +10,7 @@ function homebridge-show-long-info {
 
 function homebridge-show-copyright-info {
 	echo "Original concept by Ludeeus <https://github.com/ludeeus>"
-	echo "Disclaimer: Some parts of this script is 'borrowed' from Dale Higgs <https://github.com/dale3h>"
+	echo "Disclaimer: Some parts of this script is inspired by Dale Higgs <https://github.com/dale3h>"
 }
 
 function homebridge-install-package {
@@ -104,6 +104,24 @@ sudo systemctl daemon-reload
 sudo systemctl enable homebridge.service
 sudo systemctl start homebridge.service
 
+if [ -f "/usr/sbin/samba" ]; then
+	read -p "Do you want to add samba share for homebridge configuration? [N/y] : " SAMBA
+	if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
+		echo "Adding configuration to samba..."
+		sudo smbpasswd -a homebridge -n
+		echo "[homebridge]" | tee -a /etc/samba/smb.conf
+		echo "path = /home/homebridge/.homebridge" | tee -a /etc/samba/smb.conf
+		echo "writeable = yes" | tee -a /etc/samba/smb.conf
+		echo "guest ok = yes" | tee -a /etc/samba/smb.conf
+		echo "create mask = 0644" | tee -a /etc/samba/smb.conf
+		echo "directory mask = 0755" | tee -a /etc/samba/smb.conf
+		echo "force user = homebridge" | tee -a /etc/samba/smb.conf
+		echo "" | tee -a /etc/samba/smb.conf
+		echo "Restarting Samba service"
+		sudo systemctl restart smbd.service
+	fi
+fi
+
 echo "Checking the installation..."
 validation=$(ps -ef | grep -v grep | grep homebridge | wc -l)
 if [ "$validation" != "0" ]; then
@@ -121,7 +139,7 @@ if [ "$validation" != "0" ]; then
 else
 	echo -e "\e[31mInstallation failed..."
 	echo -e "\e[31mAborting..."
-	echo -e "\e[0mIf you have issues with this script, please say something in the #hassbian channel on Discord."
+	echo -e "\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 	return 1
 fi
 return 0
