@@ -51,7 +51,9 @@ This will allow you to controll your home with Apple's HomeKit (Siri on iOS, OSX
 By default all devices are hidden, and you will need to add som entries in your `customize.yaml` configuration.
 You can learn more about this in the [Home Assistant for Homebridge repo.](https://github.com/home-assistant/homebridge-homeassistant#customization)
 _NB!: This install script will fail resulting in your Pi to reboot, if you do not use an recomended level powersupply._
-
+```
+sudo hassbian-config install homebridge
+```
 This script was originally contributed by [@Ludeeus](https://github.com/ludeeus).
 
 ### Install databases
