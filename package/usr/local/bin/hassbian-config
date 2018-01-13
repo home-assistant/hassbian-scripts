@@ -254,6 +254,10 @@ case $COMMAND in
 "state")
    get-suite-state-info $SUITE
    ;;
+"-V")
+  dpkg -s hassbian-scripts | grep 'Version:' | awk '{print $2}'
+  exit
+  ;;
 *)
    usage
    ;;
