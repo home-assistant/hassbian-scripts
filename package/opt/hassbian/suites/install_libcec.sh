@@ -71,11 +71,8 @@ sudo ldconfig
 
 echo "Linking libcec to venv site packages"
 sudo -u homeassistant -H /bin/bash <<EOF
-if [ -d "/usr/lib/python3.5" ]; then
-   ln -s /usr/local/lib/python3.5/dist-packages/cec /srv/homeassistant/lib/python3.5/site-packages/
-   else
-   ln -s /usr/local/lib/python3.4/dist-packages/cec /srv/homeassistant/lib/python3.4/site-packages/
-fi
+PYTHONVER=$(ls /usr/local/lib/ | grep python | tail -1)
+ln -s /usr/local/lib/$PYTHONVER/dist-packages/cec /srv/homeassistant/lib/$PYTHONVER/site-packages/
 EOF
 
 echo
