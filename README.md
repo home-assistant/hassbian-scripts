@@ -21,7 +21,7 @@ The following scripts are currently included. You can view the documentation bel
   * [Samba](/docs/samba.md)
   * [Trådfri](/docs/tradfri.md)
   * [Webterminal](/docs/webterminal.md)
-* [Changelog](/releases)
+* [Changelog](https://github.com/home-assistant/hassbian-scripts/releases)
 
 ***
 ## Raspbian Jessie
