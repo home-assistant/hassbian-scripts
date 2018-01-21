@@ -6,7 +6,7 @@ The scripts in this repository where made to be used with the HASSbian image and
 ## The included scripts
 The following scripts are currently included. You can view the documentation below for usage and instructions.
 <!--- When adding stuff here, please keep it alphabetical --->
-[hassbian-config](/docs/hassbian_config.md)
+### [hassbian-config](/docs/hassbian_config.md)
 * [Duck DNS](/docs/duckdns.md)
 * [HASSbian](/docs/)
 * [Home Assistant](/docs/homeassistant.md)
@@ -22,7 +22,7 @@ The following scripts are currently included. You can view the documentation bel
   * [MariaDB](/docs/mariadb.md)
   * [MS SQL](/docs/mssql.md)
   * [PostgreSQL](/docs/postgresql.md)
-[Changelog](CHANGELOG.md)
+### [Changelog](CHANGELOG.md)
 
 ***
 ## Raspbian Jessie
