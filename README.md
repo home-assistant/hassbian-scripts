@@ -10,4 +10,4 @@ The following scripts are currently included. You can view the documentation bel
   * [Home Assistant](/docs/homeassistant.md)
   * [Homebridge](/docs/homebridge.md)
   * [Samba](/docs/samba.md)
-* [Changelog](/CHANGELOG.MD)
+* [Changelog](CHANGELOG.MD)
