@@ -8,7 +8,7 @@ The following scripts are currently included. You can view the documentation bel
 <!--- When adding stuff here, please keep it alphabetical --->
 ### [hassbian-config](/docs/hassbian_config.md)
 * [Duck DNS](/docs/duckdns.md)
-* [HASSbian](/docs/)
+* [HASSbian](/docs/hassbian.md)
 * [Home Assistant](/docs/homeassistant.md)
 * [Homebridge](/docs/homebridge.md)
 * [HUE](/docs/hue.md)
