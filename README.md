@@ -5,23 +5,24 @@ The scripts in this repository where made to be used with the HASSbian image and
 
 ## The included scripts
 The following scripts are currently included. You can view the documentation below for usage and instructions.
-* [hassbian-config](/docs/hassbian_config.md)
-  * [Duck DNS](/docs/duckdns.md)
-  * [HASSbian](/docs/)
-  * [Home Assistant](/docs/homeassistant.md)
-  * [Homebridge](/docs/homebridge.md)
-  * [HUE](/docs/hue.md)
-  * [LibCEC](/docs/libcec.md)
-  * [Mosquitto](/docs/mosquitto.md)
-  * [RaZberry ](/docs/razberry.md)
-  * [Samba](/docs/samba.md)
-  * [Trådfri](/docs/tradfri.md)
-  * [Webterminal](/docs/Webterminal.md)
-  * **Database scripts**
-    * [MariaDB](/docs/mariadb.md)
-    * [MS SQL](/docs/mssql.md)
-    * [PostgreSQL](/docs/postgresql.md)
-* [Changelog](CHANGELOG.md)
+<!--- When adding stuff here, please keep it alphabetical --->
+[hassbian-config](/docs/hassbian_config.md)
+* [Duck DNS](/docs/duckdns.md)
+* [HASSbian](/docs/)
+* [Home Assistant](/docs/homeassistant.md)
+* [Homebridge](/docs/homebridge.md)
+* [HUE](/docs/hue.md)
+* [LibCEC](/docs/libcec.md)
+* [Mosquitto](/docs/mosquitto.md)
+* [RaZberry ](/docs/razberry.md)
+* [Samba](/docs/samba.md)
+* [Trådfri](/docs/tradfri.md)
+* [Webterminal](/docs/Webterminal.md)
+* **Database scripts**
+  * [MariaDB](/docs/mariadb.md)
+  * [MS SQL](/docs/mssql.md)
+  * [PostgreSQL](/docs/postgresql.md)
+[Changelog](CHANGELOG.md)
 
 ***
 ## Raspbian Jessie
