@@ -16,7 +16,7 @@ If so, add an PR here when you are done:
 Running as: `root`  
 Default username: `pi`  
 Default password: `raspberry`  
-Default port: `1883`
+Default port: `1883`  
 Configuration file: `/etc/mosquitto/mosquitto.conf`  
 Start service: `sudo systemctl start mosquitto.service`  
 Stop service: `sudo systemctl stop mosquitto.service`  

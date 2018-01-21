@@ -13,12 +13,12 @@ If so, add an PR here when you are done:
 
 ## Additional info
 Running as: `root`  
-Default port: `4200`
+Default port: `4200`  
 Configuration file: `/etc/default/shellinabox`  
 Start service: `sudo systemctl start shellinabox.service`  
 Stop service: `sudo systemctl stop shellinabox.service`  
 Restart service: `sudo systemctl restart shellinabox.service`  
-Service status: `sudo systemctl status shellinabox.service`
+Service status: `sudo systemctl status shellinabox.service`  
 Example config for Home-Assistant:
 ```yaml
 panel_iframe:
