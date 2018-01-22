@@ -9,6 +9,7 @@ $ sudo hassbian-config upgrade hassbian
 ## Additional info
 Default username: `pi`  
 Default password: `raspberry`  
+Hostname: `hassbian`  
 SSH enabled: `true`  
 
 ***
