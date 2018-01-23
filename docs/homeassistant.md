@@ -19,7 +19,13 @@ Configuration dir: `/home/homeassistant/.homeassistant/`
 Start service: `sudo systemctl start home-assistant@homeassistant.service`  
 Stop service: `sudo systemctl stop home-assistant@homeassistant.service`  
 Restart service: `sudo systemctl restart home-assistant@homeassistant.service`  
-Service status: `sudo systemctl status home-assistant@homeassistant.service`
+Service status: `sudo systemctl status home-assistant@homeassistant.service`  
+Enter the virtual environment where Home Assistant is installed as `homeassistant`:
+```
+sudo su -s /bin/bash homeassistant
+source /srv/homeassistant/bin/activate
+```
+When you are done, type `exit` to return to the `pi` user.
 
 ***
 The installation script was originally contributed by [@Landrash](https://github.com/landrash).  
