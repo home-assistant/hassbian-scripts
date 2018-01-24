@@ -87,16 +87,26 @@ systemctl restart mosquitto.service
 
 ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
 
-echo
-echo "Installation done!"
-echo
-echo "Your MQTT broker is running at $ip_address:1883 or if prefered hassbian.local:1883"
-echo
-echo "To continue have a look at https://home-assistant.io/docs/mqtt/"
-echo
-echo "If you have issues with this script, please say something in the #devs-hassbian channel on Discord."
-echo "Original script by @dale3h"
-echo
+echo "Checking the installation..."
+validation=$(ps -ef | grep -v grep | grep mosquitto | wc -l)
+if [ "$validation" != "0" ]; then
+	echo
+	echo -e "\e[32mInstallation done.\e[0m"
+	echo
+	echo "Your MQTT broker is running at $ip_address:1883 or if prefered hassbian.local:1883"
+	echo ""
+	echo "To continue have a look at https://home-assistant.io/docs/mqtt/"
+	echo "For more information see this repo:"
+	echo "https://github.com/home-assistant/homebridge-homeassistant#customization"
+	echo
+	echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+	echo
+else
+	echo -e "\e[31mInstallation failed..."
+	echo -e "\e[31mAborting..."
+	echo -e "\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+	return 1
+fi
 return 0
 }
 
