@@ -130,6 +130,13 @@ Before running this script you should already have an Duck DNS account, during t
 ```
 sudo hassbian-config install duckdns
 ```
+
+If you choose to aslo generate SSL certificates with this you would need to add this under `http:` to your `configuration.yaml`
+```
+  ssl_certificate: /home/homeassistant/dehydrated/certs/YOURDOMAIN.duckdns.org/fullchain.pem
+  ssl_key: /home/homeassistant/dehydrated/certs/YOURDOMAIN.duckdns.org/privkey.pem
+  base_url: YOURDOMAIN.duckdns.org:PORTNUMBER
+```
 This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
 
 ### Install an web terminal for easy access to ssh in an web browser *(install_webterminal.sh)*
