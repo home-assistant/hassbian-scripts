@@ -1,13 +1,12 @@
 #!/bin/bash
 LOGFILE=/tmp/hassbian.log
 SUITE_INSTALL_DIR=/opt/hassbian/suites
-SUITE_INSTALL_DB=/srv/homeassistant/hassbian/suite-states
-SUITE_INSTALL_DB_LOCK=/srv/homeassistant/hassbian/suite-states.lock
+SUITE_CONTROL_DIR=/srv/homeassistant/hassbian/control
 
 function usage {
-   echo $0: usage:
+   echo hassbian-config usage:
    echo
-   echo $0 \<command\> \<suite\>
+   echo hassbian-config \<command\> \<suite\>
    echo where \<command\> is one of:
    echo     install   - installs a software suite
    echo     upgrade   - upgrades a software suite
@@ -36,7 +35,13 @@ function show-suites {
 	installers=$(get-all-suite-installers)
 	for i in $installers
 	do
-	  printf "\e[32m%-20s\e[0m %s\n" "$i:" "$(show-suite-info $i)"
+    if [ ! -f $SUITE_CONTROL_DIR/$i ]; then
+      SUITESTATE=""
+    else
+      SUITESTATE=$(cat $SUITE_CONTROL_DIR/$i | grep SCRIPTSTATE | awk -F'=' '{printf $2}')
+      SUITESTATE=$(printf "\e[34m $SUITESTATE%-7s")
+    fi
+	  printf "\e[32m%-20s\e[0m %s\n" "$i$SUITESTATE" "$(show-suite-info $i)"
 	done
 
 	echo -e ""
@@ -44,7 +49,7 @@ function show-suites {
 	upgrades=$(get-all-suite-upgrades)
 	for i in $upgrades
 	do
-	  printf "\e[32m%-20s\e[0m %s\n" "$i:" "$(show-suite-info $i)"
+	  printf "\e[32m%-20s\e[0m %s\n" "$i" "$(show-suite-info $i)"
 	done
     echo
     echo -e "To view more info about a suite type: 'hassbian-config show \e[32msuite-name\e[0m'"
@@ -56,64 +61,6 @@ function show-suite-long-info {
    $1-show-short-info
    $1-show-long-info
    $1-show-copyright-info
-}
-
-function get-database-lock {
-   # Create a file descriptor (we shouldn't have 300 files open already) and use it to lock the database
-   exec 300> $SUITE_INSTALL_DB_LOCK
-   flock -n 300 || exit 1
-}
-
-function release-database-lock {
-   # This is how to close a file descriptor.
-   exec 300>&-
-}
-
-# We cannot eliminate disk writes without a tmpfs
-# however, operation is likely so infrequent wear won't matter.
-function update-suite-state {
-   get-database-lock
-   # We are now the "owner" of the lockfile.
-   # Truncate or create an empty temporary file
-   >| $SUITE_INSTALL_DB.tmp
-   while read suite state
-   do
-      if [ "$suite" == "$1" ]
-      then
-         echo "$suite $2" >> $SUITE_INSTALL_DB.tmp
-      else
-         echo "$suite $state" >> $SUITE_INSTALL_DB.tmp
-      fi
-   done < $SUITE_INSTALL_DB
-
-   # And put the database back where it should be.
-   mv $SUITE_INSTALL_DB.tmp $SUITE_INSTALL_DB
-
-   release-database-lock
-}
-
-function get-suite-state {
-   suitestate="Uninstalled"
-   get-database-lock
-   while read suite state
-   do
-      if [ "$suite" == "$1" ]
-      then
-         suitestate=$state
-      fi
-   done < $SUITE_INSTALL_DB
-   release-database-lock
-   echo $suitestate
-}
-
-function get-suites-from-db {
-   get-database-lock
-   while read suite state
-   do
-      suites=$suites" "$suite
-   done < $SUITE_INSTALL_DB
-   release-database-lock
-   echo $suites
 }
 
 function check-permission {
@@ -138,29 +85,36 @@ function share-log {
 }
 
 function install-suite {
-   # Having got here, the installer script exists; source it, then run the installer function.
-   check-permission
-   update-suite-state "$1" "installing"
-   source $SUITE_INSTALL_DIR/install_$1.sh
-   if $1-install-package
-   then
-      update-suite-state "$1" "installed"
-   else
-      update-suite-state "$1" "failed"
-   fi
+  if [ ! -f $SUITE_CONTROL_DIR/$1 ]; then
+    touch $SUITE_CONTROL_DIR/$1
+    echo "SCRIPTSTATE=uninstalled" > $SUITE_CONTROL_DIR/$1
+  fi
+  SUITESTATE=$(cat $SUITE_CONTROL_DIR/$1 | grep SCRIPTSTATE | awk -F'=' '{print $2}')
+  if [ "$SUITESTATE" == "installed" ]; then
+    echo "$1 is already installed..."
+    echo -n "Do you want to proceed? [y/N]"
+    read response
+    if [ "$response" == "y" ] || [ "$response" == "Y" ]; then
+      source $SUITE_INSTALL_DIR/install_$1.sh
+      $1-install-package
+      sed -i -- 's/SCRIPTSTATE='$SUITESTATE'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/$1
+    else
+      echo "This installer will now exit..."
+      return 0
+    fi
+  else
+    source $SUITE_INSTALL_DIR/install_$1.sh
+    $1-install-package
+    sed -i -- 's/SCRIPTSTATE='$SUITESTATE'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/$1
+  fi
+  return 0
 }
 
 function upgrade-suite {
    # Having got here, the installer script exists; source it, then run the installer function.
    check-permission
-   update-suite-state "$1" "upgrading"
    source $SUITE_INSTALL_DIR/upgrade_$1.sh
-   if $1-upgrade-package
-   then
-      update-suite-state "$1" "upgraded"
-   else
-      update-suite-state "$1" "failed"
-   fi
+   $1-upgrade-package
 }
 
 function verify-suite {
@@ -177,44 +131,16 @@ function verify-suite {
    return $retval
 }
 
-function get-suite-state-info {
-   # Get the state of one suite (non empty parameter) or all suites (empty parameter)
-   if [ "$1" != "" ]
-   then
-      suiteops=$1
-   else
-      installed=$(get-suites-from-db)
-      available=$(get-all-suite-installers)
-      # Now get all unique items from both these env vars.
-      suiteops=$(echo "$installed $available" | tr ' ' '\n' | sort -u )
-   fi
-   # now start the JSON build - I've left spaces in the text to make it clearer.
-   json=""
-   frag='{ "suites": {'
-   first=1
-   # One or more space separated suites in $operation, loop round one by one
-   for suite in $suiteops
-   do
-      if [ $first -eq 0 ]
-      then
-         # If this isn't the first entity we've added, append a comma.
-         frag="$frag,"
-      fi
-      first=0
-      suitestate=$(get-suite-state $suite)
-      if verify-suite $suite
-      then
-         suiteinfo=$(show-suite-info $suite)
-      else
-         suiteinfo="Unavailable information for suite '$suite'"
-      fi
-      # No good way to do this, so quick-n-dirty:
-      json="\"$suite\": { \"state\": \"$suitestate\", \"description\": \"$suiteinfo\" } "
-      frag="$frag $json"
-   done
-   # Finish off the JSON fragment, closing all that we opened above
-   json="$frag } }"
-   echo $json
+function show-installed-suites {
+  INSTALLERS=$(find $SUITE_CONTROL_DIR/ -maxdepth 1 -type f | awk -F'/|_' ' {print $NF}' | grep -v 'homeassistant' | awk -F. '{print $1}')
+  for i in $INSTALLERS
+  do
+  STATE=$(cat $SUITE_CONTROL_DIR/$i | grep SCRIPTSTATE=installed | awk -F'=' '{print $2}')
+  if [ "$STATE" != "" ]; then
+  echo "$i:" $STATE
+  fi
+  done
+  return 0
 }
 
 if [ $# -lt 1 ]
@@ -268,12 +194,19 @@ case $COMMAND in
    ;;
 "state")
    get-suite-state-info $SUITE
+   exit
    ;;
 "log")
    more $LOGFILE
+   exit
    ;;
- "share-log")
+"share-log")
    share-log
+   exit
+   ;;
+"show-installed")
+   show-installed-suites
+   exit
    ;;
 *)
    usage
