@@ -54,9 +54,29 @@ sync
 echo "Starting AppDaemon service"
 systemctl start appdaemon@homeassistant.service
 
+if [ -f "/usr/sbin/samba" ]; then
+	read -p "Do you want to add samba share for AppDaemon configuration? [N/y] : " SAMBA
+	if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
+		echo "Adding configuration to samba..."
+		echo "[appdaemon]" | tee -a /etc/samba/smb.conf
+		echo "path = /home/homeassistant/appdaemon" | tee -a /etc/samba/smb.conf
+		echo "writeable = yes" | tee -a /etc/samba/smb.conf
+		echo "guest ok = yes" | tee -a /etc/samba/smb.conf
+		echo "create mask = 0644" | tee -a /etc/samba/smb.conf
+		echo "directory mask = 0755" | tee -a /etc/samba/smb.conf
+		echo "force user = homeassistant" | tee -a /etc/samba/smb.conf
+		echo "" | tee -a /etc/samba/smb.conf
+		echo "Restarting Samba service"
+		sudo systemctl restart smbd.service
+	fi
+fi
+
+
 echo 
 echo "Installation done."
 echo
+echo "You may find the appdaemon configuration files in:"
+echo "/home/homeassistant/appdaemon"
 echo "To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
 echo
 echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
