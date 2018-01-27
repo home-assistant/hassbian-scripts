@@ -30,8 +30,7 @@ sudo npm install -g --unsafe-perm homebridge hap-nodejs node-gyp
 sudo npm install -g homebridge-homeassistant
 
 echo "Adding homebridge user, and creating config file..."
-sudo useradd -M --system homebridge
-sudo mkdir /home/homebridge
+sudo useradd --system --create-home homebridge
 sudo mkdir /home/homebridge/.homebridge
 sudo touch /home/homebridge/.homebridge/config.json
 
