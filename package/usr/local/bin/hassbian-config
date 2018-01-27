@@ -3,9 +3,9 @@ SUITE_INSTALL_DIR=/opt/hassbian/suites
 SUITE_CONTROL_DIR=/srv/homeassistant/hassbian/control
 
 function usage {
-   echo $0: usage:
+   echo hassbian-config usage:
    echo
-   echo $0 \<command\> \<suite\>
+   echo hassbian-config \<command\> \<suite\>
    echo where \<command\> is one of:
    echo     install        - installs a software suite
    echo     upgrade        - upgrades a software suite
