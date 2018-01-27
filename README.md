@@ -168,6 +168,14 @@ sudo hassbian-config upgrade home-assistant
 ```
 This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
 
+### Upgrade your AppDaemon *(uppgrade_appdaemon.sh)*
+This script will upgrade AppDaemon to the newest version.
+```
+sudo hassbian-config upgrade appdaemon
+```
+
+This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
+
 ### Upgrade your HASSbian installation *(uppgrade_hassbian.sh)*
 This script will update the base OS on the system.
 ```
