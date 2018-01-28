@@ -127,4 +127,4 @@ fi
 return 0
 }
 
-[[ $0 == "$BASH_SOURCE" ]] && homebridge-install-package
+[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
