@@ -7,6 +7,7 @@ The scripts in this repository where made to be used with the HASSbian image and
 The following scripts are currently included. You can view the documentation below for usage and instructions.
 <!--- When adding stuff here, please keep it alphabetical --->
 * [hassbian-config](/docs/hassbian_config.md)
+  * [AppDaemon](/docs/appdaemon.md)
   * [Duck DNS](/docs/duckdns.md)
   * [HASSbian](/docs/hassbian.md)
   * [Home Assistant](/docs/homeassistant.md)
