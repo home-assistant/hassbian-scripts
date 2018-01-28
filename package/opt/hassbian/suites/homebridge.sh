@@ -108,21 +108,23 @@ sudo systemctl daemon-reload
 sudo systemctl enable homebridge.service
 sudo systemctl start homebridge.service
 
-if [ -f "/usr/sbin/samba" ]; then
-	read -p "Do you want to add samba share for homebridge configuration? [N/y] : " SAMBA
-	if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
-		echo "Adding configuration to samba..."
-		sudo smbpasswd -a homebridge -n
-		echo "[homebridge]" | tee -a /etc/samba/smb.conf
-		echo "path = /home/homebridge/.homebridge" | tee -a /etc/samba/smb.conf
-		echo "writeable = yes" | tee -a /etc/samba/smb.conf
-		echo "guest ok = yes" | tee -a /etc/samba/smb.conf
-		echo "create mask = 0644" | tee -a /etc/samba/smb.conf
-		echo "directory mask = 0755" | tee -a /etc/samba/smb.conf
-		echo "force user = homebridge" | tee -a /etc/samba/smb.conf
-		echo "" | tee -a /etc/samba/smb.conf
-		echo "Restarting Samba service"
-		sudo systemctl restart smbd.service
+if [ "$ACCEPT" != "true" ]; then
+	if [ -f "/usr/sbin/samba" ]; then
+		read -p "Do you want to add samba share for homebridge configuration? [N/y] : " SAMBA
+		if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
+			echo "Adding configuration to samba..."
+			sudo smbpasswd -a homebridge -n
+			echo "[homebridge]" | tee -a /etc/samba/smb.conf
+			echo "path = /home/homebridge/.homebridge" | tee -a /etc/samba/smb.conf
+			echo "writeable = yes" | tee -a /etc/samba/smb.conf
+			echo "guest ok = yes" | tee -a /etc/samba/smb.conf
+			echo "create mask = 0644" | tee -a /etc/samba/smb.conf
+			echo "directory mask = 0755" | tee -a /etc/samba/smb.conf
+			echo "force user = homebridge" | tee -a /etc/samba/smb.conf
+			echo "" | tee -a /etc/samba/smb.conf
+			echo "Restarting Samba service"
+			sudo systemctl restart smbd.service
+		fi
 	fi
 fi
 
