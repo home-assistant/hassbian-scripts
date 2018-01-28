@@ -58,8 +58,8 @@ return 0
 }
 
 function homeassistant-upgrade-package {
-home-assistant-show-short-info
-home-assistant-show-copyright-info
+homeassistant-show-short-info
+homeassistant-show-copyright-info
 
 echo "Checking current version"
 

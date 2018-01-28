@@ -84,7 +84,7 @@ function install-suite {
     sed -i -- 's/SCRIPTSTATE='$SUITESTATE'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/$1
   elif [ "$SUITESTATE" == "installed" ]; then
     echo "$1 is already installed, trying upgrade script..."
-    UPGRADE=$(type $1-upgrade-package &> /dev/null)
+    UPGRADE=$(cat $SUITE_INSTALL_DIR/$1.sh | grep $1-upgrade-package)
       if [ "$UPGRADE" == "" ]; then
         echo "Upgrade script is not available..."
         echo "You can force run the install script like this:"
