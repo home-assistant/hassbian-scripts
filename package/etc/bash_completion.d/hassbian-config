@@ -1,10 +1,10 @@
-_hassbian-config() 
+_hassbian-config()
 {
     local cur prev opts
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="install upgrade show"
+    opts="install upgrade show log share-log"
 
     case "${prev}" in
         install)
@@ -21,7 +21,7 @@ _hassbian-config()
         ;;
     esac
 
-   COMPREPLY=($(compgen -W "${opts}" -- ${cur}))  
+   COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
    return 0
 }
 complete -F _hassbian-config hassbian-config
