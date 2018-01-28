@@ -31,7 +31,6 @@ if [ "$(id -u)" != "0" ]; then
     return 1
 fi
 
-
 echo
 echo "Installation done."
 echo
