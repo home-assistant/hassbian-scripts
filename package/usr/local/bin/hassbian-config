@@ -1,4 +1,5 @@
 #!/bin/bash
+LOGFILE=/tmp/hassbian.log
 SUITE_INSTALL_DIR=/opt/hassbian/suites
 SUITE_CONTROL_DIR=/srv/homeassistant/hassbian/control
 
@@ -7,9 +8,11 @@ function usage {
    echo
    echo hassbian-config \<command\> \<suite\>
    echo where \<command\> is one of:
-   echo     install        - installs a software suite
-   echo     upgrade        - upgrades a software suite
-   echo     show           - shows software suites available
+   echo     install   - installs a software suite
+   echo     upgrade   - upgrades a software suite
+   echo     show      - shows software suites available
+   echo     log       - displays an log of the last operation
+   echo     share-log - generates an hastebin link of the last operation
    echo and \<suite\> is the name of a software component to operate on.
    echo
 }
@@ -66,6 +69,19 @@ function check-permission {
       echo "Error: hassbian-config must be run as root (with sudo) for this to be possible"
       exit 1
    fi
+}
+
+function share-log {
+    echo "This will put the output from your last operation on hastebin."
+    echo "This could include sensitive informastion."
+    echo "If you are unsure about what it contains, you can rin 'hassbian-config log' to check."
+    read -p "Do you want to crate an hastebin link? [N/y] : " RESPONCE
+    if [ "$RESPONCE" == "y" ] || [ "$RESPONCE" == "Y" ]; then
+    echo ""
+    a=$(cat $LOGFILE); curl -X POST -s -d "$a" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}'
+    exit 1
+    fi
+    exit 1
 }
 
 function install-suite {
@@ -153,7 +169,7 @@ case $COMMAND in
 "install")
    if verify-suite $SUITE
    then
-      install-suite $SUITE
+      install-suite $SUITE | tee $LOGFILE
    else
       echo "suite $SUITE doesn't exist."
    fi
@@ -170,7 +186,7 @@ case $COMMAND in
 "upgrade")
    if verify-suite $SUITE
    then
-      upgrade-suite $SUITE
+      upgrade-suite $SUITE | tee $LOGFILE
    else
       echo "suite $SUITE doesn't exist."
    fi
@@ -178,7 +194,20 @@ case $COMMAND in
    ;;
 "state")
    get-suite-state-info $SUITE
+   exit
    ;;
+"log")
+   more $LOGFILE
+   exit
+   ;;
+"share-log")
+   share-log
+   exit
+   ;;
+"-V")
+  dpkg -s hassbian-scripts | grep 'Version:' | awk '{print $2}'
+  exit
+  ;;
 "show-installed")
    show-installed-suites
    exit
