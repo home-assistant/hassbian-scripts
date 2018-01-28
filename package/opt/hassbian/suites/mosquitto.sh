@@ -62,21 +62,26 @@ touch pwfile
 chown mosquitto:mosquitto pwfile
 chmod 0600 pwfile
 
-echo
-echo "Please take a moment to setup your first MQTT user"
-echo
-
-echo -n "Username: "
-read mqtt_username
-if [ ! "$mqtt_username" ]; then
+if [ "$ACCEPT" == "true" ]; then
   mqtt_username=pi
-fi
-
-echo -n "Password: "
-read -s mqtt_password
-echo
-if [ ! "$mqtt_password" ]; then
   mqtt_password=raspberry
+else
+  echo
+  echo "Please take a moment to setup your first MQTT user"
+  echo
+
+  echo -n "Username: "
+  read mqtt_username
+  if [ ! "$mqtt_username" ]; then
+    mqtt_username=pi
+  fi
+
+  echo -n "Password: "
+  read -s mqtt_password
+  echo
+  if [ ! "$mqtt_password" ]; then
+    mqtt_password=raspberry
+  fi
 fi
 
 echo "Creating password entry for user $mqtt_username"

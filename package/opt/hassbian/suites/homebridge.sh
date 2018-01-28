@@ -34,20 +34,25 @@ sudo useradd --system --create-home homebridge
 sudo mkdir /home/homebridge/.homebridge
 sudo touch /home/homebridge/.homebridge/config.json
 
-echo ""
-echo ""
-echo "Example: https://home.duckdns.org:8123"
-echo -n "Enter your Home Assistant URL and port: "
-read HOMEASSISTANT_URL
-if [ ! "$HOMEASSISTANT_URL" ]; then
-    HOMEASSISTANT_URL="http://127.0.0.1:8123"
-fi
+if [ "$ACCEPT" == "true" ]; then
+  HOMEASSISTANT_URL="http://127.0.0.1:8123"
+  HOMEASSISTANT_PASSWORD=""
+else
+  echo ""
+  echo ""
+  echo "Example: https://home.duckdns.org:8123"
+  echo -n "Enter your Home Assistant URL and port: "
+  read HOMEASSISTANT_URL
+  if [ ! "$HOMEASSISTANT_URL" ]; then
+      HOMEASSISTANT_URL="http://127.0.0.1:8123"
+  fi
 
-echo ""
-echo ""
-echo -n "Enter your Home Assistant API password: "
-read -s HOMEASSISTANT_PASSWORD
-echo
+  echo ""
+  echo ""
+  echo -n "Enter your Home Assistant API password: "
+  read -s HOMEASSISTANT_PASSWORD
+  echo
+fi
 
 HOMEBRIDGE_PIN=$(printf "%03d-%02d-%03d" $(($RANDOM % 999)) $(($RANDOM % 99)) $(($RANDOM % 999)))
 HEX_CHARS=0123456789ABCDEF
