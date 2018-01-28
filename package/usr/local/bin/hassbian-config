@@ -215,7 +215,8 @@ case $COMMAND in
      shift # past argument
      ;;
   *)
-     usage
+     RUN="usage"
+     shift # past argument
      ;;
 esac
 done
