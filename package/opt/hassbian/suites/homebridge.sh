@@ -30,8 +30,7 @@ sudo npm install -g --unsafe-perm homebridge hap-nodejs node-gyp
 sudo npm install -g homebridge-homeassistant
 
 echo "Adding homebridge user, and creating config file..."
-sudo useradd -M --system homebridge
-sudo mkdir /home/homebridge
+sudo useradd --system --create-home homebridge
 sudo mkdir /home/homebridge/.homebridge
 sudo touch /home/homebridge/.homebridge/config.json
 
@@ -104,6 +103,24 @@ sudo systemctl daemon-reload
 sudo systemctl enable homebridge.service
 sudo systemctl start homebridge.service
 
+if [ -f "/usr/sbin/samba" ]; then
+	read -p "Do you want to add samba share for homebridge configuration? [N/y] : " SAMBA
+	if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
+		echo "Adding configuration to samba..."
+		sudo smbpasswd -a homebridge -n
+		echo "[homebridge]" | tee -a /etc/samba/smb.conf
+		echo "path = /home/homebridge/.homebridge" | tee -a /etc/samba/smb.conf
+		echo "writeable = yes" | tee -a /etc/samba/smb.conf
+		echo "guest ok = yes" | tee -a /etc/samba/smb.conf
+		echo "create mask = 0644" | tee -a /etc/samba/smb.conf
+		echo "directory mask = 0755" | tee -a /etc/samba/smb.conf
+		echo "force user = homebridge" | tee -a /etc/samba/smb.conf
+		echo "" | tee -a /etc/samba/smb.conf
+		echo "Restarting Samba service"
+		sudo systemctl restart smbd.service
+	fi
+fi
+
 echo "Checking the installation..."
 validation=$(ps -ef | grep -v grep | grep homebridge | wc -l)
 if [ "$validation" != "0" ]; then
@@ -126,5 +143,6 @@ else
 fi
 return 0
 }
+
 
 [[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
