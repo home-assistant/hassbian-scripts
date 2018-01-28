@@ -30,7 +30,7 @@ echo
 echo "You can now access the web terminal here: http://$ip_address:4200"
 echo "You can also add this to your Home-Assistant config in an 'panel_iframe'"
 echo
-echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
+echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 echo
 return 0
 }

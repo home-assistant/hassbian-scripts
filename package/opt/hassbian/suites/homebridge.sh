@@ -10,7 +10,7 @@ function homebridge-show-long-info {
 
 function homebridge-show-copyright-info {
 	echo "Original concept by Ludeeus <https://github.com/ludeeus>"
-	echo "Disclaimer: Some parts of this script is 'borrowed' from Dale Higgs <https://github.com/dale3h>"
+	echo "Disclaimer: Some parts of this script is inspired by Dale Higgs <https://github.com/dale3h>"
 }
 
 function homebridge-install-package {
@@ -116,12 +116,12 @@ if [ "$validation" != "0" ]; then
 	echo "For more information see this repo:"
 	echo "https://github.com/home-assistant/homebridge-homeassistant#customization"
 	echo
-	echo "If you have issues with this script, please say something in the #hassbian channel on Discord."
+	echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 	echo
 else
 	echo -e "\e[31mInstallation failed..."
 	echo -e "\e[31mAborting..."
-	echo -e "\e[0mIf you have issues with this script, please say something in the #hassbian channel on Discord."
+	echo -e "\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 	return 1
 fi
 return 0

@@ -106,10 +106,9 @@ echo "Uppgrade complete."
 echo
 echo "Note that it may take some time to start up after an upgrade."
 echo
-echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
+echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 echo
 return 0
 }
 
-# Make this script function as it always has if run standalone, rather than issue a warning and do nothing.
-[[ $0 == "$BASH_SOURCE" ]] && homeassistant-install-package
+[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

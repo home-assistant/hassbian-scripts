@@ -78,7 +78,7 @@ EOF
 echo
 echo "Installation done."
 echo
-echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
+echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 echo
 echo "To continue have a look at https://home-assistant.io/components/hdmi_cec/"
 echo "It's recomended that you restart your Pi before continuing with testing libcec."
@@ -86,4 +86,4 @@ echo
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config install instead"
+[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

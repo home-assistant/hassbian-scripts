@@ -18,6 +18,8 @@ where command is one of:
 - `install`
 - `upgrade`
 - `show`
+- `log`
+- `share-log`
 
 ##### install
 The install command takes one argument and will attempt to install the indicated suite of software.
@@ -29,6 +31,10 @@ Generally, this means that the invocation of `hassbian-config` should be run as 
 `sudo hassbian-config upgrade *suite*`
 ##### show
 The show command can be run without arguments, and lists all available suites which can be installed or with a *suite* name as argument and shows information about the suite .
+##### log
+This command shows the log from the last `hassbian-config` operation.
+##### share-log
+This command creates an easy to share hastebin link of your last `hassbian-config` operation.
 
 ## Installer script components
 All scripts listed below are helper scripts for the `hassbian-config` command, and shouldn't be run directly.  The documentation has been kept for explanatory purposes only.
@@ -45,14 +51,23 @@ Usually this script is not run after installation but could be used with some mo
 
 This script was originally contributed by [@Landrash](https://github.com/landrash).
 
+
 ### Install Homebridge with Home Assistant addon *(install_homebridge.sh)*
 This script will install and configure Homebridge to be used with Home Assistant.
 This will allow you to controll your home with Apple's HomeKit (Siri on iOS, OSX and AppleTV).
 By default all devices are hidden, and you will need to add som entries in your `customize.yaml` configuration.
 You can learn more about this in the [Home Assistant for Homebridge repo.](https://github.com/home-assistant/homebridge-homeassistant#customization)
 _NB!: This install script will fail resulting in your Pi to reboot, if you do not use an recomended level powersupply._
+```
+sudo hassbian-config install homebridge
+```
+This script was originally contributed by [@Ludeeus](https://github.com/ludeeus).  
 
-This script was originally contributed by [@Ludeeus](https://github.com/ludeeus).
+### Install Home Assistant Development Branch *(install_homeassistant-dev.sh)*
+This will install the current development branch of Home Assistant.
+This is not recommended for daily use and should only be used if you know what your doing.
+
+This script was originally contributed by [@Landrash](https://github.com/landrash).
 
 ### Install databases
 The following scripts are meant for use with the [recorder](https://home-assistant.io/components/recorder/) component in Home Assistant and install databases and/or tools required for using them.
@@ -104,7 +119,7 @@ sudo hassbian-config install tradfri
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
 
 ### Install Mosquitto *(install_mosquitto.sh)*
-**This script was broken since packages are not available for Debian Stretch, but we have implemented an workaround that make sure this will run as intended on HASSbian Stretch.** This script installs the MQTT Mosquitto server. Repository from the Mosquitto project is added to package system and the official packages for Debian are installed.
+This script installs the MQTT Mosquitto server. Repository from the Mosquitto project is added to package system and the official packages for Debian are installed.
 Additionally, this script helps you create your first MQTT user that can be used with Home Assistant.
 
 
@@ -131,6 +146,13 @@ This script adds an cron job to auto update you the WAN IP address for the defin
 Before running this script you should already have an Duck DNS account, during the installation you will be asked to supply your domain name and the token for your account.
 ```
 sudo hassbian-config install duckdns
+```
+
+If you choose to aslo generate SSL certificates with this you would need to add this under `http:` to your `configuration.yaml`
+```
+  ssl_certificate: /home/homeassistant/dehydrated/certs/YOURDOMAIN.duckdns.org/fullchain.pem
+  ssl_key: /home/homeassistant/dehydrated/certs/YOURDOMAIN.duckdns.org/privkey.pem
+  base_url: YOURDOMAIN.duckdns.org:PORTNUMBER
 ```
 This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
 
@@ -168,6 +190,14 @@ This script will automate the process of upgrading your Home Assistant to the ne
 ```
 sudo hassbian-config upgrade home-assistant
 ```
+This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
+
+### Upgrade your AppDaemon *(uppgrade_appdaemon.sh)*
+This script will upgrade AppDaemon to the newest version.
+```
+sudo hassbian-config upgrade appdaemon
+```
+
 This script was originally contributed by [@Ludeeus](https://github.com/Ludeeus).
 
 ### Upgrade your HASSbian installation *(uppgrade_hassbian.sh)*

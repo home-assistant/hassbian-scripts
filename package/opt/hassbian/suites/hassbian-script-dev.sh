@@ -36,7 +36,7 @@ sudo rm -r /tmp/hassbian_config_update
 echo
 echo "Upgrade is done."
 echo
-echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
+echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 echo
 return 0
 }
