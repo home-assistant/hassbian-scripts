@@ -204,6 +204,10 @@ case $COMMAND in
    share-log
    exit
    ;;
+"-V")
+  dpkg -s hassbian-scripts | grep 'Version:' | awk '{print $2}'
+  exit
+  ;;
 "show-installed")
    show-installed-suites
    exit
