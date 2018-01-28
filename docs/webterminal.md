@@ -1,5 +1,5 @@
 ## Description
-This script installs an web terminal called 'shellinabox' to you system that give you SSH access in your web browser.
+This script installs an web terminal called 'shellinabox' to your system that give you SSH access in your web browser.
 
 ## Installation
 ```
