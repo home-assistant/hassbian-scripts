@@ -85,4 +85,4 @@ return 0
 }
 
 # Make this script function as it always has if run standalone, rather than issue a warning and do nothing.
-[[ $0 == "$BASH_SOURCE" ]] && homeassistant-install-package
+[[ $0 == "$BASH_SOURCE" ]] && appdaemon-install-package
