@@ -10,8 +10,8 @@ where command is one of:
 - `install` Use this to isntall an suite.
 - `upgrade` Use this to upgrade an installed suite.
 - `show` This will show you all available suites.
-- `log` This wil show you the log of last hassbian-config operation.
-- `share-log` This wil generate an hastebin link of the last hassbian-config operation.
+- `log` This will show you the log of last hassbian-config operation.
+- `share-log` This will generate an hastebin link of the last hassbian-config operation.
 
 optional flags:
 - `-y` This will accept defaults on scripts that allow this.
