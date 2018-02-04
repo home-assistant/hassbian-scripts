@@ -1,9 +1,9 @@
 #!/bin/bash
 
 OWNER=$(whoami)
-VERSIOM=$(grep version  -i package/DEBIAN/control | cut -d ":" -f2 | tr -d [:space:])
+VERSION=$(grep version  -i package/DEBIAN/control | cut -d ":" -f2 | tr -d [:space:])
 PACKAGE=$(grep package  -i package/DEBIAN/control | cut -d ":" -f2 | tr -d [:space:])
-PACKAGENAME="${PACKAGE}_${VERSIOM}.deb"
+PACKAGENAME="${PACKAGE}_${VERSION}.deb"
 
 if [ -f $PACKAGENAME ]; then
 	echo "Previous package exists. Deleting"
