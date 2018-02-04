@@ -37,7 +37,7 @@ sudo patch <<'EOF'
 @@ -252,3 +252,11 @@
  # to the drivers directory for these users to have write rights in it
  ;   write list = root, @lpadmin
- 
+
 +[homeassistant]
 +path = /home/homeassistant/.homeassistant
 +writeable = yes
@@ -57,11 +57,11 @@ ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $
 echo
 echo "Installation done."
 echo
-echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
+echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 echo
 echo "Configuration is now available as a Samba share at \\\\$ip_address\homeassistant"
 echo
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config install instead"
+[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

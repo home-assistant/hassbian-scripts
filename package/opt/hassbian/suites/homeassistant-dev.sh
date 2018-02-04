@@ -44,7 +44,7 @@ systemctl start home-assistant@homeassistant.service
 
 ip_address=$(ifconfig | awk -F':' '/inet addr/&&!/127.0.0.1/{split($2,_," ");print _[1]}')
 
-echo 
+echo
 echo "Installation done."
 echo
 echo "Your Home Assistant development branch installation is running at $ip_address:8123 or if prefered http://hassbian.local:8123"
@@ -52,5 +52,4 @@ echo
 return 0
 }
 
-# Make this script function as it always has if run standalone, rather than issue a warning and do nothing.
-[[ $0 == "$BASH_SOURCE" ]] && homeassistant-install-package
+[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
