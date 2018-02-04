@@ -12,6 +12,7 @@ where command is one of:
 - `show` This will show you all available suites.
 - `log` This will show you the log of last hassbian-config operation.
 - `share-log` This will generate an hastebin link of the last hassbian-config operation.
+- `-V` This will show you the installed version of `hassbian-config`.
 
 Optional flags:
 - `-y` This will accept defaults on scripts that allow this.
