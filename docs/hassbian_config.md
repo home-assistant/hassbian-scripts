@@ -7,15 +7,15 @@ The hassbian-config command is invoked with:
 hassbian-config *command* *suite* *flag(optional)*
 ```
 where command is one of:
-- `install` Use this to isntall an suite.
+- `install` Use this to install an suite.
 - `upgrade` Use this to upgrade an installed suite.
 - `show` This will show you all available suites.
 - `log` This will show you the log of last hassbian-config operation.
 - `share-log` This will generate an hastebin link of the last hassbian-config operation.
 
-optional flags:
+Optional flags:
 - `-y` This will accept defaults on scripts that allow this.
-- `-f` This will force run an script, usefull is you try to install something a second time.
+- `-f` This will force run an script. This is useful if you need to reinstall a package.
 
 ## Installation
 This package is pre-installed on the [HASSbian image](https://github.com/home-assistant/pi-gen/releases).
