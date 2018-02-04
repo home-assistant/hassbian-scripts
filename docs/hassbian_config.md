@@ -18,8 +18,8 @@ optional flags:
 - `-f` This will force run an script, usefull is you try to install something a second time.
 
 ## Installation
-This package is installed in the [HASSbian image](https://github.com/home-assistant/pi-gen/releases), so you do not need to install it there.
-This will probably work on other distros also, but testing will only be done on HASSBian, therefor no support will be given if you choose to install it elsewhere.
+This package is pre-installed on the [HASSbian image](https://github.com/home-assistant/pi-gen/releases).
+This package can be used with Raspbian lite but it's not recommended.
 ```
 $ curl https://api.github.com/repos/home-assistant/hassbian-scripts/releases/latest | grep "browser_download_url.*deb" | cut -d : -f 2,3 | tr -d \" | wget -qi -
 $ sudo apt install -y ./hassbian*
