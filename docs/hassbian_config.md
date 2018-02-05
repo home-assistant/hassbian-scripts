@@ -1,4 +1,4 @@
-## Description
+## Description 
 This command is a package handler for the Hassbian scripts. All interactions for installing software should be handled through this command. Running the individual scripts to install software will no longer work as expected.
 
 #### Usage
