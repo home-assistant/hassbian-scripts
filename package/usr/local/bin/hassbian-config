@@ -103,6 +103,13 @@ function install-suite {
 
 function upgrade-suite {
    # Having got here, the installer script exists; source it, then run the installer function.
+   UPGRADE=$(cat $SUITE_INSTALL_DIR/$1.sh | grep $1-upgrade-package)
+     if [ "$UPGRADE" == "" ]; then
+       echo "Upgrade script is not available..."
+       echo "You can force run the install script like this:"
+       echo "sudo hassbian-config -f install $1"
+       exit
+     fi
    check-permission
    source $SUITE_INSTALL_DIR/$1.sh
    $1-upgrade-package
