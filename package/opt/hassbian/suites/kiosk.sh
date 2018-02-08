@@ -21,7 +21,8 @@ apt-get update
 apt-get -y --force-yes install screen checkinstall xterm xdotool x11-xserver-utils unclutter chromium-browser x11vnc expect
 
 # Set up x11vnc
-sudo -u pi /home/pi/scripts/setX11vncPass raspberry
+cp /opt/hassbian/suites/files/setX11vncPass /home/pi/scripts/setX11vncPass
+sudo -u pi /home/pi/setX11vncPass raspberry
 if [ ! -f /home/pi/.vnc/passwd ]; then
   echo "/home/pi/.vnc/passwd was not created. Trying again."
   sudo -u pi /home/pi/scripts/setX11vncPass raspberry
