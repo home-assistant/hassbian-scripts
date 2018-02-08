@@ -22,6 +22,8 @@ apt-get -y --force-yes install screen checkinstall xterm xdotool x11-xserver-uti
 
 # Set up x11vnc
 cp /opt/hassbian/suites/files/setX11vncPass /home/pi/scripts/setX11vncPass
+chmod +x /home/pi/scripts/setX11vncPass
+
 sudo -u pi /home/pi/setX11vncPass raspberry
 if [ ! -f /home/pi/.vnc/passwd ]; then
   echo "/home/pi/.vnc/passwd was not created. Trying again."
