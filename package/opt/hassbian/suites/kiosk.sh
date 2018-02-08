@@ -18,8 +18,7 @@ kiosk-show-copyright-info
 
 apt-get update
 
-apt-get -y --force-yes install screen checkinstall avahi-daemon libavahi-compat-libdnssd1 xterm 
-apt-get install -y --force-yes xdotool x11-xserver-utils unclutter chromium-browser x11vnc expect
+apt-get -y --force-yes install screen checkinstall xterm xdotool x11-xserver-utils unclutter chromium-browser x11vnc expect
 
 # Set up x11vnc
 sudo -u pi /home/pi/scripts/setX11vncPass raspberry
