@@ -7,7 +7,7 @@ Description=Install Home Assistant
 After=network.target
 
 [Service]
-ExecStart=/opt/hassbian/suites/install_homeassistant.sh
+ExecStart=/usr/local/bin/hassbian-config install homeassistant
 
 [Install]
 WantedBy=multi-user.target
