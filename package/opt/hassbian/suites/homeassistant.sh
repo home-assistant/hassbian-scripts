@@ -25,6 +25,7 @@ echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
 echo "Installing latest version of Home Assistant"
+pip3 install setuptools wheel
 pip3 install homeassistant
 
 echo "Deactivating virtualenv"
@@ -42,7 +43,7 @@ systemctl daemon-reload
 echo "Starting Home Assistant"
 systemctl start home-assistant@homeassistant.service
 
-ip_address=$(ifconfig | awk -F':' '/inet addr/&&!/127.0.0.1/{split($2,_," ");print _[1]}')
+ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
 
 echo
 echo "Installation done."
@@ -52,7 +53,7 @@ echo
 echo "To continue have a look at https://home-assistant.io/getting-started/configuration/"
 echo
 echo "If this script failed then this Raspberry Pi most likely did not have a fully functioning internet connection."
-echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
+echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 echo
 return 0
 }
@@ -62,16 +63,9 @@ homeassistant-show-short-info
 homeassistant-show-copyright-info
 
 echo "Checking current version"
+pypiversion=$(curl -s https://pypi.python.org/pypi/homeassistant/json | grep '"version":' | awk -F'"' '{print $4}')
 
-function jsonValue() {
-        KEY=$1
-        num=$2
-        awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'$KEY'\042/){print $(i+1)}}}' | tr -d '"' | sed -n ${num}p
-}
-
-versiongit=$(curl -s -X GET https://api.github.com/repos/home-assistant/home-assistant/releases/latest | jsonValue tag_name 1|sed -e 's/^[[:space:]]*//')
-
-sudo -u homeassistant -H /bin/bash << EOF | grep Version|awk '{print $2'}|while read version; do if [[ ${versiongit} == ${version} ]]; then echo "You already have the latest version: $version";exit 1;fi;done
+sudo -u homeassistant -H /bin/bash << EOF | grep Version|awk '{print $2'}|while read version; do if [[ ${pypiversion} == ${version} ]]; then echo "You already have the latest version: $version";exit 1;fi;done
 source /srv/homeassistant/bin/activate
 pip3 show homeassistant
 EOF
