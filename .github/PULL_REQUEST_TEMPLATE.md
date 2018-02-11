@@ -1,6 +1,11 @@
+### Description:
 
+**Related issue (if applicable):** Fixes #<hassbian-scripts issue number goes here>
 
-***
-- [ ] Created/Updated documentation at /docs/
-- [ ] Script has validation check of the job.
-- [ ] Script is tested locally.
+### Checklist:
+  - [ ] The code change is tested and works locally.
+  - [ ] Script has validation check of the job.
+  
+#### If pertinent:
+  - [ ] Created/Updated documentation at `/docs`
+  
