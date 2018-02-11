@@ -26,6 +26,9 @@ read domain
 if [ ! "$domain" ]; then
   exit
 fi
+if [[ $domain = *"duckdns"* ]]; then
+  domain=$(echo "$domain" | cut -d\. -f1)
+fi
 
 echo -n "Token: "
 read token
