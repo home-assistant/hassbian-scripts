@@ -19,7 +19,7 @@ Optional flags:
 - `-f` This will force run an script. This is useful if you need to reinstall a package.
 
 ## Installation
-This package is pre-installed on the [HASSbian image](https://github.com/home-assistant/pi-gen/releases).
+This package is pre-installed on the [Hassbian image](https://github.com/home-assistant/pi-gen/releases).
 This package can be used with Raspbian lite but it's not recommended.
 ```
 $ curl https://api.github.com/repos/home-assistant/hassbian-scripts/releases/latest | grep "browser_download_url.*deb" | cut -d : -f 2,3 | tr -d \" | wget -qi -

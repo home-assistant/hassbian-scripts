@@ -1,6 +1,6 @@
 ## Hassbian-scripts
-These are the scripts used in the [HASSbian](https://github.com/home-assistant/pi-gen) image.
-The scripts in this repository where made to be used with the HASSbian image and the included Home Assistant instance.  
+These are the scripts used in the [Hassbian](https://github.com/home-assistant/pi-gen) image.
+The scripts in this repository where made to be used with the Hassbian image and the included Home Assistant instance.  
 
 
 ## The included scripts
@@ -9,7 +9,7 @@ The following scripts are currently included. You can view the documentation bel
 * [hassbian-config](/docs/hassbian_config.md)
   * [AppDaemon](/docs/appdaemon.md)
   * [Duck DNS](/docs/duckdns.md)
-  * [HASSbian](/docs/hassbian.md)
+  * [Hassbian](/docs/hassbian.md)
   * [Home Assistant](/docs/homeassistant.md)
   * [Homebridge](/docs/homebridge.md)
   * [HUE](/docs/hue.md)
