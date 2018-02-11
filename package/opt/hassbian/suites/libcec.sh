@@ -70,18 +70,15 @@ sudo make install
 sudo ldconfig
 
 echo "Linking libcec to venv site packages"
+PYTHONVER=$(ls /usr/local/lib/ | grep python | tail -1)
 sudo -u homeassistant -H /bin/bash <<EOF
-if [ -d "/usr/lib/python3.5" ]; then
-   ln -s /usr/local/lib/python3.5/dist-packages/cec /srv/homeassistant/lib/python3.5/site-packages/
-   else
-   ln -s /usr/local/lib/python3.4/dist-packages/cec /srv/homeassistant/lib/python3.4/site-packages/
-fi
+ln -s /usr/local/lib/$PYTHONVER/dist-packages/cec /srv/homeassistant/lib/$PYTHONVER/site-packages/
 EOF
 
 echo
 echo "Installation done."
 echo
-echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
+echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 echo
 echo "To continue have a look at https://home-assistant.io/components/hdmi_cec/"
 echo "It's recomended that you restart your Pi before continuing with testing libcec."
@@ -89,4 +86,4 @@ echo
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config install instead"
+[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
