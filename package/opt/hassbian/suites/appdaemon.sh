@@ -79,7 +79,7 @@ echo "You may find the appdaemon configuration files in:"
 echo "/home/homeassistant/appdaemon"
 echo "To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
 echo
-echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
+echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 echo
 return 0
 }
