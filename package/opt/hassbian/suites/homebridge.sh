@@ -17,6 +17,33 @@ function homebridge-install-package {
 homebridge-show-long-info
 homebridge-show-copyright-info
 
+if [ "$ACCEPT" == "true" ]; then
+  HOMEASSISTANT_URL="http://127.0.0.1:8123"
+  HOMEASSISTANT_PASSWORD=""
+else
+  echo ""
+  echo "Please take a moment to setup the Homebridge configuration..."
+  echo ""
+  echo "Example: https://home.duckdns.org:8123"
+  echo -n "Enter your Home Assistant URL and port: "
+  read HOMEASSISTANT_URL
+  if [ ! "$HOMEASSISTANT_URL" ]; then
+      HOMEASSISTANT_URL="http://127.0.0.1:8123"
+  fi
+  echo ""
+  echo ""
+  echo -n "Enter your Home Assistant API password: "
+  read -s HOMEASSISTANT_PASSWORD
+  echo
+fi
+
+if [ "$ACCEPT" != "true" ]; then
+  if [ -f "/usr/sbin/samba" ]; then
+    echo -n "Do you want to add samba share for Homebridge configuration? [N/y] : "
+    read SAMBA
+  fi
+fi
+
 echo "Preparing system, and adding dependencies..."
 sudo apt update
 sudo apt -y upgrade
@@ -33,27 +60,6 @@ echo "Adding homebridge user, and creating config file..."
 sudo useradd --system --create-home homebridge
 sudo mkdir /home/homebridge/.homebridge
 sudo touch /home/homebridge/.homebridge/config.json
-
-if [ "$ACCEPT" == "true" ]; then
-  HOMEASSISTANT_URL="http://127.0.0.1:8123"
-  HOMEASSISTANT_PASSWORD=""
-else
-  echo ""
-  echo ""
-  echo "Example: https://home.duckdns.org:8123"
-  echo -n "Enter your Home Assistant URL and port: "
-  read HOMEASSISTANT_URL
-  if [ ! "$HOMEASSISTANT_URL" ]; then
-      HOMEASSISTANT_URL="http://127.0.0.1:8123"
-  fi
-
-  echo ""
-  echo ""
-  echo -n "Enter your Home Assistant API password: "
-  read -s HOMEASSISTANT_PASSWORD
-  echo
-fi
-
 HOMEBRIDGE_PIN=$(printf "%03d-%02d-%03d" $(($RANDOM % 999)) $(($RANDOM % 99)) $(($RANDOM % 999)))
 HEX_CHARS=0123456789ABCDEF
 RANDOM_MAC=$( for i in {1..6} ; do echo -n ${HEX_CHARS:$(( $RANDOM % 16 )):1} ; done | sed -e 's/\(..\)/:\1/g' )
@@ -108,24 +114,19 @@ sudo systemctl daemon-reload
 sudo systemctl enable homebridge.service
 sudo systemctl start homebridge.service
 
-if [ "$ACCEPT" != "true" ]; then
-	if [ -f "/usr/sbin/samba" ]; then
-		read -p "Do you want to add samba share for homebridge configuration? [N/y] : " SAMBA
-		if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
-			echo "Adding configuration to samba..."
-			sudo smbpasswd -a homebridge -n
-			echo "[homebridge]" | tee -a /etc/samba/smb.conf
-			echo "path = /home/homebridge/.homebridge" | tee -a /etc/samba/smb.conf
-			echo "writeable = yes" | tee -a /etc/samba/smb.conf
-			echo "guest ok = yes" | tee -a /etc/samba/smb.conf
-			echo "create mask = 0644" | tee -a /etc/samba/smb.conf
-			echo "directory mask = 0755" | tee -a /etc/samba/smb.conf
-			echo "force user = homebridge" | tee -a /etc/samba/smb.conf
-			echo "" | tee -a /etc/samba/smb.conf
-			echo "Restarting Samba service"
-			sudo systemctl restart smbd.service
-		fi
-	fi
+if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
+	echo "Adding configuration to samba..."
+	sudo smbpasswd -a homebridge -n
+	echo "[homebridge]" | tee -a /etc/samba/smb.conf
+	echo "path = /home/homebridge/.homebridge" | tee -a /etc/samba/smb.conf
+	echo "writeable = yes" | tee -a /etc/samba/smb.conf
+	echo "guest ok = yes" | tee -a /etc/samba/smb.conf
+	echo "create mask = 0644" | tee -a /etc/samba/smb.conf
+	echo "directory mask = 0755" | tee -a /etc/samba/smb.conf
+	echo "force user = homebridge" | tee -a /etc/samba/smb.conf
+	echo "" | tee -a /etc/samba/smb.conf
+	echo "Restarting Samba service"
+	sudo systemctl restart smbd.service
 fi
 
 echo "Checking the installation..."
@@ -139,9 +140,7 @@ if [ "$validation" != "0" ]; then
 	echo "use this: '$HOMEBRIDGE_PIN'"
 	echo "For more information see this repo:"
 	echo "https://github.com/home-assistant/homebridge-homeassistant#customization"
-	echo
-	echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
-	echo
+  echo
 else
 	echo -e "\e[31mInstallation failed..."
 	echo -e "\e[31mAborting..."
