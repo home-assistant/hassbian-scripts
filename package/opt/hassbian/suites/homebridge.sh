@@ -1,10 +1,10 @@
 #!/bin/bash
 function homebridge-show-short-info {
-  echo "Installs and configure homebridge for Home Assistant."
+  echo "Installs and configure Homebridge for Home Assistant."
 }
 
 function homebridge-show-long-info {
-  echo "Installs and configure homebridge for Home Assistant"
+  echo "Installs and configure Homebridge for Home Assistant"
 	echo "This will allow you to use HomeKit enabled devices to control Home Assistant."
 }
 
@@ -39,7 +39,7 @@ fi
 
 if [ "$ACCEPT" != "true" ]; then
   if [ -f "/usr/sbin/samba" ]; then
-    echo -n "Do you want to add samba share for Homebridge configuration? [N/y] : "
+    echo -n "Do you want to add Samba share for Homebridge configuration? [N/y] : "
     read SAMBA
   fi
 fi
@@ -47,12 +47,11 @@ fi
 echo "Preparing system, and adding dependencies..."
 sudo apt update
 sudo apt -y upgrade
-sudo apt install -y make git
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 sudo apt install -y nodejs
 sudo apt install -y libavahi-compat-libdnssd-dev
 
-echo "Installing homebridge for homeassistant..."
+echo "Installing Homebridge for Home Assistant..."
 sudo npm install -g --unsafe-perm homebridge hap-nodejs node-gyp
 sudo npm install -g homebridge-homeassistant
 
@@ -115,7 +114,7 @@ sudo systemctl enable homebridge.service
 sudo systemctl start homebridge.service
 
 if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
-	echo "Adding configuration to samba..."
+	echo "Adding configuration to Samba..."
 	sudo smbpasswd -a homebridge -n
 	echo "[homebridge]" | tee -a /etc/samba/smb.conf
 	echo "path = /home/homebridge/.homebridge" | tee -a /etc/samba/smb.conf
@@ -140,7 +139,7 @@ if [ "$validation" != "0" ]; then
 	echo "use this: '$HOMEBRIDGE_PIN'"
 	echo "For more information see this repo:"
 	echo "https://github.com/home-assistant/homebridge-homeassistant#customization"
-  echo
+	echo
 else
 	echo -e "\e[31mInstallation failed..."
 	echo -e "\e[31mAborting..."

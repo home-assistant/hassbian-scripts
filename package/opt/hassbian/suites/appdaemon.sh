@@ -17,7 +17,7 @@ appdaemon-show-copyright-info
 
 if [ "$ACCEPT" != "true" ]; then
   if [ -f "/usr/sbin/samba" ]; then
-    echo -n "Do you want to add samba share for AppDaemon configuration? [N/y] : "
+    echo -n "Do you want to add Samba share for AppDaemon configuration? [N/y] : "
     read SAMBA
   fi
 fi
@@ -62,7 +62,7 @@ echo "Starting AppDaemon service"
 systemctl start appdaemon@homeassistant.service
 
 if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
-	echo "Adding configuration to samba..."
+	echo "Adding configuration to Samba..."
 	echo "[appdaemon]" | tee -a /etc/samba/smb.conf
 	echo "path = /home/homeassistant/appdaemon" | tee -a /etc/samba/smb.conf
 	echo "writeable = yes" | tee -a /etc/samba/smb.conf
@@ -80,7 +80,7 @@ if [ "$validation" != "0" ]; then
 	echo
 	echo -e "\e[32mInstallation done..\e[0m"
 	echo
-  echo "You will find the appdaemon configuration files in:"
+	echo "You will find the AppDaemon configuration files in:"
   echo "/home/homeassistant/appdaemon"
   echo
 	echo "To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
