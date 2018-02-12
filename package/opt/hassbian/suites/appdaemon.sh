@@ -81,8 +81,8 @@ if [ "$validation" != "0" ]; then
 	echo -e "\e[32mInstallation done..\e[0m"
 	echo
 	echo "You will find the AppDaemon configuration files in:"
-  echo "/home/homeassistant/appdaemon"
-  echo
+	echo "/home/homeassistant/appdaemon"
+	echo
 	echo "To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
 	echo
 else
