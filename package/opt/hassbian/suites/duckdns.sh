@@ -40,7 +40,7 @@ echo
 if [ ! "$token" ]; then
   exit
 fi
-read -p "Do you want to generate certificates to use SSL(https)? [N/y] : " SSL_RESPONSE
+read -p -r "Do you want to generate certificates to use SSL(https)? [N/y] : " SSL_RESPONSE
 
 echo "Changing to homeassistant user..."
 sudo -u homeassistant -H /bin/bash << EOF
