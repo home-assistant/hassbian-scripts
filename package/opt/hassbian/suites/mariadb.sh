@@ -1,15 +1,15 @@
 #!/bin/bash
 
 function mariadb-show-short-info {
-    echo "MariaDB install script for Hassbian"
+  echo "MariaDB install script for Hassbian."
 }
 
 function mariadb-show-long-info {
-	echo "Installs the MariaDB database engine and dependecies for use with the recorder in Home Assistant"
+  echo "Installs the MariaDB database engine and dependecies for use with the recorder in Home Assistant."
 }
 
 function mariadb-show-copyright-info {
-    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
+  echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
 function mariadb-install-package {
@@ -17,8 +17,8 @@ mariadb-show-short-info
 mariadb-show-copyright-info
 
 if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-   return 1
+  echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
+  return 1
 fi
 
 echo "Running apt-get preparation"

@@ -129,8 +129,8 @@ if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
 fi
 
 echo "Checking the installation..."
-validation=$(ps -ef | grep -v grep | grep -c homebridge)
-if [ "$validation" != "0" ]; then
+validation=$(pgrep -f homebridge)
+if [ "$validation" == NULL ]; then
 	echo
 	echo -e "\e[32mInstallation done.\e[0m"
 	echo

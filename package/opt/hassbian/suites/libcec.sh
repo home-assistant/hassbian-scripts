@@ -1,15 +1,15 @@
 #!/bin/bash
 
 function libcec-show-short-info {
-    echo "libcec install script for Hassbian"
+  echo "libcec install script for Hassbian."
 }
 
 function libcec-show-long-info {
-	echo "Installs the libcec package for controlling CEC devices from this Pi"
+  echo "Installs the libcec package for controlling CEC devices from this Pi."
 }
 
 function libcec-show-copyright-info {
-    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
+  echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
 function libcec-install-package {
@@ -17,8 +17,8 @@ libcec-show-short-info
 libcec-show-copyright-info
 
 if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-   return 1
+  echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
+  return 1
 fi
 
 echo "Running apt-get preparation"

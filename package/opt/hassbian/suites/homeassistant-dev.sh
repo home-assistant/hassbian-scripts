@@ -1,14 +1,14 @@
 #!/bin/bash
 function homeassistant-dev-show-short-info {
-    echo "Home Assistant developement branch install script for Hassbian"
+  echo "Home Assistant developement branch install script for Hassbian."
 }
 
 function homeassistant-dev-show-long-info {
-    echo "Installs Home Assistant from the developement branch from github onto this system."
+  echo "Installs Home Assistant from the developement branch from github onto this system."
 }
 
 function homeassistant-dev-show-copyright-info {
-    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
+  echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
 function homeassistant-dev-install-package {

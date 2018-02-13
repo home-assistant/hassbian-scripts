@@ -1,15 +1,15 @@
 #!/bin/bash
 
 function mysql-show-short-info {
-    echo "MySQL install script for Hassbian"
+  echo "MySQL install script for Hassbian."
 }
 
 function mysql-show-long-info {
-	echo "Installs the MySQL database engine and dependecies for use with the recorder in Home Assistant"
+  echo "Installs the MySQL database engine and dependecies for use with the recorder in Home Assistant."
 }
 
 function mysql-show-copyright-info {
-    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
+  echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
 function mysql-install-package {
@@ -17,8 +17,8 @@ mysql-show-short-info
 mysql-show-copyright-info
 
 if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-   return 1
+  echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
+  return 1
 fi
 
 echo "Running apt-get preparation"

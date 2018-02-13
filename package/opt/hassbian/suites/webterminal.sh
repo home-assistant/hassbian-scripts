@@ -1,10 +1,10 @@
 #!/bin/bash
 function webterminal-show-short-info {
-    echo "Installs an websevice terminal."
+  echo "Installs an websevice terminal."
 }
 
 function webterminal-show-long-info {
-    echo "Installs an websevice terminal to controll your installation."
+  echo "Installs an websevice terminal to controll your installation."
 }
 
 function webterminal-show-copyright-info {

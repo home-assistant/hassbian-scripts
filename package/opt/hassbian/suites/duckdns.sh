@@ -1,15 +1,15 @@
 #!/bin/bash
 function duckdns-show-short-info {
-echo -e "Setup for Duck DNS auto renewal, and generates SSL certificate."
+  echo "Setup for Duck DNS auto renewal, and generates SSL certificate."
 }
 
 function duckdns-show-long-info {
-echo -e "This script adds an cron job to auto uppdate you the WAN IP address for the defined domain."
-echo -e "This script could also generate SSL certificate for https with  Let’s Encrypt."
+  echo "This script adds an cron job to auto uppdate you the WAN IP address for the defined domain."
+  echo "This script can also generate SSL certificate for https with Let’s Encrypt."
 }
 
 function duckdns-show-copyright-info {
-	echo "Original concept by Ludeeus <https://github.com/ludeeus>"
+  echo "Original concept by Ludeeus <https://github.com/ludeeus>."
 }
 
 function duckdns-install-package {
@@ -47,17 +47,17 @@ sudo -u homeassistant -H /bin/bash << EOF
 cd
 
 if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
-	git clone https://github.com/lukas2511/dehydrated.git
-	cd dehydrated
-	echo $domain".duckdns.org" | tee domains.txt
-	echo "CHALLENGETYPE='dns-01'" | tee -a config
-	echo "HOOK='./hook.sh'" | tee -a config
-	curl -o ./hook.sh https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/opt/hassbian/suites/files/ssl_hook.sh
-	sed -i 's/myhome/'$domain'/g' ./hook.sh
-	sed -i 's/your-duckdns-token/'$token'/g' ./hook.sh
-	chmod 755 hook.sh
-	./dehydrated --register  --accept-terms
-	./dehydrated -c
+  git clone https://github.com/lukas2511/dehydrated.git
+  cd dehydrated
+  echo $domain".duckdns.org" | tee domains.txt
+  echo "CHALLENGETYPE='dns-01'" | tee -a config
+  echo "HOOK='./hook.sh'" | tee -a config
+  curl -o ./hook.sh https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/opt/hassbian/suites/files/ssl_hook.sh
+  sed -i 's/myhome/'$domain'/g' ./hook.sh
+  sed -i 's/your-duckdns-token/'$token'/g' ./hook.sh
+  chmod 755 hook.sh
+  ./dehydrated --register  --accept-terms
+  ./dehydrated -c
 fi
 
 echo "Creating duckdns folder..."

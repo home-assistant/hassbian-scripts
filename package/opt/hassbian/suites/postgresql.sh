@@ -1,15 +1,15 @@
 #!/bin/bash
 
 function postgresql-show-short-info {
-    echo "PostgreSQL install script for Hassbian"
+  echo "PostgreSQL install script for Hassbian."
 }
 
 function postgresql-show-long-info {
-	echo "Installs the PostgreSQL database engine and dependecies for use with the recorder in Home Assistant"
+  echo "Installs the PostgreSQL database engine and dependecies for use with the recorder in Home Assistant."
 }
 
 function postgresql-show-copyright-info {
-    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
+  echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
 function postgresql-install-package {
@@ -17,8 +17,8 @@ postgresql-show-short-info
 postgresql-show-copyright-info
 
 if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-   return 1
+  echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
+  return 1
 fi
 
 echo "Running apt-get preparation"

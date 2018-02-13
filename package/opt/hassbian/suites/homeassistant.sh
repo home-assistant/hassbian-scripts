@@ -1,14 +1,14 @@
 #!/bin/bash
 function homeassistant-show-short-info {
-    echo "Home Assistant install script for Hassbian"
+  echo "Home Assistant install script for Hassbian."
 }
 
 function homeassistant-show-long-info {
-    echo "Installs the base homeassistant package onto this system."
+  echo "Installs the base homeassistant package onto this system."
 }
 
 function homeassistant-show-copyright-info {
-    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
+  echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
 function homeassistant-install-package {
@@ -71,8 +71,8 @@ pip3 show homeassistant
 EOF
 
 if [[ $? == 1 ]]; then
-        echo "Stopping upgrade"
-        exit 1
+  echo "Stopping upgrade"
+  exit 1
 fi
 
 echo "Stopping Home Assistant"

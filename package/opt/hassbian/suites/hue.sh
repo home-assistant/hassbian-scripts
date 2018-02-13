@@ -1,34 +1,34 @@
 #!/bin/bash
 
 function hue-show-short-info {
-    echo "Echo/Home/Mycroft Emulated Hue install script for Hassbian."
+  echo "Echo/Home/Mycroft Emulated Hue install script for Hassbian."
 }
 
 function hue-show-long-info {
-    echo "Configures the Python executable to allow usage of low numbered"
-    echo "ports for use with Amazon Echo, Google Home and Mycroft.ai."
+  echo "Configures the Python executable to allow usage of low numbered"
+  echo "ports for use with Amazon Echo, Google Home and Mycroft.ai."
 }
 
 function hue-show-copyright-info {
-    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
+  echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
 function hue-install-package {
 hue-show-short-info
 hue-show-copyright-info
 
-echo "Setting permissions for Python"
+echo "Setting permissions for Python."
 if [ -d "/usr/lib/python3.5" ]; then
-    echo "Setting permissions for Python 3.5"
-    sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3.5
-    else
-    echo "Setting permissions for Python 3.4"
-    sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3.4
+  echo "Setting permissions for Python 3.5"
+  sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3.5
+  else
+  echo "Setting permissions for Python 3.4"
+  sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3.4
 fi
 
 if [ "$(id -u)" != "0" ]; then
-    echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-    return 1
+  echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
+  return 1
 fi
 
 echo
