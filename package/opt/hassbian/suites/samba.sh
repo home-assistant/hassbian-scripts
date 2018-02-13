@@ -1,16 +1,16 @@
 #!/bin/bash
 
 function samba-show-short-info {
-	echo "Samba install script for Hassbian"
+  echo "Samba install script for Hassbian."
 }
 
 function samba-show-long-info {
-	echo "Installs the samba package for sharing the hassbian configuration files"
-	echo "over the network."
+  echo "Installs the samba package for sharing the hassbian configuration files."
+  echo "over the network."
 }
 
 function samba-show-copyright-info {
-	echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
+  echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
 function samba-install-package {
@@ -18,8 +18,8 @@ samba-show-short-info
 samba-show-copyright-info
 
 if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-   return 1
+  echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
+  return 1
 fi
 
 echo "Running apt-get preparation"
@@ -30,7 +30,7 @@ echo "Adding homeassistant Samba user"
 sudo smbpasswd -a homeassistant -n
 
 echo "Adding shared folder for Home Assistant configuration directory"
-cd /etc/samba/
+cd /etc/samba/ || exit
 sudo patch <<'EOF'
 --- smb.conf 2017-02-02 20:29:42.383603738 +0000
 +++ smb_ha.conf 2017-02-02 20:37:12.418960977 +0000
@@ -64,4 +64,4 @@ echo
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
