@@ -22,6 +22,28 @@ echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
 return 1
 fi
 
+if [ "$ACCEPT" == "true" ]; then
+  mqtt_username=pi
+  mqtt_password=raspberry
+else
+  echo
+  echo "Please take a moment to setup your first MQTT user"
+  echo
+
+  echo -n "Username: "
+  read mqtt_username
+  if [ ! "$mqtt_username" ]; then
+    mqtt_username=pi
+  fi
+
+  echo -n "Password: "
+  read -s mqtt_password
+  echo
+  if [ ! "$mqtt_password" ]; then
+    mqtt_password=raspberry
+  fi
+fi
+
 echo "Adding mosquitto user"
 adduser mosquitto --system --group
 
@@ -62,28 +84,6 @@ touch pwfile
 chown mosquitto:mosquitto pwfile
 chmod 0600 pwfile
 
-if [ "$ACCEPT" == "true" ]; then
-  mqtt_username=pi
-  mqtt_password=raspberry
-else
-  echo
-  echo "Please take a moment to setup your first MQTT user"
-  echo
-
-  echo -n "Username: "
-  read mqtt_username
-  if [ ! "$mqtt_username" ]; then
-    mqtt_username=pi
-  fi
-
-  echo -n "Password: "
-  read -s mqtt_password
-  echo
-  if [ ! "$mqtt_password" ]; then
-    mqtt_password=raspberry
-  fi
-fi
-
 echo "Creating password entry for user $mqtt_username"
 mosquitto_passwd -b pwfile "$mqtt_username" "$mqtt_password"
 
@@ -103,8 +103,6 @@ if [ "$validation" != "0" ]; then
 	echo "To continue have a look at https://home-assistant.io/docs/mqtt/"
 	echo "For more information see this repo:"
 	echo "https://github.com/home-assistant/homebridge-homeassistant#customization"
-	echo
-	echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 	echo
 else
 	echo -e "\e[31mInstallation failed..."
