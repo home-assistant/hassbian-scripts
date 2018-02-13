@@ -18,7 +18,7 @@ appdaemon-show-copyright-info
 if [ "$ACCEPT" != "true" ]; then
   if [ -f "/usr/sbin/samba" ]; then
     echo -n "Do you want to add Samba share for AppDaemon configuration? [N/y] : "
-    read SAMBA
+    read -r SAMBA
   fi
 fi
 
@@ -75,7 +75,7 @@ if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
 	sudo systemctl restart smbd.service
 fi
 
-validation=$(ps -ef | grep -v grep | grep appdaemon | wc -l)
+validation=$(ps -ef | grep -v grep | grep -c appdaemon)
 if [ "$validation" != "0" ]; then
 	echo
 	echo -e "\e[32mInstallation done..\e[0m"
@@ -120,7 +120,7 @@ echo "Starting AppDaemon service..."
 systemctl start appdaemon@homeassistant.service
 
 echo "Checking the installation..."
-validation=$(ps -ef | grep -v grep | grep appdaemon | wc -l)
+validation=$(ps -ef | grep -v grep | grep -c appdaemon)
 if [ "$validation" != "0" ]; then
 	echo
 	echo -e "\e[32mUppgrade done..\e[0m"
@@ -135,4 +135,4 @@ else
 fi
 return 0
 }
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

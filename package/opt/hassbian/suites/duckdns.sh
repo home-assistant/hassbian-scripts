@@ -22,7 +22,7 @@ echo "If no choice is made the installation will exit."
 echo
 echo "(if your domain is 'example.duckdns.org' type example)"
 echo -n "Domain: "
-read domain
+read -r domain
 if [ ! "$domain" ]; then
   exit
 fi
@@ -30,12 +30,12 @@ if [[ $domain = *"duckdns"* ]]; then
   domain=$(echo "$domain" | cut -d\. -f1)
 fi
 if [[ $domain = *"//"* ]]; then
-  domain=$(echo "$domain" | cut -d\/ -f3)
+  domain=$(echo "$domain" | cut -d/ -f3)
 fi
 
 
 echo -n "Token: "
-read token
+read -r token
 echo
 if [ ! "$token" ]; then
   exit
@@ -95,4 +95,4 @@ echo
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

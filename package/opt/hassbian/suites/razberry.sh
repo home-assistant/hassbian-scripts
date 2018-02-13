@@ -20,12 +20,12 @@ razberry-show-short-info
 razberry-show-copyright-info
 
 echo "Checking for version of Raspberry Pi"
-RPI_BOARD_REVISION=`grep Revision /proc/cpuinfo | cut -d: -f2 | tr -d " "`
+RPI_BOARD_REVISION=$(grep Revision /proc/cpuinfo | cut -d: -f2 | tr -d " ")
 if [[ $RPI_BOARD_REVISION ==  "a02082" || $RPI_BOARD_REVISION == "a22082" ]]
 then
     echo "Raspberry Pi 3 Detected. Disabling Bluetooth"
     systemctl disable hciuart
-    if [[ ! `grep "dtoverlay=pi3-miniuart-bt" /boot/config.txt` ]]
+    if [[ ! $(grep "dtoverlay=pi3-miniuart-bt" /boot/config.txt) ]]
     then
         echo "Adding 'dtoverlay=pi3-miniuart-bt' to /boot/config.txt"
         echo "dtoverlay=pi3-miniuart-bt" >> /boot/config.txt
@@ -42,4 +42,4 @@ echo
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

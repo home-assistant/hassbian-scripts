@@ -31,13 +31,13 @@ else
   echo
 
   echo -n "Username: "
-  read mqtt_username
+  read -r mqtt_username
   if [ ! "$mqtt_username" ]; then
     mqtt_username=pi
   fi
 
   echo -n "Password: "
-  read -s mqtt_password
+  read -s -r mqtt_password
   echo
   if [ ! "$mqtt_password" ]; then
     mqtt_password=raspberry
@@ -59,10 +59,10 @@ echo "Installing repository key"
 wget -O - http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
 
 echo "Adding repository"
-OS_VERSION=$(cat /etc/os-release | grep VERSION= | awk -F'(' '{print $2}' |  awk -F')' '{print $1}')
-if [ ! -f /etc/apt/sources.list.d/mosquitto-$OS_VERSION.list ]
+OS_VERSION=$(lsb_release -cs)
+if [ ! -f /etc/apt/sources.list.d/mosquitto-"$OS_VERSION".list ]
 then
-    sudo curl -o /etc/apt/sources.list.d/mosquitto-$OS_VERSION.list http://repo.mosquitto.org/debian/mosquitto-$OS_VERSION.list
+    sudo curl -o /etc/apt/sources.list.d/mosquitto-"$OS_VERSION".list http://repo.mosquitto.org/debian/mosquitto-$OS_VERSION.list
 else
 	echo "Already present, skipping..."
 fi
@@ -74,7 +74,7 @@ apt-cache search mosquitto
 apt-get install -y mosquitto mosquitto-clients
 
 echo "Writing default configuration"
-cd /etc/mosquitto
+cd /etc/mosquitto || exit
 mv mosquitto.conf mosquitto.conf.backup
 cp /opt/hassbian/suites/files/mosquitto.conf /etc/mosquitto/mosquitto.conf
 chown mosquitto:mosquitto mosquitto.conf
@@ -93,7 +93,7 @@ systemctl restart mosquitto.service
 ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
 
 echo "Checking the installation..."
-validation=$(ps -ef | grep -v grep | grep mosquitto | wc -l)
+validation=$(ps -ef | grep -v grep | grep -c mosquitto)
 if [ "$validation" != "0" ]; then
 	echo
 	echo -e "\e[32mInstallation done.\e[0m"
@@ -113,4 +113,4 @@ fi
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

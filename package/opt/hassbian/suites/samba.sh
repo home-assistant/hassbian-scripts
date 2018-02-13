@@ -30,7 +30,7 @@ echo "Adding homeassistant Samba user"
 sudo smbpasswd -a homeassistant -n
 
 echo "Adding shared folder for Home Assistant configuration directory"
-cd /etc/samba/
+cd /etc/samba/ || exit
 sudo patch <<'EOF'
 --- smb.conf 2017-02-02 20:29:42.383603738 +0000
 +++ smb_ha.conf 2017-02-02 20:37:12.418960977 +0000
@@ -64,4 +64,4 @@ echo
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

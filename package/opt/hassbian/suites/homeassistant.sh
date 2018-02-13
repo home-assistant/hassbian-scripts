@@ -65,7 +65,7 @@ homeassistant-show-copyright-info
 echo "Checking current version"
 pypiversion=$(curl -s https://pypi.python.org/pypi/homeassistant/json | grep '"version":' | awk -F'"' '{print $4}')
 
-sudo -u homeassistant -H /bin/bash << EOF | grep Version|awk '{print $2'}|while read version; do if [[ ${pypiversion} == ${version} ]]; then echo "You already have the latest version: $version";exit 1;fi;done
+sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'|while read -r version; do if [[ "${pypiversion}" == "${version}" ]]; then echo "You already have the latest version: $version";exit 1;fi;done
 source /srv/homeassistant/bin/activate
 pip3 show homeassistant
 EOF
@@ -105,4 +105,4 @@ echo
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

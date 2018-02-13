@@ -26,14 +26,14 @@ else
   echo ""
   echo "Example: https://home.duckdns.org:8123"
   echo -n "Enter your Home Assistant URL and port: "
-  read HOMEASSISTANT_URL
+  read -r HOMEASSISTANT_URL
   if [ ! "$HOMEASSISTANT_URL" ]; then
       HOMEASSISTANT_URL="http://127.0.0.1:8123"
   fi
   echo ""
   echo ""
   echo -n "Enter your Home Assistant API password: "
-  read -s HOMEASSISTANT_PASSWORD
+  read -s -r HOMEASSISTANT_PASSWORD
   echo
 fi
 
@@ -59,11 +59,11 @@ echo "Adding homebridge user, and creating config file..."
 sudo useradd --system --create-home homebridge
 sudo mkdir /home/homebridge/.homebridge
 sudo touch /home/homebridge/.homebridge/config.json
-HOMEBRIDGE_PIN=$(printf "%03d-%02d-%03d" $(($RANDOM % 999)) $(($RANDOM % 99)) $(($RANDOM % 999)))
+HOMEBRIDGE_PIN=$(printf "%03d-%02d-%03d" $((RANDOM % 999)) $((RANDOM % 99)) $((RANDOM % 999)))
 HEX_CHARS=0123456789ABCDEF
-RANDOM_MAC=$( for i in {1..6} ; do echo -n ${HEX_CHARS:$(( $RANDOM % 16 )):1} ; done | sed -e 's/\(..\)/:\1/g' )
+RANDOM_MAC=$( for i in {1..6} ; do echo -n ${HEX_CHARS:$((RANDOM % 16)):1} ; done | sed -e 's/\(..\)/:\1/g' )
 HOMEBRIDGE_USERNAME=CC:22:3D$RANDOM_MAC
-HOMEBRIDGE_PORT=$( printf "57%03d" $(($RANDOM % 999)))
+HOMEBRIDGE_PORT=$( printf "57%03d" $((RANDOM % 999)))
 cat > /home/homebridge/.homebridge/config.json <<EOF
 {
   "bridge": {
@@ -129,7 +129,7 @@ if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
 fi
 
 echo "Checking the installation..."
-validation=$(ps -ef | grep -v grep | grep homebridge | wc -l)
+validation=$(ps -ef | grep -v grep | grep -c homebridge)
 if [ "$validation" != "0" ]; then
 	echo
 	echo -e "\e[32mInstallation done.\e[0m"
@@ -150,4 +150,4 @@ return 0
 }
 
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

@@ -45,7 +45,7 @@ make
 EOF
 
 echo "Installing Pulse-Eight platform"
-cd /srv/homeassistant/src/platform/build
+cd /srv/homeassistant/src/platform/build || exit
 sudo make install
 sudo ldconfig
 
@@ -65,12 +65,12 @@ make -j4
 EOF
 
 echo "Installing Pulse-Eight libcec"
-cd /srv/homeassistant/src/libcec/build
+cd /srv/homeassistant/src/libcec/build || exit
 sudo make install
 sudo ldconfig
 
 echo "Linking libcec to venv site packages"
-PYTHONVER=$(ls /usr/local/lib/ | grep python | tail -1)
+PYTHONVER=$(echo /usr/local/lib/*python* | awk -F/ '{print $NF}')
 sudo -u homeassistant -H /bin/bash <<EOF
 ln -s /usr/local/lib/$PYTHONVER/dist-packages/cec /srv/homeassistant/lib/$PYTHONVER/site-packages/
 EOF
@@ -86,4 +86,4 @@ echo
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
