@@ -25,7 +25,7 @@ if [[ $RPI_BOARD_REVISION ==  "a02082" || $RPI_BOARD_REVISION == "a22082" ]]
 then
     echo "Raspberry Pi 3 Detected. Disabling Bluetooth"
     systemctl disable hciuart
-    if [[ ! $(grep "dtoverlay=pi3-miniuart-bt" /boot/config.txt) ]]
+    if [[ ! $(grep -q "dtoverlay=pi3-miniuart-bt" /boot/config.txt) ]]
     then
         echo "Adding 'dtoverlay=pi3-miniuart-bt' to /boot/config.txt"
         echo "dtoverlay=pi3-miniuart-bt" >> /boot/config.txt

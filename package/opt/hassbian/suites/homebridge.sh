@@ -40,7 +40,7 @@ fi
 if [ "$ACCEPT" != "true" ]; then
   if [ -f "/usr/sbin/samba" ]; then
     echo -n "Do you want to add Samba share for Homebridge configuration? [N/y] : "
-    read SAMBA
+    read -r SAMBA
   fi
 fi
 
