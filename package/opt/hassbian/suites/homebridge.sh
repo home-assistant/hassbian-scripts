@@ -60,9 +60,7 @@ sudo useradd --system --create-home homebridge
 sudo mkdir /home/homebridge/.homebridge
 sudo touch /home/homebridge/.homebridge/config.json
 HOMEBRIDGE_PIN=$(printf "%03d-%02d-%03d" $((RANDOM % 999)) $((RANDOM % 99)) $((RANDOM % 999)))
-HEX_CHARS=0123456789ABCDEF
-RANDOM_MAC=$( for i in {1..6} ; do echo -n ${HEX_CHARS:$((RANDOM % 16)):1} ; done | sed -e 's/\(..\)/:\1/g' )
-HOMEBRIDGE_USERNAME=CC:22:3D$RANDOM_MAC
+HOMEBRIDGE_USERNAME=$(hexdump -n3 -e'/3 "00:60:2F" 3/1 ":%02X"' /dev/random)
 HOMEBRIDGE_PORT=$( printf "57%03d" $((RANDOM % 999)))
 cat > /home/homebridge/.homebridge/config.json <<EOF
 {
