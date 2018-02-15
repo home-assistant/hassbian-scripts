@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck source=src/lib.sh
 LOGFILE=/tmp/hassbian.log
 SUITE_INSTALL_DIR=/opt/hassbian/suites
 SUITE_CONTROL_DIR=/srv/homeassistant/hassbian/control
@@ -26,7 +27,7 @@ function show-suite-info {
 
 function get-all-suite-installers {
   ALLSUITES=$(find $SUITE_INSTALL_DIR/ -maxdepth 1 -type f | sort | awk -F'/' ' {print $NF}' | awk -F. '{print $1}')
-  echo $ALLSUITES
+  echo "$ALLSUITES"
   return 0
 }
 
