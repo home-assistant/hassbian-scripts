@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck source=src/lib.sh
+# shellcheck source=/opt/hassbian/suites
 LOGFILE=/tmp/hassbian.log
 SUITE_INSTALL_DIR=/opt/hassbian/suites
 SUITE_CONTROL_DIR=/srv/homeassistant/hassbian/control
