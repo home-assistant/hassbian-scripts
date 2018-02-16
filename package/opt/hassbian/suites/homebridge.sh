@@ -128,7 +128,7 @@ fi
 
 echo "Checking the installation..."
 validation=$(pgrep -f homebridge)
-if [ "$validation" == NULL ]; then
+if [ "$validation" != NULL ]; then
 	echo
 	echo -e "\e[32mInstallation done.\e[0m"
 	echo

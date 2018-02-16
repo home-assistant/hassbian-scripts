@@ -76,7 +76,7 @@ if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
 fi
 
 validation=$(pgrep -f appdaemon)
-if [ "$validation" == NULL ]; then
+if [ "$validation" != NULL ]; then
   echo
   echo -e "\e[32mInstallation done..\e[0m"
   echo
@@ -121,7 +121,7 @@ systemctl start appdaemon@homeassistant.service
 
 echo "Checking the installation..."
 validation=$(pgrep -f appdaemon)
-if [ "$validation" == NULL ]; then
+if [ "$validation" != NULL ]; then
   echo
   echo -e "\e[32mUppgrade done..\e[0m"
   echo

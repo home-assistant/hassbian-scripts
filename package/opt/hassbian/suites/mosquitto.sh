@@ -94,7 +94,7 @@ ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $
 
 echo "Checking the installation..."
 validation=$(pgrep -f mosquitto)
-if [ "$validation" == NULL ]; then
+if [ "$validation" != NULL ]; then
   echo
   echo -e "\e[32mInstallation done.\e[0m"
   echo

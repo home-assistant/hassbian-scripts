@@ -68,11 +68,12 @@ function check-permission {
 function share-log {
   if [ "$ACCEPT" == "true" ]; then
     a=$(cat $LOGFILE); curl -X POST -s -d "$a" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}'
-    else
-      echo "This will put the output from your last operation on hastebin."
-      echo "This could include sensitive informastion."
-      echo "If you are unsure about what it contains, you can rin 'hassbian-config log' to check."
-      read -p -r "Do you want to crate an hastebin link? [N/y] : " RESPONSE
+  else
+    echo "This will put the output from your last operation on hastebin."
+    echo "This could include sensitive informastion."
+    echo "If you are unsure about what it contains, you can rin 'hassbian-config log' to check."
+    echo -n "Do you want to crate an hastebin link? [N/y] : "
+    read -r  RESPONSE
     if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
       echo ""
     a=$(cat $LOGFILE); curl -X POST -s -d "$a" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}'
@@ -124,8 +125,7 @@ function upgrade-suite {
 }
 
 function verify-suite {
-  if [ -f "$SUITE_INSTALL_DIR/$1.sh" ]
-  then
+  if [ -f "$SUITE_INSTALL_DIR/$1.sh" ]; then
     retval=0 # beware - 0 is true in bash.
   else
     retval=1
@@ -134,21 +134,22 @@ function verify-suite {
 }
 
 function show-installed-suites {
-  INSTALLERS=$(find $SUITE_CONTROL_DIR/ -maxdepth 1 -type f | awk -F'/|_' ' {print $NF}' | grep -v 'homeassistant' | awk -F. '{print $1}')
+  INSTALLERS=$(find $SUITE_INSTALL_DIR/ -maxdepth 1 -type f | sort | awk -F'/' ' {print $NF}' | awk -F. '{print $1}')
   for i in $INSTALLERS
   do
+  if [ -f "$SUITE_CONTROL_DIR/$i" ]; then
     STATE=$(grep "SCRIPTSTATE=installed" $SUITE_CONTROL_DIR/"$i" | awk -F'=' '{print $2}')
-  if [ "$STATE" != "" ]; then
-    echo "$i:" "$STATE"
+    if [ "$STATE" != "" ]; then
+      echo "$i:" "$STATE"
+    fi
   fi
   done
   return 0
 }
 
-if [ $# -lt 1 ]
-then
+if [ $# -lt 1 ]; then
   usage
-  return 0
+  exit 0
 fi
 
 while [[ $# -gt 0 ]]
@@ -182,15 +183,6 @@ case $COMMAND in
   "install")
     if verify-suite "$SUITE"; then
       RUN="install-suite $SUITE"
-    else
-      RUN="echo suite $SUITE doesn't exist."
-    fi
-    shift # past argument
-    shift # past value
-    ;;
-  "info")
-    if verify-suite "$SUITE"; then
-      RUN="info-suite $SUITE"
     else
       RUN="echo suite $SUITE doesn't exist."
     fi
