@@ -33,6 +33,7 @@ echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
 echo "Installing dependencies for MS SQL"
+pip3 install --upgrade setuptools wheel
 pip3 install pymssql
 
 echo "Deactivating virtualenv"
