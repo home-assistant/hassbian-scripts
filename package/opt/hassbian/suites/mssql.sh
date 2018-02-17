@@ -1,15 +1,15 @@
 #!/bin/bash
 
 function mssql-show-short-info {
-    echo "MS SQL install script for Hassbian"
+  echo "MS SQL install script for Hassbian."
 }
 
 function mssql-show-long-info {
-	echo "Installs the MS SQL database engine and dependecies for use with the recorder in Home Assistant"
+  echo "Installs the MS SQL database engine and dependecies for use with the recorder in Home Assistant."
 }
 
 function mssql-show-copyright-info {
-    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
+  echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
 function mssql-install-package {
@@ -17,8 +17,8 @@ mssql-show-short-info
 mssql-show-copyright-info
 
 if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-   return 1
+  echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
+  return 1
 fi
 
 echo "Running apt-get preparation"
@@ -33,6 +33,7 @@ echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
 echo "Installing dependencies for MS SQL"
+pip3 install --upgrade setuptools wheel
 pip3 install pymssql
 
 echo "Deactivating virtualenv"
@@ -51,4 +52,4 @@ echo
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
