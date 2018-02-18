@@ -21,14 +21,14 @@ Restart service: `sudo systemctl restart appdaemon@homeassistant.service`
 Service status: `sudo systemctl status appdaemon@homeassistant.service`  
 Enter the virtual environment where AppDaemon is installed as `homeassistant`:
 ```bash
-sudo su -s /bin/bash homeassistant
-source /srv/appdaemon/bin/activate
+$ sudo su -s /bin/bash homeassistant
+$ source /srv/appdaemon/bin/activate
 ```
 When you are done, type `exit` to return to the `pi` user.
 
 To manually start AppDaemon, enter the AppDaemon virtual environment as described abowe, and then type this to start it:
 ```bash
-appdaemon -c /home/homeassistant/appdaemon/
+$ appdaemon -c /home/homeassistant/appdaemon/
 ```
 
 ***
