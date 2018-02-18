@@ -120,7 +120,7 @@ function upgrade-suite {
   fi
   check-permission
   source $SUITE_INSTALL_DIR/"$1".sh
-  "$1"-upgrade-package
+  "$1"-upgrade-package | tee $LOGFILE
   return 0
 }
 
