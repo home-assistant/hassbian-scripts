@@ -5,7 +5,7 @@ function samba-show-short-info {
 }
 
 function samba-show-long-info {
-  echo "Installs the samba package for sharing the hassbian configuration files."
+  echo "Installs the samba package for sharing the Hassbian configuration files."
   echo "over the network."
 }
 

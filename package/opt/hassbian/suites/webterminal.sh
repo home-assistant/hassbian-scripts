@@ -4,11 +4,11 @@ function webterminal-show-short-info {
 }
 
 function webterminal-show-long-info {
-  echo "Installs an websevice terminal to controll your installation."
+  echo "Installs an websevice terminal to control your installation."
 }
 
 function webterminal-show-copyright-info {
-	echo "Original consept by Ludeeus <https://github.com/ludeeus>"
+	echo "Original concept by Ludeeus <https://github.com/ludeeus>"
 }
 
 function webterminal-install-package {
