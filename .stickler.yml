@@ -1,4 +1,4 @@
 linters:
   shellcheck:
-    shell: sh
+    shell: bash
     exclude: 'SC1090'
