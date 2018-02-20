@@ -45,7 +45,7 @@ systemctl start home-assistant@homeassistant.service
 ip_address=$(ifconfig | awk -F':' '/inet addr/&&!/127.0.0.1/{split($2,_," ");print _[1]}')
 
 echo "Checking the installation..."
-validation=$(pgrep -f homeassistant)
+validation=$(pgrep -x hass)
 if [ ! -z "${validation}" ]; then
   echo
   echo -e "\\e[32mInstallation done..\\e[0m"

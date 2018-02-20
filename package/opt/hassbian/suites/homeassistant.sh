@@ -46,7 +46,7 @@ systemctl start home-assistant@homeassistant.service
 ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
 
 echo "Checking the installation..."
-validation=$(pgrep -f homeassistant)
+validation=$(pgrep -x hass)
 if [ ! -z "${validation}" ]; then
   echo
   echo -e "\\e[32mInstallation done..\\e[0m"
@@ -103,7 +103,7 @@ echo "Restarting Home Assistant"
 systemctl start home-assistant@homeassistant.service
 
 echo "Checking the installation..."
-validation=$(pgrep -f homeassistant)
+validation=$(pgrep -x hass)
 if [ ! -z "${validation}" ]; then
   echo
   echo -e "\\e[32mUppgrade complete..\\e[0m"
