@@ -1,15 +1,15 @@
 #!/bin/bash
 function hassbian-show-short-info {
-    echo "Upgrade the base OS installation on this system"
+  echo "Upgrade the base OS installation on this system."
 }
 
 function hassbian-show-long-info {
-    echo "Upgrade the base OS installation on this system"
+  echo "Upgrade the base OS installation on this system."
 }
 
 function hassbian-show-copyright-info {
-    echo "Original concept by Ludeeus <https://github.im/Ludeeus>"
-    echo "Modyfied by Landrash <https://github.com/Landrash>"
+  echo "Original concept by Ludeeus <https://github.com/Ludeeus>."
+  echo "Modyfied by Landrash <https://github.com/Landrash>."
 }
 
 function hassbian-upgrade-package {
@@ -32,4 +32,4 @@ echo
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

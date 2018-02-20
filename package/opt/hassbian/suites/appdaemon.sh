@@ -1,19 +1,26 @@
 #!/bin/bash
 function appdaemon-show-short-info {
-    echo "AppDaemon install script for Hassbian"
+  echo "AppDaemon install script for Hassbian."
 }
 
 function appdaemon-show-long-info {
-    echo "Installs AppDaemon in a separate Venv onto this system."
+  echo "Installs AppDaemon in a separate Venv onto this system."
 }
 
 function appdaemon-show-copyright-info {
-    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
+  echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
 function appdaemon-install-package {
 appdaemon-show-short-info
 appdaemon-show-copyright-info
+
+if [ "$ACCEPT" != "true" ]; then
+  if [ -f "/usr/sbin/samba" ]; then
+    echo -n "Do you want to add Samba share for AppDaemon configuration? [N/y] : "
+    read -r SAMBA
+  fi
+fi
 
 echo "Creating directory for AppDaemon Venv"
 sudo mkdir /srv/appdaemon
@@ -53,34 +60,37 @@ sync
 
 echo "Starting AppDaemon service"
 systemctl start appdaemon@homeassistant.service
-if [ "$ACCEPT" != "true" ]; then
-  if [ -f "/usr/sbin/samba" ]; then
-  	read -p "Do you want to add samba share for AppDaemon configuration? [N/y] : " SAMBA
-  	if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
-  		echo "Adding configuration to samba..."
-  		echo "[appdaemon]" | tee -a /etc/samba/smb.conf
-  		echo "path = /home/homeassistant/appdaemon" | tee -a /etc/samba/smb.conf
-  		echo "writeable = yes" | tee -a /etc/samba/smb.conf
-  		echo "guest ok = yes" | tee -a /etc/samba/smb.conf
-  		echo "create mask = 0644" | tee -a /etc/samba/smb.conf
-  		echo "directory mask = 0755" | tee -a /etc/samba/smb.conf
-  		echo "force user = homeassistant" | tee -a /etc/samba/smb.conf
-  		echo "" | tee -a /etc/samba/smb.conf
-  		echo "Restarting Samba service"
-  		sudo systemctl restart smbd.service
-  	fi
-  fi
+
+if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
+  echo "Adding configuration to Samba..."
+  echo "[appdaemon]" | tee -a /etc/samba/smb.conf
+  echo "path = /home/homeassistant/appdaemon" | tee -a /etc/samba/smb.conf
+  echo "writeable = yes" | tee -a /etc/samba/smb.conf
+  echo "guest ok = yes" | tee -a /etc/samba/smb.conf
+  echo "create mask = 0644" | tee -a /etc/samba/smb.conf
+  echo "directory mask = 0755" | tee -a /etc/samba/smb.conf
+  echo "force user = homeassistant" | tee -a /etc/samba/smb.conf
+  echo "" | tee -a /etc/samba/smb.conf
+  echo "Restarting Samba service"
+  sudo systemctl restart smbd.service
 fi
 
-echo
-echo "Installation done."
-echo
-echo "You may find the appdaemon configuration files in:"
-echo "/home/homeassistant/appdaemon"
-echo "To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
-echo
-echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
-echo
+validation=$(pgrep -f appdaemon)
+if [ "$validation" != NULL ]; then
+  echo
+  echo -e "\e[32mInstallation done..\e[0m"
+  echo
+  echo "You will find the AppDaemon configuration files in:"
+  echo "/home/homeassistant/appdaemon"
+  echo
+  echo "To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
+  echo
+else
+  echo -e "\e[31mInstallation failed..."
+  echo -e "\e[31mAborting..."
+  echo -e "\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  return 1
+fi
 return 0
 }
 
@@ -110,21 +120,19 @@ echo "Starting AppDaemon service..."
 systemctl start appdaemon@homeassistant.service
 
 echo "Checking the installation..."
-validation=$(ps -ef | grep -v grep | grep appdaemon | wc -l)
-if [ "$validation" != "0" ]; then
-	echo
-	echo -e "\e[32mUppgrade done..\e[0m"
-	echo
-	echo "To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
-	echo
-	echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
-	echo
+validation=$(pgrep -f appdaemon)
+if [ "$validation" != NULL ]; then
+  echo
+  echo -e "\e[32mUppgrade done..\e[0m"
+  echo
+  echo "To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
+  echo
 else
-	echo -e "\e[31mInstallation failed..."
-	echo -e "\e[31mAborting..."
-	echo -e "\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
-	return 1
+  echo -e "\e[31mUpgrade failed..."
+  echo -e "\e[31mAborting..."
+  echo -e "\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  return 1
 fi
 return 0
 }
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
