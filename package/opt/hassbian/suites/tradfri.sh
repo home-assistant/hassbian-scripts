@@ -5,7 +5,7 @@ function tradfri-show-short-info {
 }
 
 function tradfri-show-long-info {
-	echo "Installs the libraries needed to controll IKEA Tradfri devices from this Pi."
+	echo "Installs the libraries needed to control IKEA Tradfri devices from this Pi."
 }
 
 function tradfri-show-copyright-info {
@@ -28,7 +28,7 @@ apt-get install -y dh-autoreconf
 echo "Changing to homeassistant user"
 sudo -u homeassistant -H /bin/bash <<EOF
 
-echo "Activating to Home Assistant venv"
+echo "Activating Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
 echo "Installing dependencies for Tradfri."

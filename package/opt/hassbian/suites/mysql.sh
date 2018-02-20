@@ -5,7 +5,7 @@ function mysql-show-short-info {
 }
 
 function mysql-show-long-info {
-  echo "Installs the MySQL database engine and dependecies for use with the recorder in Home Assistant."
+  echo "Installs the MySQL database engine and dependecies for use with the recorder component in Home Assistant."
 }
 
 function mysql-show-copyright-info {

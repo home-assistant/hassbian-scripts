@@ -5,7 +5,7 @@ function postgresql-show-short-info {
 }
 
 function postgresql-show-long-info {
-  echo "Installs the PostgreSQL database engine and dependecies for use with the recorder in Home Assistant."
+  echo "Installs the PostgreSQL database engine and dependecies for use with the recorder component in Home Assistant."
 }
 
 function postgresql-show-copyright-info {
