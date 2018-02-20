@@ -49,16 +49,16 @@ echo "Checking the installation..."
 validation=$(pgrep -f homeassistant)
 if [ ! -z "${validation}" ]; then
   echo
-  echo -e "\e[32mInstallation done..\e[0m"
+  echo -e "\\e[32mInstallation done..\\e[0m"
   echo "Your Home Assistant installation is running at $ip_address:8123 or if prefered http://hassbian.local:8123"
   echo "To continue have a look at https://home-assistant.io/getting-started/configuration/"
   echo
   echo "If this script failed then this Raspberry Pi most likely did not have a fully functioning internet connection."
   echo
 else
-  echo -e "\e[31mInstallation failed..."
-  echo -e "\e[31mAborting..."
-  echo -e "\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  echo -e "\\e[31mInstallation failed..."
+  echo -e "\\e[31mAborting..."
+  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
   return 1
 fi
@@ -106,13 +106,13 @@ echo "Checking the installation..."
 validation=$(pgrep -f homeassistant)
 if [ ! -z "${validation}" ]; then
   echo
-  echo -e "\e[32mUppgrade complete..\e[0m"
+  echo -e "\\e[32mUppgrade complete..\\e[0m"
   echo "Note that it may take some time to start up after an upgrade."
   echo
 else
-  echo -e "\e[31mInstallation failed..."
-  echo -e "\e[31mAborting..."
-  echo -e "\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  echo -e "\\e[31mInstallation failed..."
+  echo -e "\\e[31mAborting..."
+  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
   return 1
 fi

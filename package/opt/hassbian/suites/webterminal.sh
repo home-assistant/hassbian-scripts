@@ -28,15 +28,15 @@ echo "Checking the installation..."
 validation=$(pgrep -f shellinaboxd)
 if [ ! -z "${validation}" ]; then
   echo
-  echo -e "\e[32mInstallation done..\e[0m"
+  echo -e "\\e[32mInstallation done..\\e[0m"
   echo
   echo "You can now access the web terminal here: http://$ip_address:4200"
   echo "You can also add this to your Home-Assistant config in an 'panel_iframe'"
   echo
 else
-  echo -e "\e[31mInstallation failed..."
-  echo -e "\e[31mAborting..."
-  echo -e "\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  echo -e "\\e[31mInstallation failed..."
+  echo -e "\\e[31mAborting..."
+  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
   return 1
 fi
