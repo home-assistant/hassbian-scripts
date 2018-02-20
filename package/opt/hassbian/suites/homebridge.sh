@@ -25,7 +25,7 @@ else
   echo "Please take a moment to setup the Homebridge configuration..."
   echo ""
   echo "Example: https://home.duckdns.org:8123"
-  echo -n "Enter your Home Assistant URL and port: "
+  echo -n "Enter    your Home Assistant URL and port: "
   read -r HOMEASSISTANT_URL
   if [ ! "$HOMEASSISTANT_URL" ]; then
       HOMEASSISTANT_URL="http://127.0.0.1:8123"
