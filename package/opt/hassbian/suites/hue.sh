@@ -25,14 +25,14 @@ echo "Checking the installation..."
 validation=$(getcap /usr/bin/"$PYTHONVER" | awk -F'= ' '{print $NF}')
 if [ ! -z "${validation}" ]; then
   echo
-  echo -e "\e[32mInstallation done..\e[0m"
+  echo -e "\\e[32mInstallation done..\\e[0m"
   echo
   echo "To continue have a look at https://home-assistant.io/components/emulated_hue/"
   echo
 else
-  echo -e "\e[31mInstallation failed..."
-  echo -e "\e[31mAborting..."
-  echo -e "\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  echo -e "\\e[31mInstallation failed..."
+  echo -e "\\e[31mAborting..."
+  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
   return 1
 fi
