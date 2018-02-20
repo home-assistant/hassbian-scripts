@@ -23,7 +23,7 @@ fi
 
 echo "Running apt-get preparation"
 apt-get update
-apt-get install -y postgresql-server-dev-9.6
+apt-get install -y postgresql-server-dev-9.6 postgresql-9.6
 
 
 echo "Changing to homeassistant user"
