@@ -17,7 +17,7 @@ function homebridge-install-package {
 homebridge-show-long-info
 homebridge-show-copyright-info
 
-if [ "$ACCEPT" == "true" ]; then
+if [ $ACCEPT == "true" ]; then
   HOMEASSISTANT_URL="http://127.0.0.1:8123"
   HOMEASSISTANT_PASSWORD=""
 else
@@ -81,7 +81,7 @@ cat > /home/homebridge/.homebridge/config.json <<EOF
       "password": "${HOMEASSISTANT_PASSWORD}",
       "supported_types": ["automation", "binary_sensor", "climate", "cover", "device_tracker", "fan", "group", "input_boolean", "light", "lock", "media_player", "remote", "scene", "script", "sensor", "switch", "vacuum"],
 	  "default_visibility": "hidden"
-    }
+    
   ]
 }
 EOF

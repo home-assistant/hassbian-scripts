@@ -72,7 +72,7 @@ function share-log {
     echo "This will put the output from your last operation on hastebin."
     echo "This could include sensitive informastion."
     echo "If you are unsure about what it contains, you can rin 'hassbian-config log' to check."
-    echo -n "Do you want to crate an hastebin link? [N/y] : "
+    echo -n "D  o you want to crate an hastebin link? [N/y] : "
     read -r  RESPONSE
     if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
       echo ""
