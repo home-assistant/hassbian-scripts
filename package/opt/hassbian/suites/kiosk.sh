@@ -21,6 +21,7 @@ apt-get --no-install-recommends install xserver-xorg xserver-xorg-video-fbdev xi
 apt-get -y --force-yes install screen checkinstall xterm xdotool x11-xserver-utils unclutter chromium-browser x11vnc expect
 
 # Set up x11vnc
+mkdir /home/pi/scripts
 cp /opt/hassbian/suites/files/setX11vncPass /home/pi/scripts/setX11vncPass
 chmod +x /home/pi/scripts/setX11vncPass
 
