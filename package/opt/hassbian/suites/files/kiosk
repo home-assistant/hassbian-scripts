@@ -1,0 +1,13 @@
+#!/bin/bash
+xset s 60         # Screen off in 60 seconds
+xset +dpms         # enable DPMS (Energy Star) features.
+x11vnc -many -rfbauth /home/pi/.vnc/passwd &
+sleep 15
+export DISPLAY=:0
+WID=$(xdotool search --onlyvisible --class chromium|head -1)
+xdotool windowactivate ${WID}
+xdotool key F11
+unclutter
+chromium-browser --kiosk --touch-events=enabled --disable-pinch --noerrdialogs --disable-session-crashed-bubble --app=http://localhost:8123
+sleep 1
+done
