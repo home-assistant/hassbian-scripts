@@ -60,7 +60,7 @@ if [ ! -z "${validation}" ]; then
   echo
   echo -e "\\e[32mInstallation done..\\e[0m"
   echo
-  echo "Configuration is now available as a Samba share at \\\\$ip_address\homeassistant"
+  echo "Configuration is now available as a Samba share at \\\\$ip_address\\homeassistant"
   echo
 else
   echo -e "\\e[31mInstallation failed..."
