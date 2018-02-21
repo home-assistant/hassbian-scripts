@@ -39,7 +39,11 @@ deactivate
 EOF
 
 echo "Checking the installation..."
-validation=$(which mysql)
+validation=$(sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'
+source /srv/homeassistant/bin/activate
+pip3 show mysqlclient
+EOF
+)
 if [ ! -z "${validation}" ]; then
   echo
   echo -e "\\e[32mInstallation done..\\e[0m"
