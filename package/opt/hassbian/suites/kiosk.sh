@@ -17,7 +17,7 @@ kiosk-show-short-info
 kiosk-show-copyright-info
 
 apt-get update
-
+apt-get --no-install-recommends install xserver-xorg xserver-xorg-video-fbdev xinit pciutils xinput xfonts-100dpi xfonts-75dpi xfonts-scalable
 apt-get -y --force-yes install screen checkinstall xterm xdotool x11-xserver-utils unclutter chromium-browser x11vnc expect
 
 # Set up x11vnc
