@@ -86,8 +86,7 @@ sudo systemctl restart cron.service
 
 echo "Checking the installation..."
 if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
-  certdir=/home/homeassistant/dehydrated/certs/"$domain".duckdns.org/
-  certvalidation=$(find $certdir -maxdepth 1 -type f | sort | grep privkey)
+  certvalidation=$(find /home/homeassistant/dehydrated/certs/"$domain".duckdns.org/ -maxdepth 1 -type f | sort | grep privkey)
 else
   certvalidation="ok"
 fi
