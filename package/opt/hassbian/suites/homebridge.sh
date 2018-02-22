@@ -133,7 +133,7 @@ if [ ! -z "${validation}" ]; then
   echo -e "\\e[32mInstallation done.\\e[0m"
   echo
   echo "Homebridge is now running and you can add it to your"
-  echo "home-kit app on your iOS device, when you are asked for a pin"
+  echo "HomeKit app on your iOS device, when you are asked for a pin"
   echo "use this: '$HOMEBRIDGE_PIN'"
   echo "For more information see this repo:"
   echo "https://github.com/home-assistant/homebridge-homeassistant#customization"
