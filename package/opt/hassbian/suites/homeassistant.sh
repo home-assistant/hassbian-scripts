@@ -106,7 +106,7 @@ echo "Checking the installation..."
 validation=$(pgrep -x hass)
 if [ ! -z "${validation}" ]; then
   echo
-  echo -e "\\e[32mUppgrade complete..\\e[0m"
+  echo -e "\\e[32mUpgrade complete..\\e[0m"
   echo "Note that it may take some time to start up after an upgrade."
   echo
 else

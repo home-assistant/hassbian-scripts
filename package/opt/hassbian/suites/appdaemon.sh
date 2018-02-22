@@ -126,7 +126,7 @@ echo "Checking the installation..."
 validation=$(pgrep -f appdaemon)
 if [ ! -z "${validation}" ]; then
   echo
-  echo -e "\\e[32mUppgrade done..\\e[0m"
+  echo -e "\\e[32mUpgrade done..\\e[0m"
   echo
   echo "To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
   echo

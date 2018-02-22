@@ -31,7 +31,7 @@ echo "Cleanup"
 rm "$HASSBIAN_PACKAGE"
 
 echo
-echo "Uppgrade is now done."
+echo "Upgrade is now done."
 echo
 return 0
 }
