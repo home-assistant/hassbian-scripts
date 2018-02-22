@@ -87,6 +87,7 @@ if [ ! -z "${validation}" ]; then
   echo "To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
   echo
 else
+  echo
   echo -e "\\e[31mInstallation failed..."
   echo -e "\\e[31mAborting..."
   echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
@@ -130,7 +131,8 @@ if [ ! -z "${validation}" ]; then
   echo "To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
   echo
 else
-  echo -e "\\e[31mUpgrade failed..."
+  echo
+  echo -e "\\e[31mInstallation failed..."
   echo -e "\\e[31mAborting..."
   echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo

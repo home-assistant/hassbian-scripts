@@ -53,6 +53,7 @@ if [ ! -z "${validation}" ]; then
   echo "It's recomended that you restart your Tradfri Gateway before continuing."
   echo
 else
+  echo
   echo -e "\\e[31mInstallation failed..."
   echo -e "\\e[31mAborting..."
   echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."

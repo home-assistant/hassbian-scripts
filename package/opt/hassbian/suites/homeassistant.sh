@@ -55,8 +55,9 @@ if [ ! -z "${validation}" ]; then
   echo
   echo
 else
+  echo
   echo -e "\\e[31mInstallation failed..."
-  echo -e "\\e[31mThis Raspberry Pi most likely did not have a fully functioning internet connection."
+  echo -e "\\e[31mAborting..."
   echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
   return 1
@@ -109,6 +110,7 @@ if [ ! -z "${validation}" ]; then
   echo "Note that it may take some time to start up after an upgrade."
   echo
 else
+  echo
   echo -e "\\e[31mInstallation failed..."
   echo -e "\\e[31mAborting..."
   echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
