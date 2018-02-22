@@ -96,7 +96,7 @@ echo "Restarting Home Assistant"
 systemctl start home-assistant@homeassistant.service
 
 echo
-echo "Uppgrade complete."
+echo "Upgrade complete."
 echo
 echo "Note that it may take some time to start up after an upgrade."
 echo
