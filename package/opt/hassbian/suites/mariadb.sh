@@ -38,14 +38,25 @@ echo "Deactivating virtualenv"
 deactivate
 EOF
 
-echo
-echo "Installation done."
-echo
-echo "No database or database user is created during this setup and will need to be created manually."
-echo
-echo "To continue have a look at https://home-assistant.io/components/recorder/"
-echo
-echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+
+echo "Checking the installation..."
+validation=$(which mariadb)
+if [ ! -z "${validation}" ]; then
+  echo
+  echo -e "\\e[32mInstallation done..\\e[0m"
+  echo
+  echo "No database or database user is created during this setup and will need to be created manually."
+  echo
+  echo "To continue have a look at https://home-assistant.io/components/recorder/"
+  echo
+else
+  echo
+  echo -e "\\e[31mInstallation failed..."
+  echo -e "\\e[31mAborting..."
+  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  echo
+  return 1
+fi
 return 0
 }
 

@@ -45,16 +45,23 @@ systemctl start home-assistant@homeassistant.service
 
 ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
 
-echo
-echo "Installation done."
-echo
-echo "Your Home Assistant installation is running at $ip_address:8123 or if prefered http://hassbian.local:8123"
-echo
-echo "To continue have a look at https://home-assistant.io/getting-started/configuration/"
-echo
-echo "If this script failed then this Raspberry Pi most likely did not have a fully functioning internet connection."
-echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
-echo
+echo "Checking the installation..."
+validation=$(pgrep -x hass)
+if [ ! -z "${validation}" ]; then
+  echo
+  echo -e "\\e[32mInstallation done..\\e[0m"
+  echo "Your Home Assistant installation is running at $ip_address:8123 or if prefered http://hassbian.local:8123"
+  echo "To continue have a look at https://home-assistant.io/getting-started/configuration/"
+  echo
+  echo
+else
+  echo
+  echo -e "\\e[31mInstallation failed..."
+  echo -e "\\e[31mAborting..."
+  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  echo
+  return 1
+fi
 return 0
 }
 
@@ -95,13 +102,21 @@ EOF
 echo "Restarting Home Assistant"
 systemctl start home-assistant@homeassistant.service
 
-echo
-echo "Uppgrade complete."
-echo
-echo "Note that it may take some time to start up after an upgrade."
-echo
-echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
-echo
+echo "Checking the installation..."
+validation=$(pgrep -x hass)
+if [ ! -z "${validation}" ]; then
+  echo
+  echo -e "\\e[32mUpgrade complete..\\e[0m"
+  echo "Note that it may take some time to start up after an upgrade."
+  echo
+else
+  echo
+  echo -e "\\e[31mInstallation failed..."
+  echo -e "\\e[31mAborting..."
+  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  echo
+  return 1
+fi
 return 0
 }
 

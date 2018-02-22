@@ -10,7 +10,7 @@ $ sudo hassbian-config install homeassistant
 
 ## Upgrade
 ```
-$ sudo hassbian-config upgrade home-assistant
+$ sudo hassbian-config upgrade homeassistant
 ```
 
 ## Additional info

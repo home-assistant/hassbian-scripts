@@ -37,8 +37,6 @@ echo "Installation done."
 echo
 echo "To continue have a look at https://home-assistant.io/components/emulated_hue/"
 echo
-echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
-echo
 return 0
 }
 

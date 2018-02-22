@@ -39,14 +39,27 @@ echo "Deactivating virtualenv"
 deactivate
 EOF
 
-echo
-echo "Installation done."
-echo
-echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
-echo
-echo "To continue have a look at https://home-assistant.io/components/tradfri/"
-echo "It's recomended that you restart your Tradfri Gateway before continuing."
-echo
+echo "Checking the installation..."
+validation=$(sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'
+source /srv/homeassistant/bin/activate
+pip3 show cython
+EOF
+)
+if [ ! -z "${validation}" ]; then
+  echo
+  echo -e "\\e[32mInstallation done..\\e[0m"
+  echo
+  echo "To continue have a look at https://home-assistant.io/components/tradfri/"
+  echo "It's recomended that you restart your Tradfri Gateway before continuing."
+  echo
+else
+  echo
+  echo -e "\\e[31mInstallation failed..."
+  echo -e "\\e[31mAborting..."
+  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  echo
+  return 1
+fi
 return 0
 }
 

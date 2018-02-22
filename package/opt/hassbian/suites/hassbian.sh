@@ -23,11 +23,9 @@ echo "Upgrading base operating system"
 sudo apt upgrade -y
 
 echo
-echo "Uppgrade complete."
+echo "Upgrade complete."
 echo
 echo "Note that you may need to reboot the raspberry Pi for some updates to take effect."
-echo
-echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
 echo
 return 0
 }

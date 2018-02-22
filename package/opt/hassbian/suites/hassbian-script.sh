@@ -31,10 +31,7 @@ echo "Cleanup"
 rm "$HASSBIAN_PACKAGE"
 
 echo
-echo "Uppgrade is now done."
-echo
-echo
-echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+echo "Upgrade is now done."
 echo
 return 0
 }
