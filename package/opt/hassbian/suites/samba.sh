@@ -17,11 +17,6 @@ function samba-install-package {
 samba-show-short-info
 samba-show-copyright-info
 
-if [ "$(id -u)" != "0" ]; then
-  echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-  return 1
-fi
-
 echo "Running apt-get preparation"
 apt-get update
 apt-get install -y samba
