@@ -4,17 +4,22 @@ SUITE_INSTALL_DIR=/opt/hassbian/suites
 SUITE_CONTROL_DIR=/srv/homeassistant/hassbian/control
 
 function usage {
-  echo hassbian-config usage:
-  echo
-  echo hassbian-config \<command\> \<suite\>
-  echo where \<command\> is one of:
-  echo     install   - installs a software suite
-  echo     upgrade   - upgrades a software suite
-  echo     show      - shows software suites available
-  echo     log       - displays an log of the last operation
-  echo     share-log - generates an hastebin link of the last operation
-  echo and \<suite\> is the name of a software component to operate on.
-  echo
+  printf "hassbian-config\\n"
+  printf "Version: $(hassbian-config -V)\\n"
+  printf "\\n"
+  printf "usage: hassbian-config [command] [suite] [options]\\n"
+  printf "where [command] is one of:\\n"
+  printf "%-8s\\t%s\\n" "  install" "Installs a software [suite]"
+  printf "%-8s\\t%s\\n" "  upgrade" "Upgrades a software [suite]"
+  printf "%-8s\\t%s\\n" "  show" "To see available [suite] for isntall/upgrade"
+  printf "%-8s\\t%s\\n" "  log" "Displays an log of the last operation"
+  printf "%-8s\\t%s\\n" "  share-log" "Generates an hastebin link of the last operation"
+  printf "%-8s\\t%s\\n" "  -V" "Prints the version of hassbian-config"
+  printf "\\n"
+  printf "available [options]:\\n"
+  printf "%-5s\\t%s\\n" "  -y" "accept all inputs/defaults"
+  printf "%-5s\\t%s\\n" "  -f" "force"
+  printf "\\n"
   return 0
 }
 
