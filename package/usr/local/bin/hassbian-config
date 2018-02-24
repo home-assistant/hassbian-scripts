@@ -5,7 +5,7 @@ SUITE_CONTROL_DIR=/srv/homeassistant/hassbian/control
 
 function usage {
   printf "hassbian-config\\n"
-  printf "Version: $(hassbian-config -V)\\n"
+  printf "%s\\n" "version: $(hassbian-config -V)"
   printf "\\n"
   printf "usage: hassbian-config [command] [suite] [options]\\n"
   printf "where [command] is one of:\\n"
@@ -16,9 +16,9 @@ function usage {
   printf "%-8s\\t%s\\n" "  share-log" "Generates an hastebin link of the last operation"
   printf "%-8s\\t%s\\n" "  -V" "Prints the version of hassbian-config"
   printf "\\n"
-  printf "available [options]:\\n"
-  printf "%-5s\\t%s\\n" "  -y" "accept all inputs/defaults"
-  printf "%-5s\\t%s\\n" "  -f" "force"
+  printf "available optional [options]:\\n"
+  printf "%-5s\\t%s\\n" "  -y" "accept defaults on scripts that allow this"
+  printf "%-5s\\t%s\\n" "  -f" "force run an script, this is useful if you need to reinstall a package"
   printf "\\n"
   return 0
 }
