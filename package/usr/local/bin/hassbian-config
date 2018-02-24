@@ -5,6 +5,7 @@ SUITE_CONTROL_DIR=/srv/homeassistant/hassbian/control
 
 function usage {
   printf "usage: hassbian-config [command] [suite] [options]\\n"
+  printf "run 'hassbian-config --help' to see all options\\n"
   return 0
 }
 
