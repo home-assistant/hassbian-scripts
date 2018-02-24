@@ -4,6 +4,11 @@ SUITE_INSTALL_DIR=/opt/hassbian/suites
 SUITE_CONTROL_DIR=/srv/homeassistant/hassbian/control
 
 function usage {
+  printf "usage: hassbian-config [command] [suite] [options]\\n"
+  return 0
+}
+
+function help {
   printf "hassbian-config\\n"
   printf "%s\\n" "version: $(hassbian-config -V)"
   printf "\\n"
@@ -11,14 +16,17 @@ function usage {
   printf "where [command] is one of:\\n"
   printf "%-8s\\t%s\\n" "  install" "Installs a software [suite]"
   printf "%-8s\\t%s\\n" "  upgrade" "Upgrades a software [suite]"
-  printf "%-8s\\t%s\\n" "  show" "To see available [suite] for isntall/upgrade"
+  printf "%-8s\\t%s\\n" "  show" "To see available [suite] for install/upgrade"
   printf "%-8s\\t%s\\n" "  log" "Displays an log of the last operation"
   printf "%-8s\\t%s\\n" "  share-log" "Generates an hastebin link of the last operation"
-  printf "%-8s\\t%s\\n" "  -V" "Prints the version of hassbian-config"
   printf "\\n"
   printf "available optional [options]:\\n"
-  printf "%-5s\\t%s\\n" "  -y" "accept defaults on scripts that allow this"
-  printf "%-5s\\t%s\\n" "  -f" "force run an script, this is useful if you need to reinstall a package"
+  printf "%-10s\\t%s\\n" " -y | --accept" "Accept defaults on scripts that allow this"
+  printf "%-10s\\t%s\\n" " -f | --force" "Force run an script, this is useful if you need to reinstall a package"
+  printf "\\n"
+  printf "other [command] available:\\n"
+  printf "%-10s\\t%s\\n" " -V | --version" "Prints the version of hassbian-config"
+  printf "%-10s\\t%s\\n" " -H | --help" "Shows this help"
   printf "\\n"
   return 0
 }
@@ -88,6 +96,10 @@ function share-log {
 }
 
 function install-suite {
+  if [ "$(id -u)" != "0" ]; then
+    echo "This script must be run with sudo. Use \"sudo hassbian-config install "$1"\"" 1>&2
+    return 1
+  fi
   if [ ! -f $SUITE_CONTROL_DIR/"$1" ]; then
     touch $SUITE_CONTROL_DIR/"$1"
     echo "SCRIPTSTATE=uninstalled" > $SUITE_CONTROL_DIR/"$1"
@@ -117,6 +129,10 @@ function install-suite {
 }
 
 function upgrade-suite {
+  if [ "$(id -u)" != "0" ]; then
+    echo "This script must be run with sudo. Use \"sudo hassbian-config upgrade "$1"\"" 1>&2
+    return 1
+  fi
   UPGRADE=$(grep "$1"-upgrade-package $SUITE_INSTALL_DIR/"$1".sh)
   if [ "$UPGRADE" == "" ]; then
     echo "Upgrade script is not available..."
@@ -164,11 +180,11 @@ SUITE=$2
 
 
 case $COMMAND in
-  "-f")
+  "-f"|"--force")
     FORCE="true"
     shift # past argument
     ;;
-  "-y")
+  "-y"|"--accept")
     ACCEPT="true"
     shift # past argument
     ;;
@@ -211,13 +227,17 @@ case $COMMAND in
     RUN="share-log"
     shift # past argument
     ;;
-  "-V")
+  "-V"|"--version")
     VERSION=$(dpkg -s hassbian-scripts | grep 'Version:' | awk '{print $2}')
     RUN="echo $VERSION"
     shift # past argument
     ;;
   "show-installed")
     RUN="show-installed-suites"
+    shift # past argument
+    ;;
+  "-H"|"--help")
+    RUN="help"
     shift # past argument
     ;;
   *)
