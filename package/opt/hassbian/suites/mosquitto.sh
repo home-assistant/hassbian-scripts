@@ -17,11 +17,6 @@ function mosquitto-install-package {
 mosquitto-show-short-info
 mosquitto-show-copyright-info
 
-if [ "$(id -u)" != "0" ]; then
-echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-return 1
-fi
-
 if [ "$ACCEPT" == "true" ]; then
   mqtt_username=pi
   mqtt_password=raspberry
