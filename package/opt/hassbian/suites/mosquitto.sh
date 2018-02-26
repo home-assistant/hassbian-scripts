@@ -17,11 +17,6 @@ function mosquitto-install-package {
 mosquitto-show-short-info
 mosquitto-show-copyright-info
 
-if [ "$(id -u)" != "0" ]; then
-echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-return 1
-fi
-
 if [ "$ACCEPT" == "true" ]; then
   mqtt_username=pi
   mqtt_password=raspberry
@@ -94,9 +89,9 @@ ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $
 
 echo "Checking the installation..."
 validation=$(pgrep -f mosquitto)
-if [ "$validation" != NULL ]; then
+if [ ! -z "${validation}" ]; then
   echo
-  echo -e "\e[32mInstallation done.\e[0m"
+  echo -e "\\e[32mInstallation done.\\e[0m"
   echo
   echo "Your MQTT broker is running at $ip_address:1883 or if prefered hassbian.local:1883"
   echo ""
@@ -105,9 +100,11 @@ if [ "$validation" != NULL ]; then
   echo "https://github.com/home-assistant/homebridge-homeassistant#customization"
   echo
 else
-  echo -e "\e[31mInstallation failed..."
-  echo -e "\e[31mAborting..."
-  echo -e "\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  echo
+  echo -e "\\e[31mInstallation failed..."
+  echo -e "\\e[31mAborting..."
+  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  echo
   return 1
 fi
 return 0

@@ -44,11 +44,21 @@ systemctl start home-assistant@homeassistant.service
 
 ip_address=$(ifconfig | awk -F':' '/inet addr/&&!/127.0.0.1/{split($2,_," ");print _[1]}')
 
-echo
-echo "Installation done."
-echo
-echo "Your Home Assistant development branch installation is running at $ip_address:8123 or if prefered http://hassbian.local:8123"
-echo
+echo "Checking the installation..."
+validation=$(pgrep -x hass)
+if [ ! -z "${validation}" ]; then
+  echo
+  echo -e "\\e[32mInstallation done..\\e[0m"
+  echo "Your Home Assistant development branch installation is running at $ip_address:8123 or if prefered http://hassbian.local:8123"
+  echo
+else
+  echo
+  echo -e "\\e[31mInstallation failed..."
+  echo -e "\\e[31mAborting..."
+  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  echo
+  return 1
+fi
 return 0
 }
 

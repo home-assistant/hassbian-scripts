@@ -17,11 +17,6 @@ function samba-install-package {
 samba-show-short-info
 samba-show-copyright-info
 
-if [ "$(id -u)" != "0" ]; then
-  echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-  return 1
-fi
-
 echo "Running apt-get preparation"
 apt-get update
 apt-get install -y samba
@@ -54,13 +49,22 @@ sudo systemctl restart smbd.service
 
 ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
 
-echo
-echo "Installation done."
-echo
-echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
-echo
-echo "Configuration is now available as a Samba share at \\\\$ip_address\homeassistant"
-echo
+echo "Checking the installation..."
+validation=$(pgrep -x smbd)
+if [ ! -z "${validation}" ]; then
+  echo
+  echo -e "\\e[32mInstallation done..\\e[0m"
+  echo
+  echo "Configuration is now available as a Samba share at \\\\$ip_address\\homeassistant"
+  echo
+else
+  echo
+  echo -e "\\e[31mInstallation failed..."
+  echo -e "\\e[31mAborting..."
+  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  echo
+  return 1
+fi
 return 0
 }
 

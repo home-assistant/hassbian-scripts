@@ -49,11 +49,11 @@ cd
 
 if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
   git clone https://github.com/lukas2511/dehydrated.git
-  cd dehydrated
+  cd dehydrated  || exit
   echo $domain".duckdns.org" | tee domains.txt
   echo "CHALLENGETYPE='dns-01'" | tee -a config
   echo "HOOK='./hook.sh'" | tee -a config
-  curl -o ./hook.sh https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/opt/hassbian/suites/files/ssl_hook.sh
+  curl -so ./hook.sh https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/opt/hassbian/suites/files/ssl_hook.sh
   sed -i 's/myhome/'$domain'/g' ./hook.sh
   sed -i 's/your-duckdns-token/'$token'/g' ./hook.sh
   chmod 755 hook.sh
@@ -62,8 +62,9 @@ if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
 fi
 
 echo "Creating duckdns folder..."
+cd /home/homeassistant || exit
 mkdir duckdns
-cd duckdns
+cd duckdns || exit
 
 echo "Creating a script file to be used by cron."
 echo "echo url='https://www.duckdns.org/update?domains=$domain&token=$token&ip=' | curl -k -o ~/duckdns/duck.log -K -" > duck.sh
@@ -72,7 +73,7 @@ echo "Setting premissions..."
 chmod 700 duck.sh
 
 echo "Creating cron job..."
-(crontab -l ; echo "*/5 * * * * ~/duckdns/duck.sh >/dev/null 2>&1")| crontab -
+(crontab -l ; echo "*/5 * * * * /home/homeassistant/duckdns/duck.sh >/dev/null 2>&1")| crontab -
 if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
 (crontab -l ; echo "0 1 1 * * /home/homeassistant/dehydrated/dehydrated -c")| crontab -
 fi
@@ -83,16 +84,35 @@ EOF
 echo "Restarting cron service..."
 sudo systemctl restart cron.service
 
-echo
-echo "Installation done."
-echo
+echo "Checking the installation..."
 if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
-echo "Remember to update your configuration.yaml to take advantage of SSL!"
-echo "Documentation for this can be found here <https://home-assistant.io/components/http/>."
+  certvalidation=$(find /home/homeassistant/dehydrated/certs/"$domain".duckdns.org/ -maxdepth 1 -type f | sort | grep privkey)
+else
+  certvalidation="ok"
 fi
-echo
-echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
-echo
+if [ ! -f /home/homeassistant/duckdns/duck.sh ]; then
+  dnsvalidation=""
+else
+  dnsvalidation="ok"
+fi
+
+if [ ! -z "${certvalidation}" ] && [ ! -z "${dnsvalidation}" ]; then
+  echo
+  echo -e "\\e[32mInstallation done..\\e[0m"
+  echo
+  if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
+  echo "Remember to update your configuration.yaml to take advantage of SSL!"
+  echo "Documentation for this can be found here <https://home-assistant.io/components/http/>."
+  echo
+  fi
+else
+  echo
+  echo -e "\\e[31mInstallation failed..."
+  echo -e "\\e[31mAborting..."
+  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  echo
+  return 1
+fi
 return 0
 }
 

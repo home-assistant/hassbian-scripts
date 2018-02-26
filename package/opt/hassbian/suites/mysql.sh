@@ -16,11 +16,6 @@ function mysql-install-package {
 mysql-show-short-info
 mysql-show-copyright-info
 
-if [ "$(id -u)" != "0" ]; then
-  echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-  return 1
-fi
-
 echo "Running apt-get preparation"
 apt-get update
 apt-get install -y default-libmysqlclient-dev libssl-dev
@@ -38,15 +33,28 @@ echo "Deactivating virtualenv"
 deactivate
 EOF
 
-echo
-echo "Installation done."
-echo
-echo "No database or database user is created during this setup and will need to be created manually."
-echo
-echo "To continue have a look at https://home-assistant.io/components/recorder/"
-echo
-echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
-echo
+echo "Checking the installation..."
+validation=$(sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'
+source /srv/homeassistant/bin/activate
+pip3 show mysqlclient
+EOF
+)
+if [ ! -z "${validation}" ]; then
+  echo
+  echo -e "\\e[32mInstallation done..\\e[0m"
+  echo
+  echo "No database or database user is created during this setup and will need to be created manually."
+  echo
+  echo "To continue have a look at https://home-assistant.io/components/recorder/"
+  echo
+else
+  echo
+  echo -e "\\e[31mInstallation failed..."
+  echo -e "\\e[31mAborting..."
+  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
+  echo
+  return 1
+fi
 return 0
 }
 
