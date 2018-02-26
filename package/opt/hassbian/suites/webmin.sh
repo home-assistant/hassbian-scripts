@@ -2,7 +2,7 @@
 
 function webmin-show-short-info {
   echo "Webmin install script for Hassbian"
-
+}
 
 function webmin-show-long-info {
   echo "Installs the Webmin web-based administration interface on Hassbian."
