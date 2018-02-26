@@ -23,7 +23,7 @@ function webmin-show-repo-message {
 function webmin-check-repo {
   SOURCES_LIST=$(cat /etc/apt/sources.list)
   echo "Checking if Webmin repo entry exists"
-  if grep -q "deb https://download.webmin.com/download/repository sarge contrib" <<< $SOURCES_LIST; then
+  if grep -q "deb https://download.webmin.com/download/repository sarge contrib" <<< "$SOURCES_LIST"; then
     webmin-show-repo-message
   else
     echo "Webmin repository not found, adding it now"
