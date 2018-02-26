@@ -23,7 +23,7 @@ function webmin-show-repo-message {
 function webmin-check-repo {
   SOURCES_LIST=$(cat /etc/apt/sources.list)
   echo "Checking if Webmin repo entry exists"
-  if grep -q 'deb https://download.webmin.com/download/repository sarge contrib' <<< $SOURCES_LIST; then
+  if grep -q "deb https://download.webmin.com/download/repository sarge contrib" <<< $SOURCES_LIST; then
     webmin-show-repo-message
   else
     echo "Webmin repository not found, adding it now"
@@ -43,25 +43,21 @@ function webmin-check-keys {
     apt-get install gnupg
   fi
   echo "Creating directory for the Webmin repo key"
-  cd /etc
+  cd /etc || return
   mkdir webmin_keys
-  cd webmin_keys
+  cd webmin_keys || return
   echo "Downloading Webmin repo key"
   wget "http://www.webmin.com/jcameron-key.asc"
   echo "Adding key with apt-key"
-  apt-key add jcameron-key.asc
-  if [ $? -eq 0 ]; then
+  if apt-key add jcameron-key.asc; then
     echo "Repo key added successfully"
+  else
+    return 1
   fi
 }
 
-function get-local-ip {
-  LOCAL_IP=$(hostname -I)
-}
-
 function webmin-install-package {
-  WEBMIN_REPO="deb https://download.webmin.com/download/repository sarge contrib"
-
+  # WEBMIN_REPO="deb https://download.webmin.com/download/repository sarge contrib"
   # Set install mode
   INSTALL_MODE="install"
   webmin-show-short-info
@@ -78,19 +74,18 @@ function webmin-install-package {
 
   # Installing actual Webmin packages
   echo "Installing Webmin packages"
-  apt-get install webmin -y
-  if ! [ $? -eq 0 ]; then
+  if ! apt-get install webmin -y; then
     echo "Installation failed - Attempting fix"
     rm /var/lib/dpkg/info/apt-show*
     apt-get -f install apt-show-versions -y
     apt-get install webmin -y
-    if ! [ $? -eq 0 ]; then
+    if apt-get install webmin -y; then
       echo "Fix successfully applied"
     fi
   fi
 
   # Get local IP address for this machine
-  get-local-ip
+  LOCAL_IP=$(hostname -I)
 
   # End
   echo
