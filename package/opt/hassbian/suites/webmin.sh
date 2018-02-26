@@ -91,7 +91,7 @@ function webmin-install-package {
   echo
   echo "Installation done."
   echo
-  echo "You can now access the Webmin control panel at http://$IP:10000"
+  echo "You can now access the Webmin control panel at http://$LOCAL_IP:10000"
   echo
   echo "For more information and tutorials, visit http://www.webmin.com/docs.html"
   echo
