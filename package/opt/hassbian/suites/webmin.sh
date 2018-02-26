@@ -13,7 +13,7 @@ function webmin-show-copyright-info {
 }
 
 function webmin-show-repo-message {
-  if ["$INSTALL_MODE" == "install"]
+  if [ "$INSTALL_MODE" == "install" ]
     echo "Repository found, proceeding with installation"
   else
     echo "Repository found, proceeding with update"
