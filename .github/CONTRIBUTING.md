@@ -5,9 +5,10 @@ Everybody is invited and welcome to contribute to Hassbian-scripts.
 The process is straight-forward.
  - Read [How to get faster PR reviews](https://github.com/kubernetes/community/blob/master/contributors/guide/pull-requests.md#best-practices-for-faster-reviews) by Kubernetes (but skip step 0)
  - Fork the Hassbian-scripts [git repository](https://github.com/home-assistant/hassbian-scripts).
+ - Add a new branch to your fork with a name that describe what you are implementing.
  - Add or change the code.
  - Ensure tests work.
- - Ensure tests work.
+ - Ensure tests work. _Finding out during review that this does not work, will **not** result in a good review._
  - Create a Pull Request against the [**dev**](https://github.com/home-assistant/hassbian-scripts/tree/dev) branch of Hassbian-scripts.
 
 ## Pull Requests for new scripts.
@@ -17,14 +18,39 @@ All new script must have meet the following criteria to even be reviewed:
 - Every script should have an validation at the end, se [validation](#validation) for tips.
 - You **must** add [documentation](#documentation) to the /docs for the script.
 
+### PR Naming
+Create a good name for your PR, this will be used in the cahngelog.
+**Good names**  
+- Suite: Added support for feature X.
+- Hassbian-config: Added function X.
+- New install script for suite.
+- Suite: Fixed typo in function X.
+- Suite docs: Added more information about suite.
+
+**Bad names**  
+- Updated suite.sh
+- Fixed typo.
+
+### Description in the PR
+Remember that it is people that are reviewing your PR, pepole that most likly don't share your mindset.
+A good description of what the PR does, will certanly help during the review prosess.
+
+### Comments
+Your PR will most likly get comments during the review prosess, this is _not_ to criticise your work.
+But feeback on how your PR can better macth our "standards", you should have a look at exsiting scripts in the [repo](https://github.com/home-assistant/hassbian-scripts/tree/dev/package/opt/hassbian/suites).
+If some comments are unclear to you, use the thred under that comment to get clarification, or drop a line in the #devs_hassbian channel over at [Discord](https://discord.gg/c5DvZ4e), we want to help you help us getting Hassbian-scripts better.
+
 ## Structure of the hassbian-scripts
 The scripts in Hassbian-scripts are referred to as suites, these suites are bash scripts with an `.sh` file extension.
 Each suite is buildt up of functions, and every script should have at least these functions:
- - suite-show-short-info, this info will be printed at the start when the script runs and is also used by `hassbian-config show`.
+ - suite-show-short-info.
+  - This info will be printed at the start when the script runs and is also used by `hassbian-config show`.
 	- This will typically include an short description of the suit.
- - suite-show-long-info, this info will be printed at the start when the script runs and is also used by `hassbian-config show suite`.
+ - suite-show-long-info.
+  - This info will be printed at the start when the script runs and is also used by `hassbian-config show suite`.
 	- This will typically include an longer description of the suit, and it's features.
- - suite-show-copyright-info, this info will be printed at the start when the script runs and is also used by `hassbian-config show suite`.
+ - suite-show-copyright-info.
+  - This info will be printed at the start when the script runs and is also used by `hassbian-config show suite`.
 	- This will typically include the name/username and a link to github of the person writing the script.
  - suite-install-package and or suite-upgrade-package, this is where the magic happen, this is where you include your script.
 
@@ -149,13 +175,15 @@ fi
 return 0
 ```
 
+This line should only be printed it the validation fails.
+`"If you have issues with this script, please say something in the #devs_hassbian channel on Discord."`
+
 ## Testing your code
 Testing the code can be done in the folowing steps:
-1. Make sure you have the newest version from dev. `sudo hassbian-config upgrade hassbian-script-dev`
+1. Make sure you have the newest version from the upstrram dev. branch. `sudo hassbian-config upgrade hassbian-script-dev`
 2. Put your `suite.sh` file in the `/opt/hassbian/suites/` directory.
 3. Run test with `sudo hassbian-config install suite` and/or `sudo hassbian-config upgrade suite`
 	- If you added support for `-y` test this to.
-
 
 ## Documentation
 First create a new `suite.md` file in the /docs directory in your fork.
@@ -167,8 +195,8 @@ There can never be too much documentation, the file should have a minimum of:
 It should also contains if possible:
 - Log location
 - Configuration location.
-- Service commands
-- Defaults
+- Service commands (start, stop, restart, status)
+- Defaults:
 	- username
 	- password
 	- port
