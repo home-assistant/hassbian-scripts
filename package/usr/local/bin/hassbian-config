@@ -80,8 +80,20 @@ function check-permission {
 }
 
 function share-log {
+  if [ ! -f $LOGFILE ];then
+    echo "No logfile exiting..."
+    return 0
+  fi
   if [ "$ACCEPT" == "true" ]; then
-    a=$(cat $LOGFILE); curl -X POST -s -d "$a" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}'
+    loglink=$(curl -X POST -s -d "$(cat $LOGFILE)" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}')
+    vaildate=$(echo $loglink | tr ' ' '\n' | grep "initial")
+    if [[ $validate = *"hastebin"*  ]]; then
+      echo $loglink
+    else
+      echo "There is an issue with your network conection, or with the hasebin API.."
+      echo "Try again later.."
+      return 0
+    fi
   else
     echo "This will put the output from your last operation on hastebin."
     echo "This could include sensitive informastion."
@@ -89,8 +101,16 @@ function share-log {
     echo -n "Do you want to create an hastebin link? [N/y] : "
     read -r  RESPONSE
     if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
-      echo ""
-    a=$(cat $LOGFILE); curl -X POST -s -d "$a" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}'
+      loglink=$(curl -X POST -s -d "$(cat $LOGFILE)" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}')
+      vaildate=$(echo $loglink | tr ' ' '\n' | grep "initial")
+      if [[ $validate = *"hastebin"*  ]]; then
+        echo $loglink
+      else
+        echo
+        echo "There is an issue with your network conection, or with the hasebin API.."
+        echo "Try again later.."
+        return 0
+      fi
     fi
   fi
   return 0
