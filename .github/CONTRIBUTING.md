@@ -19,7 +19,7 @@ All new script must have meet the following criteria to even be reviewed:
 - You **must** add [documentation](#documentation) to the /docs for the script.
 
 ### PR Naming
-Create a good name for your PR, this will be used in the cahngelog.
+Create a good name for your PR, this will be used in the changelog.
 **Good names**  
 - Suite: Added support for feature X.
 - Hassbian-config: Added function X.
@@ -37,22 +37,22 @@ A good description of what the PR does, will certanly help during the review pro
 
 ### Comments
 Your PR will most likly get comments during the review prosess, this is _not_ to criticise your work.
-But feeback on how your PR can better macth our "standards", you should have a look at exsiting scripts in the [repo](https://github.com/home-assistant/hassbian-scripts/tree/dev/package/opt/hassbian/suites).
-If some comments are unclear to you, use the thred under that comment to get clarification, or drop a line in the #devs_hassbian channel over at [Discord](https://discord.gg/c5DvZ4e), we want to help you help us getting Hassbian-scripts better.
+But feeback on how your PR can better match our "standards", you should have a look at exsiting scripts in the [repo](https://github.com/home-assistant/hassbian-scripts/tree/dev/package/opt/hassbian/suites).
+If some comments are unclear to you, use the thread under that comment to get clarification, or drop a line in the #devs_hassbian channel over at [Discord](https://discord.gg/c5DvZ4e), we want to help you help us getting Hassbian-scripts better.
 
 ## Structure of the hassbian-scripts
 The scripts in Hassbian-scripts are referred to as suites, these suites are bash scripts with an `.sh` file extension.
-Each suite is buildt up of functions, and every script should have at least these functions:
+Each suite is built up of functions, and every script should have at least these functions:
  - suite-show-short-info.
   - This info will be printed at the start when the script runs and is also used by `hassbian-config show`.
-	- This will typically include an short description of the suit.
+	- This will typically include a short description of the suit.
  - suite-show-long-info.
   - This info will be printed at the start when the script runs and is also used by `hassbian-config show suite`.
-	- This will typically include an longer description of the suit, and it's features.
+	- This will typically include a longer description of the suit, and it's features.
  - suite-show-copyright-info.
   - This info will be printed at the start when the script runs and is also used by `hassbian-config show suite`.
 	- This will typically include the name/username and a link to github of the person writing the script.
- - suite-install-package and or suite-upgrade-package, this is where the magic happen, this is where you include your script.
+ - suite-install-package and or suite-upgrade-package, this is where the magic happens, this is where you include your script.
 
 ## Spesial notations about install/upgrade functions
 ### User inputs
@@ -105,7 +105,7 @@ return 0
 ```
 
 **pip package**  
-This will check if the pip package `cython` is installed in the virtual evniorment.
+This will check if the pip package `cython` is installed in the virtual environment.
 ```bash
 echo "Checking the installation..."
 validation=$(sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'
@@ -118,7 +118,7 @@ if [ ! -z "${validation}" ]; then
   echo -e "\\e[32mInstallation done..\\e[0m"
   echo
   echo "To continue have a look at https://home-assistant.io/components/tradfri/"
-  echo "It's recomended that you restart your Tradfri Gateway before continuing."
+  echo "It's recommended that you restart your Tradfri Gateway before continuing."
   echo
 else
   echo
@@ -180,7 +180,7 @@ This line should only be printed it the validation fails.
 
 ## Testing your code
 Testing the code can be done in the folowing steps:
-1. Make sure you have the newest version from the upstrram dev. branch. `sudo hassbian-config upgrade hassbian-script-dev`
+1. Make sure you have the newest version from the upstream dev. branch. `sudo hassbian-config upgrade hassbian-script-dev`
 2. Put your `suite.sh` file in the `/opt/hassbian/suites/` directory.
 3. Run test with `sudo hassbian-config install suite` and/or `sudo hassbian-config upgrade suite`
 	- If you added support for `-y` test this to.
