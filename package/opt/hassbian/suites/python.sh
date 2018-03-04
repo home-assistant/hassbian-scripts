@@ -1,15 +1,15 @@
 #!/bin/bash
 
 function python-show-short-info {
-  echo "Upgrades python3 and virtual enviorment to the newest version."
+  echo "Upgrades python3 and virtual environment to the newest version."
 }
 
 function python-show-long-info {
-  echo "Upgrades python3 and virtual enviorment to the newest version."
+  echo "Upgrades python3 and virtual environment to the newest version."
 }
 
 function python-show-copyright-info {
-  echo "Original consept by Ludeeus <https://github.com/ludeeus>."
+  echo "This script was originally contributed by Ludeeus <https://github.com/ludeeus>."
 }
 
 function python-upgrade-package {
