@@ -1,5 +1,4 @@
 #!/bin/bash
-
 function python-show-short-info {
   echo "Upgrades python3 and virtual environment to the newest stable version."
 }
@@ -72,10 +71,10 @@ EOF
 mv /home/homeassistant/.homeassistant/deps /home/homeassistant/.homeassistant/deps_"$currentpython"
 
 echo "Starting Home Assistant."
-sudo curl -o /etc/systemd/system/home-assistant@homeassistant.service https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/etc/systemd/system/home-assistant%40homeassistant.service
-sudo systemctl enable home-assistant@homeassistant.service
-sudo systemctl daemon-reload
-sudo systemctl start home-assistant@homeassistant.service
+curl -o /etc/systemd/system/home-assistant@homeassistant.service https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/etc/systemd/system/home-assistant%40homeassistant.service
+systemctl enable home-assistant@homeassistant.service
+systemctl daemon-reload
+systemctl start home-assistant@homeassistant.service
 
 echo "Checking the installation..."
 validation=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
@@ -85,12 +84,17 @@ EOF
 )
 if [ "$validation" == "$PYTHONVERSION" ]; then
   echo
-  echo -e "\\e[3231mUpgrade done..\\e[0m"
+  echo -e "\\e[32mUpgrade done..\\e[0m"
+  echo "First time Home Assistant starts, it will use a long time. This is normal."
   echo
 else
   echo
   echo -e "\\e[31mUpgrade failed..."
   echo -e "\\e[31mReverting..."
+  systemctl stop home-assistant@homeassistant.service
+  rm -R /srv/homeassistant
+  mv /srv/homeassistant_"$currentpython" /srv/homeassistant
+  systemctl start home-assistant@homeassistant.service
   echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
   return 1
