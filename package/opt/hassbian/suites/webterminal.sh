@@ -48,7 +48,7 @@ if [ "$SSL" == "y" ] || [ "$SSL" == "Y" ]; then
   PRIVKEY=$(find "$CERTDIR" -type f | grep privkey)
   DOMAIN=$(ls "$CERTDIR")
   echo "Merging files and adding to correct dir..."
-  cat $FULLCHAIN $PRIVKEY > /var/lib/shellinabox/certificate-"$DOMAIN".pem
+  cat "$FULLCHAIN" "$PRIVKEY" > /var/lib/shellinabox/certificate-"$DOMAIN".pem
   chown shellinabox:shellinabox -R /var/lib/shellinabox/
   echo "Adding crong job to copy certs..."
   (crontab -l ; echo "0 1 1 * * bash /opt/hassbian/suites/files/webterminalsslhelper.sh")| crontab -

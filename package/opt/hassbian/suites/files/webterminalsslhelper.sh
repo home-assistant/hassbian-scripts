@@ -10,7 +10,7 @@ fi
 FULLCHAIN=$(find "$CERTDIR" -type f | grep fullchain)
 PRIVKEY=$(find "$CERTDIR" -type f | grep privkey)
 DOMAIN=$(ls "$CERTDIR")
-cat $FULLCHAIN $PRIVKEY > /var/lib/shellinabox/certificate-"$DOMAIN".pem
+cat "$FULLCHAIN" "$PRIVKEY" > /var/lib/shellinabox/certificate-"$DOMAIN".pem
 chown shellinabox:shellinabox -R /var/lib/shellinabox/
 service shellinabox restart
 exit 0
