@@ -45,7 +45,7 @@ pip3 freeze —local > /tmp/requirements.txt
 deactivate
 EOF
 
-echo "Creating new virutal enviorment using Python $PYTHONVERSION"
+echo "Creating new virutal environment using Python $PYTHONVERSION"
 python3.6 -m venv /srv/homeassistant
 sudo chown homeassistant:homeassistant /srv/homeassistant
 sudo mv /srv/homeassistant_old/hassbian /srv/homeassistant/hassbian
