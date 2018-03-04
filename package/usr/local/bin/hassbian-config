@@ -85,9 +85,9 @@ function share-log {
     return 0
   fi
   if [ "$ACCEPT" == "true" ]; then
-    loglink=$(curl -X POST -s -d "$(cat $LOGFILE)" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}')
+    loglink=$(curl -X POST -s -d "$(cat "$LOGFILE")" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}')
     if [[ $loglink != *"initial"*  ]]; then
-      echo $loglink
+      echo "$loglink"
     else
       echo "There is an issue with your network conection, or with the hastebin API.."
       echo "Try again later.."
@@ -100,9 +100,9 @@ function share-log {
     echo -n "Do you want to create an hastebin link? [N/y] : "
     read -r  RESPONSE
     if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
-      loglink=$(curl -X POST -s -d "$(cat $LOGFILE)" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}')
+      loglink=$(curl -X POST -s -d "$(cat "$LOGFILE")" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}')
       if [[ $loglink != *"initial"*  ]]; then
-        echo $loglink
+        echo "$loglink"
       else
         echo
         echo "There is an issue with your network conection, or with the hasebin API.."
