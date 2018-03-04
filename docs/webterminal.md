@@ -27,5 +27,17 @@ panel_iframe:
     icon: mdi:console
     url: 'http://192.168.1.2:4200'
 ```
+
+#### Notes for SSL
+If you enable the use of existing Let's Encrypt certificates you need to open ports in your firewall to use them.
+
+If SSL is used the panel_iframe has to use your domain.
+```yaml
+panel_iframe:
+  web_terminal:
+    title: 'Web terminal'
+    icon: mdi:console
+    url: 'https://yourdomain.duckdns.org:4200'
+```
 ***
 This script was originally contributed by [@Ludeeus](https://github.com/ludeeus).
