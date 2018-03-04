@@ -1,6 +1,6 @@
 ## Description
 This script will upgrade Python to the latest stable version.
-It will also create a new virtuel enviorment to be used for Home Assistant.
+It will also create a new virtual enviorment to be used for Home Assistant.
 
 ## Upgrade
 ```
