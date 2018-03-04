@@ -49,12 +49,12 @@ echo "Stopping Home Assistant."
 systemctl stop home-assistant@homeassistant.service
 
 echo "Backing up previous virutal enviorment."
-mv /srv/homeassistant /srv/homeassistant_"$currentpython"
 sudo -u homeassistant -H /bin/bash << EOF
 source /srv/homeassistant/bin/activate
 pip3 freeze —local > /tmp/requirements.txt
 deactivate
 EOF
+mv /srv/homeassistant /srv/homeassistant_"$currentpython"
 
 echo "Creating new virutal environment using Python $PYTHONVERSION"
 python"${PYTHONVERSION:: -2}" -m venv /srv/homeassistant
