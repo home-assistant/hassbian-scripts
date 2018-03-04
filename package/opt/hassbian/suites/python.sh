@@ -49,7 +49,7 @@ echo "Stopping Home Assistant."
 systemctl stop home-assistant@homeassistant.service
 
 echo "Backing up previous virutal enviorment."
-mv /srv/homeassistant /srv/homeassistant_old
+mv /srv/homeassistant /srv/homeassistant_"$currentpython"
 sudo -u homeassistant -H /bin/bash << EOF
 source /srv/homeassistant/bin/activate
 pip3 freeze —local > /tmp/requirements.txt
@@ -57,9 +57,9 @@ deactivate
 EOF
 
 echo "Creating new virutal environment using Python $PYTHONVERSION"
-python${PYTHONVERSION:: -2} -m venv /srv/homeassistant
+python"${PYTHONVERSION:: -2}" -m venv /srv/homeassistant
 sudo chown homeassistant:homeassistant /srv/homeassistant
-sudo mv /srv/homeassistant_old/hassbian /srv/homeassistant/hassbian
+sudo mv /srv/homeassistant_"$currentpython"/hassbian /srv/homeassistant/hassbian
 sudo apt-get install python3-pip python3-dev
 sudo pip3 install --upgrade virtualenv
 sudo -u homeassistant -H /bin/bash << EOF
@@ -68,7 +68,7 @@ pip3 install -r /tmp/requirements.txt
 pip3 install --upgrade homeassistant
 deactivate
 EOF
-mv /home/homeassistant/.homeassistant/deps /home/homeassistant/.homeassistant/deps_old
+mv /home/homeassistant/.homeassistant/deps /home/homeassistant/.homeassistant/deps_"$currentpython"
 
 echo "Starting Home Assistant."
 sudo curl -o /etc/systemd/system/home-assistant@homeassistant.service https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/etc/systemd/system/home-assistant%40homeassistant.service
@@ -77,7 +77,7 @@ sudo systemctl daemon-reload
 sudo systemctl start home-assistant@homeassistant.service
 
 echo "Checking the installation..."
-validation=$(sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'
+validation=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
 source /srv/homeassistant/bin/activate
 python -V
 EOF
