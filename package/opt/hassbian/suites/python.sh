@@ -1,11 +1,11 @@
 #!/bin/bash
 
 function python-show-short-info {
-  echo "Upgrades python3 and virtual environment to the newest version."
+  echo "Upgrades python3 and virtual environment to the newest stable version."
 }
 
 function python-show-long-info {
-  echo "Upgrades python3 and virtual environment to the newest version."
+  echo "Upgrades python3 and virtual environment to the newest stable version."
 }
 
 function python-show-copyright-info {
@@ -17,7 +17,18 @@ python-show-short-info
 python-show-copyright-info
 PYTHONVERSION=$(curl -s https://www.python.org/downloads/source/ | grep "Latest Python 3 Release" | cut -d "<" -f 3 | awk -F ' ' '{print $NF}')
 
-echo "Installing Python $PYTHONVERSION"
+echo "Checking current version..."
+currentpython=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
+source /srv/homeassistant/bin/activate
+python -V
+EOF
+)
+
+if [ "$currentpython" == "$PYTHONVERSION" ]; then
+  echo "Python is already the highest stable version.."
+  return 0
+fi
+echo "Upgrading to Python $PYTHONVERSION"
 apt-get -y update
 apt-get install -y build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev
 apt-get install libtcmalloc-minimal4
@@ -26,8 +37,8 @@ cd /tmp || return 1
 wget https://www.python.org/ftp/python/"$PYTHONVERSION"/Python-"$PYTHONVERSION".tar.xz
 tar xf Python-"$PYTHONVERSION".tar.xz
 cd Python-"$PYTHONVERSION" || return 1
-./configure --enable-optimizations
-make
+./configure
+make altinstall
 apt -y autoremove
 cd  || return 1
 rm -r /tmp/Python-"$PYTHONVERSION"
@@ -46,7 +57,7 @@ deactivate
 EOF
 
 echo "Creating new virutal environment using Python $PYTHONVERSION"
-python3.6 -m venv /srv/homeassistant
+python${PYTHONVERSION:: -2} -m venv /srv/homeassistant
 sudo chown homeassistant:homeassistant /srv/homeassistant
 sudo mv /srv/homeassistant_old/hassbian /srv/homeassistant/hassbian
 sudo apt-get install python3-pip python3-dev
