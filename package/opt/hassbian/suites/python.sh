@@ -58,12 +58,13 @@ mv /srv/homeassistant /srv/homeassistant_"$currentpython"
 
 echo "Creating new virutal environment using Python $PYTHONVERSION"
 python"${PYTHONVERSION:: -2}" -m venv /srv/homeassistant
-sudo chown homeassistant:homeassistant /srv/homeassistant
-sudo mv /srv/homeassistant_"$currentpython"/hassbian /srv/homeassistant/hassbian
-sudo apt-get install python3-pip python3-dev
-sudo pip3 install --upgrade virtualenv
+mv /srv/homeassistant_"$currentpython"/hassbian /srv/homeassistant/hassbian
+chown homeassistant:homeassistant -R /srv/homeassistant
+apt install python3-pip python3-dev
+pip"${PYTHONVERSION:: -2}" install --upgrade virtualenv
 sudo -u homeassistant -H /bin/bash << EOF
 source /srv/homeassistant/bin/activate
+pip3 install --upgrade setuptools wheel
 pip3 install -r /tmp/requirements.txt
 pip3 install --upgrade homeassistant
 deactivate
