@@ -12,15 +12,53 @@ function webterminal-show-copyright-info {
 }
 
 function webterminal-install-package {
+
+
+if [ "$ACCEPT" == "true" ]; then # True if `-y` flag is used.
+  if [ -d "/etc/letsencrypt/live" ] || [ -d "/home/homeassistant/dehydrated/certs" ]; then
+    SSL="Y"
+  else
+    SSL="N"
+  fi
+else
+  echo ""
+  echo -n "Do you use SSL (https) with Home Assistant? [N/y] : "
+  read -r SSL
+  if [ ! "$SSL" ]; then
+      SSL="N"
+  fi
+fi
+
 echo "Installing packages."
 sudo apt-get install -y openssl shellinabox
-
 echo "Changing config."
-sudo sed -i 's/--no-beep/--no-beep --disable-ssl/g' /etc/default/shellinabox
+if [ "$SSL" == "y" ] || [ "$SSL" == "Y" ]; then
+  echo "No need to change default configuration, skipping this step..."
+  echo "Checking cert directory..."
+  if [ -d "/etc/letsencrypt/live" ]; then
+    CERTDIR="/etc/letsencrypt/live/"
+  elif [ -d "/home/homeassistant/dehydrated/certs" ]; then
+    CERTDIR="/home/homeassistant/dehydrated/certs/"
+  else
+    CERTDIR=""
+  fi
+  echo "Setting cert fullchain location..."
+  FULLCHAIN=$(find "$CERTDIR" -type f | grep fullchain)
+  echo "Setting cert privkey location..."
+  PRIVKEY=$(find "$CERTDIR" -type f | grep privkey)
+  DOMAIN=$(ls "$CERTDIR")
+  echo "Merging files and adding to correct dir..."
+  cat $FULLCHAIN $PRIVKEY > /var/lib/shellinabox/certificate-"$DOMAIN".pem
+  chown shellinabox:shellinabox -R /var/lib/shellinabox/
+  echo "Adding crong job to copy certs..."
+  (crontab -l ; echo "0 1 1 * * bash /opt/hassbian/suites/files/webterminalsslhelper.sh")| crontab -
+else
+  sed -i 's/--no-beep/--no-beep --disable-ssl/g' /etc/default/shellinabox
+fi
 
 echo "Reloading and starting the service."
-sudo service shellinabox reload
-sudo service shellinabox restart
+service shellinabox reload
+service shellinabox restart
 
 ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
 
