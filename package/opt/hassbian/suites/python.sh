@@ -71,9 +71,6 @@ EOF
 mv /home/homeassistant/.homeassistant/deps /home/homeassistant/.homeassistant/deps_"$currentpython"
 
 echo "Starting Home Assistant."
-curl -o /etc/systemd/system/home-assistant@homeassistant.service https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/etc/systemd/system/home-assistant%40homeassistant.service
-systemctl enable home-assistant@homeassistant.service
-systemctl daemon-reload
 systemctl start home-assistant@homeassistant.service
 
 echo "Checking the installation..."
