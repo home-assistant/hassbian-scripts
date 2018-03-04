@@ -83,7 +83,7 @@ source /srv/homeassistant/bin/activate
 python -V
 EOF
 )
-if [ "$validation" == "Python $PYTHONVERSION" ]; then
+if [ "$validation" == "$PYTHONVERSION" ]; then
   echo
   echo -e "\\e[3231mUpgrade done..\\e[0m"
   echo
