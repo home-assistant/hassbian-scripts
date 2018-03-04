@@ -86,11 +86,10 @@ function share-log {
   fi
   if [ "$ACCEPT" == "true" ]; then
     loglink=$(curl -X POST -s -d "$(cat $LOGFILE)" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}')
-    vaildate=$(echo $loglink | tr ' ' '\n' | grep "initial")
-    if [[ $validate = *"hastebin"*  ]]; then
+    if [[ $loglink != *"initial"*  ]]; then
       echo $loglink
     else
-      echo "There is an issue with your network conection, or with the hasebin API.."
+      echo "There is an issue with your network conection, or with the hastebin API.."
       echo "Try again later.."
       return 0
     fi
@@ -102,8 +101,7 @@ function share-log {
     read -r  RESPONSE
     if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
       loglink=$(curl -X POST -s -d "$(cat $LOGFILE)" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}')
-      vaildate=$(echo $loglink | tr ' ' '\n' | grep "initial")
-      if [[ $validate = *"hastebin"*  ]]; then
+      if [[ $loglink != *"initial"*  ]]; then
         echo $loglink
       else
         echo
