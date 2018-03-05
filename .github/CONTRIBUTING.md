@@ -47,7 +47,7 @@ Each suite is built up of functions, and every script should have at least these
   - This info will be printed at the start when the script runs and is also used by `hassbian-config show`.
 	- This will typically include a short description of the suit.
  - suite-show-long-info.
-  - This info will be printed at the start when the script runs and is also used by `hassbian-config show suite`.
+  - This info will be printed when running `hassbian-config show suite`.
 	- This will typically include a longer description of the suit, and it's features.
  - suite-show-copyright-info.
   - This info will be printed at the start when the script runs and is also used by `hassbian-config show suite`.
