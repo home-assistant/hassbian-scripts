@@ -7,7 +7,7 @@ PACKAGENAME="${PACKAGE}_${VERSION}.deb"
 
 if [ -f $PACKAGENAME ]; then
     echo "Previous package exists. Deleting"
-    rm $PACKAGENAME
+    rm "$PACKAGENAME"
 fi
 
 echo "Building package $PACKAGE version $VERSION"
