@@ -97,40 +97,22 @@ function share-log {
   return 0
 }
 
-function run-installer {
-  source $SUITE_INSTALL_DIR/"$1".sh
-  if [ "$DEBUG" == "true" ]; then
-    set -x
-    "$1"-install-package | tee $LOGFILE
-    set +x
-  else
-    "$1"-install-package | tee $LOGFILE
-  fi
-}
-
-function run-upgrader {
-  source $SUITE_INSTALL_DIR/"$1".sh
-  if [ "$DEBUG" == "true" ]; then
-    set -x
-    "$1"-upgrade-package | tee $LOGFILE
-    set +x
-  else
-    "$1"-upgrade-package | tee $LOGFILE
-  fi
-}
-
 function install-suite {
   if [ "$(id -u)" != "0" ]; then
     echo "This script must be run with sudo. Use 'sudo hassbian-config install $1'" 1>&2
     return 1
+  fi
+  if [ "$DEBUG" == "true" ]; then
+    set -x
   fi
   if [ ! -f $SUITE_CONTROL_DIR/"$1" ]; then
     touch $SUITE_CONTROL_DIR/"$1"
     echo "SCRIPTSTATE=uninstalled" > $SUITE_CONTROL_DIR/"$1"
   fi
     SUITESTATE=$(grep "SCRIPTSTATE" $SUITE_CONTROL_DIR/"$1" | awk -F'=' '{print $2}')
+    source $SUITE_INSTALL_DIR/"$1".sh
   if [ "$FORCE" == "true" ]; then
-    run-installer "$1"
+    "$1"-install-package | tee $LOGFILE
     sed -i -- 's/SCRIPTSTATE='"$SUITESTATE"'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/"$1"
   elif [ "$SUITESTATE" == "installed" ]; then
     echo "$1 is already installed, trying upgrade script..."
@@ -139,13 +121,17 @@ function install-suite {
     echo "Upgrade script is not available..."
     echo "You can force run the install script like this:"
     echo "sudo hassbian-config -f install $1"
-    exit
+    return 0
   fi
-    run-upgrader "$1"
+    "$1"-upgrade-package | tee $LOGFILE
     sed -i -- 's/SCRIPTSTATE='"$SUITESTATE"'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/"$1"
   else
-
+    source $SUITE_INSTALL_DIR/"$1".sh
+    "$1"-install-package | tee $LOGFILE
     sed -i -- 's/SCRIPTSTATE='"$SUITESTATE"'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/"$1"
+  fi
+  if [ "$DEBUG" == "true" ]; then
+    set +x
   fi
   return 0
 }
@@ -155,6 +141,9 @@ function upgrade-suite {
     echo "This script must be run with sudo. Use 'sudo hassbian-config upgrade $1'" 1>&2
     return 1
   fi
+  if [ "$DEBUG" == "true" ]; then
+    set -x
+  fi
   UPGRADE=$(grep "$1"-upgrade-package $SUITE_INSTALL_DIR/"$1".sh)
   if [ "$UPGRADE" == "" ]; then
     echo "Upgrade script is not available..."
@@ -162,7 +151,11 @@ function upgrade-suite {
     echo "sudo hassbian-config -f install $1"
   fi
   check-permission
-  run-upgrader "$1"
+  source $SUITE_INSTALL_DIR/"$1".sh
+  "$1"-upgrade-package | tee $LOGFILE
+  if [ "$DEBUG" == "true" ]; then
+    set +x
+  fi
   return 0
 }
 
