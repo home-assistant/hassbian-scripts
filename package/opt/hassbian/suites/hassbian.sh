@@ -9,7 +9,7 @@ function hassbian-show-long-info {
 
 function hassbian-show-copyright-info {
   echo "Original concept by Ludeeus <https://github.com/Ludeeus>."
-  echo "Modyfied by Landrash <https://github.com/Landrash>."
+  echo "Modified by Landrash <https://github.com/Landrash>."
 }
 
 function hassbian-upgrade-package {

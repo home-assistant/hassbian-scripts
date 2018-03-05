@@ -5,12 +5,12 @@ function homebridge-show-short-info {
 
 function homebridge-show-long-info {
   echo "Installs and configure Homebridge for Home Assistant"
-	echo "This will allow you to use HomeKit enabled devices to control Home Assistant."
+    echo "This will allow you to use HomeKit enabled devices to control Home Assistant."
 }
 
 function homebridge-show-copyright-info {
-	echo "Original concept by Ludeeus <https://github.com/ludeeus>"
-	echo "Disclaimer: Some parts of this script is inspired by Dale Higgs <https://github.com/dale3h>"
+    echo "Original concept by Ludeeus <https://github.com/ludeeus>"
+    echo "Disclaimer: Some parts of this script is inspired by Dale Higgs <https://github.com/dale3h>"
 }
 
 function homebridge-install-package {
@@ -80,7 +80,7 @@ cat > /home/homebridge/.homebridge/config.json <<EOF
       "host": "${HOMEASSISTANT_URL}",
       "password": "${HOMEASSISTANT_PASSWORD}",
       "supported_types": ["automation", "binary_sensor", "climate", "cover", "device_tracker", "fan", "group", "input_boolean", "light", "lock", "media_player", "remote", "scene", "script", "sensor", "switch", "vacuum"],
-	  "default_visibility": "hidden"
+      "default_visibility": "hidden"
     }
   ]
 }
@@ -112,18 +112,18 @@ sudo systemctl enable homebridge.service
 sudo systemctl start homebridge.service
 
 if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
-	echo "Adding configuration to Samba..."
-	sudo smbpasswd -a homebridge -n
-	echo "[homebridge]" | tee -a /etc/samba/smb.conf
-	echo "path = /home/homebridge/.homebridge" | tee -a /etc/samba/smb.conf
-	echo "writeable = yes" | tee -a /etc/samba/smb.conf
-	echo "guest ok = yes" | tee -a /etc/samba/smb.conf
-	echo "create mask = 0644" | tee -a /etc/samba/smb.conf
-	echo "directory mask = 0755" | tee -a /etc/samba/smb.conf
-	echo "force user = homebridge" | tee -a /etc/samba/smb.conf
-	echo "" | tee -a /etc/samba/smb.conf
-	echo "Restarting Samba service"
-	sudo systemctl restart smbd.service
+    echo "Adding configuration to Samba..."
+    sudo smbpasswd -a homebridge -n
+    echo "[homebridge]" | tee -a /etc/samba/smb.conf
+    echo "path = /home/homebridge/.homebridge" | tee -a /etc/samba/smb.conf
+    echo "writeable = yes" | tee -a /etc/samba/smb.conf
+    echo "guest ok = yes" | tee -a /etc/samba/smb.conf
+    echo "create mask = 0644" | tee -a /etc/samba/smb.conf
+    echo "directory mask = 0755" | tee -a /etc/samba/smb.conf
+    echo "force user = homebridge" | tee -a /etc/samba/smb.conf
+    echo "" | tee -a /etc/samba/smb.conf
+    echo "Restarting Samba service"
+    sudo systemctl restart smbd.service
 fi
 
 echo "Checking the installation..."
@@ -144,7 +144,7 @@ else
   echo -e "\\e[31mAborting..."
   echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
-	return 1
+    return 1
 fi
 return 0
 }

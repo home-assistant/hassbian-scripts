@@ -5,7 +5,7 @@ function mssql-show-short-info {
 }
 
 function mssql-show-long-info {
-  echo "Installs the MS SQL database engine and dependecies for use with the recorder component in Home Assistant."
+  echo "Installs the MS SQL database engine and dependencies for use with the recorder component in Home Assistant."
 }
 
 function mssql-show-copyright-info {

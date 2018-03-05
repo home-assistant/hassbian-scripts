@@ -26,7 +26,7 @@ The following scripts are currently included. You can view the documentation bel
 
 ***
 ## Raspbian Jessie
-If this package is used with a Debian Jessie based distrbution then you need to uncomment the source repositores in  `/etc/apt/sources.list`
+If this package is used with a Debian Jessie based distribution then you need to uncomment the source repositories in  `/etc/apt/sources.list`
 
 ```text
 # Uncomment line below then 'apt-get update' to enable 'apt-get source'

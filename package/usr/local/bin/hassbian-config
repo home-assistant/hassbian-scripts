@@ -84,7 +84,7 @@ function share-log {
     a=$(cat $LOGFILE); curl -X POST -s -d "$a" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}'
   else
     echo "This will put the output from your last operation on hastebin."
-    echo "This could include sensitive informastion."
+    echo "This could include sensitive information."
     echo "If you are unsure about what it contains, you can run 'hassbian-config log' to check."
     echo -n "Do you want to create an hastebin link? [N/y] : "
     read -r  RESPONSE

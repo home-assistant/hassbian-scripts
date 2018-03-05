@@ -77,7 +77,7 @@ if [ ! -z "${validation}" ]; then
   echo -e "\\e[32mInstallation done..\\e[0m"
   echo
   echo "To continue have a look at https://home-assistant.io/components/hdmi_cec/"
-  echo "It's recomended that you restart your Pi before continuing with testing libcec."
+  echo "It's recommended that you restart your Pi before continuing with testing libcec."
   echo
 else
   echo

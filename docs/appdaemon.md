@@ -26,7 +26,7 @@ $ source /srv/appdaemon/bin/activate
 ```
 When you are done, type `exit` to return to the `pi` user.
 
-To manually start AppDaemon, enter the AppDaemon virtual environment as described abowe, and then type this to start it:
+To manually start AppDaemon, enter the AppDaemon virtual environment as described above, and then type this to start it:
 ```bash
 $ appdaemon -c /home/homeassistant/appdaemon/
 ```
