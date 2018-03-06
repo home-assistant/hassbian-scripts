@@ -57,26 +57,22 @@ Each suite is built up of functions, and every script should have at least these
 ## Spesial notations about install/upgrade functions
 ### User inputs
 If your script require user inputs, they should be at the top of the function.
-And if possible have an option to use `-y` flag, to set default values and omit the input.
+And if possible have an option to use `--accept (-Y)` flag, to set default values and omit the input.
 Example:
 ```bash
 function suite-install-package {
-suite-show-long-info
-suite-show-copyright-info
-
-if [ "$ACCEPT" == "true" ]; then #This will be true if the suite is run with `-y`
-  SUITE_USERNAME="pi"
-else
-  echo ""
-  echo "Please take a moment to setup the suite."
-  echo -n "Enter a username of your choosing: "
-  read -r SUITE_USERNAME
-  if [ ! "$SUITE_USERNAME" ]; then
-      SUITE_USERNAME="pi" #Sets default if blank input is given.
+  if [ "$ACCEPT" == "true" ]; then #This will be true if the suite is run with `--accept`
+    SUITE_USERNAME="pi"
+  else
+    echo
+    echo "Please take a moment to setup the suite."
+    echo -n "Enter a username of your choosing: "
+    read -r SUITE_USERNAME
+    if [ ! "$SUITE_USERNAME" ]; then
+        SUITE_USERNAME="pi" #Sets default if blank input is given.
+    fi
+    echo
   fi
-  echo ""
-  echo
-fi
 ```
 
 ### Validation.
