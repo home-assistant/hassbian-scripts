@@ -12,8 +12,6 @@ function webterminal-show-copyright-info {
 }
 
 function webterminal-install-package {
-
-
 if [ "$ACCEPT" == "true" ]; then # True if `-y` flag is used.
   if [ -d "/etc/letsencrypt/live" ] || [ -d "/home/homeassistant/dehydrated/certs" ]; then
     SSL="Y"
@@ -62,13 +60,19 @@ service shellinabox restart
 
 ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
 
+if [ "$SSL" == "y" ] || [ "$SSL" == "Y" ]; then
+  PROTOCOL="https"
+else
+  PROTOCOL="http"
+fi
+
 echo "Checking the installation..."
 validation=$(pgrep -f shellinaboxd)
 if [ ! -z "${validation}" ]; then
   echo
   echo -e "\\e[32mInstallation done..\\e[0m"
   echo
-  echo "You can now access the web terminal here: http://$ip_address:4200"
+  echo "You can now access the web terminal here: $PROTOCOL://$ip_address:4200"
   echo "You can also add this to your Home-Assistant config in an 'panel_iframe'"
   echo
 else
