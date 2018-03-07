@@ -14,6 +14,26 @@ function python-show-copyright-info {
 function python-upgrade-package {
 python-show-short-info
 python-show-copyright-info
+
+if [ "$FORCE" == "" ]; then
+  printf "\\n\\n"
+  echo "This script will change a lot on your pi."
+  echo "DO NOT run this if you absolutely have to."
+  echo "You can force run the upgrade script like this:"
+  echo "sudo hassbian-config upgrade python --force"
+  return 0
+fi
+
+printf "\\n\\n"
+echo "It is NOT recomended to run this."
+echo -n "Are you really sure you want to run this script? [N/y]: "
+read -r RESPONSE
+if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
+  RESPONSE="Y"
+else
+  return 0
+fi
+
 PYTHONVERSION=$(curl -s https://www.python.org/downloads/source/ | grep "Latest Python 3 Release" | cut -d "<" -f 3 | awk -F ' ' '{print $NF}')
 
 echo "Checking current version..."

@@ -1,8 +1,10 @@
 ## Description
+It is not recomended running this script.  
+**It is recomended to download and install the newest [Hassbian image](https://github.com/home-assistant/pi-gen/releases/latest) instead of running this.**  
 This script will upgrade Python to the latest stable version.  
 It will also create a new virtual environment to be used for Home Assistant.  
-_This upgrade takes loong time to finish._  
-_This prosess takes about a hour on an RPi 3_
+_This upgrade takes long time to finish._  
+_This prosess takes about a hour on an Raspberry Pi 3_
 
 ## Upgrade
 ```
