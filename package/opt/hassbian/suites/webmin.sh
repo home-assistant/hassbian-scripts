@@ -1,102 +1,120 @@
 #!/bin/bash
 
 function webmin-show-short-info {
-  echo "Webmin install script for Hassbian"
+  if [[ $INSTALL_MODE = "update" ]]; then
+    echo "Webmin update script for Hassbian"
+  else
+    echo "Webmin install script for Hassbian"
+  fi
 }
 
 function webmin-show-long-info {
-  echo "Installs the Webmin web-based administration interface on Hassbian."
+  # I have no idea if this is needed or not but I'm so damn tired right now...
+  if [[ $INSTALL_MODE = "update" ]]; then
+    echo "Updates the Webmin web-based administration interface on Hassbian."
+  else
+    echo "Installs the Webmin web-based administration interface on Hassbian."
+  fi
 }
 
 function webmin-show-copyright-info {
   echo "Copyright(c) 2018 Antoni K <https://github.com/Antoni-K>."
 }
 
-function webmin-show-repo-message {
-  if [ "$INSTALL_MODE" == "install" ]; then
-    echo "Repository found, proceeding with installation"
-  else
-    echo "Repository found, proceeding with update"
+function webmin-fix-deps {
+  echo "Checking for missing dependencies"
+  if ! apt-get install perl libnet-ssleay-perl openssl libauthen-pam-perl libpam-runtime libio-pty-perl apt-show-versions python -y; then
+    echo "Dependency installation failed - this might be a known problem. Applying fix..."
+    rm /var/lib/dpkg/info/apt-show*
+    apt-get -f install apt-show-versions -y
+    if apt-get install perl libnet-ssleay-perl openssl libauthen-pam-perl libpam-runtime libio-pty-perl apt-show-versions python -y; then
+      echo "Fix successfully applied"
+    else
+      echo "Applying fix failed"
+      if [[ ! $ACCEPT = true ]]; then
+        read -p "Do you want to continue (y/N):" -n 1 -r
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          echo "Proceeding..."
+        else
+          return 1
+        fi
+      else
+        echo "Aborting"
+        return 1
+      fi
+    fi
   fi
+  return 0
 }
 
-function webmin-check-repo {
-  SOURCES_LIST=$(cat /etc/apt/sources.list)
-  echo "Checking if Webmin repo entry exists"
-  if grep -q "deb https://download.webmin.com/download/repository sarge contrib" <<< "$SOURCES_LIST"; then
-    webmin-show-repo-message
-  else
-    echo "Webmin repository not found, adding it now"
-    sed -i '$a deb https://download.webmin.com/download/repository sarge contrib' /etc/apt/sources.list
+function webmin-make-temp-dir {
+  pwd=$(pwd)
+  if [ ! -d "/tmp/webmin_download" ]; then
+    echo "Temp directory doesn't exist; creating"
+    cd /tmp || return 1
+    mkdir webmin_download || return 1
+    cd webmin_download || return 1
+    echo "Done"
   fi
-  unset SOURCES_LIST
-  unset INSTALL_MODE
+  cd /tmp/webmin_download || return 1
+  if ! rm -f * ; then
+    echo "Cleaning /tmp/webmin_download failed"
+  fi
+  cd || return 1
+  cd "$pwd" || return 1
+  return 0
 }
 
-function webmin-check-keys {
-  echo "Checking for GnuPG"
-  if type "gnupg" &> /dev/null; then
-    echo "GnuPG found, proceeding"
-  else
-    echo "GnuPG (an apt-key requirement) not found, installing"
-    apt-get update
-    apt-get install gnupg
+function webmin-download-bundle {
+  WEBMIN_URL_LATEST="http://www.webmin.com/download/deb/webmin-current.deb"
+  echo "Downloading .deb package"
+  webmin-make-temp-dir || return 1
+  cd /tmp/webmin_download || return 1
+  wget --content-disposition "$WEBMIN_URL_LATEST" || echo "Download failed" && return 1
+  echo "Download successful"
+  return 0
+}
+
+function webmin-install-bundle {
+  cd /tmp/webmin_download || return 1
+  PACKAGE_NAME=$(ls)
+  echo "Installing Webmin package"
+  if ! dpkg --install "$PACKAGE_NAME" ; then
+    echo "Package installation failed to due to missing dependencies"
+    echo "Installing dependencies"
+    if ! webmin-fix-deps ; dpkg --install "$PACKAGE_NAME" ; then
+      echo "Installation failed; aborting"
+      return 1
+    fi
   fi
-  echo "Creating directory for the Webmin repo key"
-  cd /etc || return
-  mkdir webmin_keys
-  cd webmin_keys || return
-  echo "Downloading Webmin repo key"
-  wget "http://www.webmin.com/jcameron-key.asc"
-  echo "Adding key with apt-key"
-  if apt-key add jcameron-key.asc; then
-    echo "Repo key added successfully"
-  else
-    return 1
-  fi
+  return 0
 }
 
 function webmin-install-package {
+  INSTALL_MODE="install"
   # WEBMIN_REPO="deb https://download.webmin.com/download/repository sarge contrib"
   # Set install mode
-  INSTALL_MODE="install"
   webmin-show-short-info
   webmin-show-copyright-info
-
-  # Check if repo is installed and install apt-transport-https support program
-  webmin-check-repo
-  echo "Installing required apt-get HTTPS support program"
-  apt-get install apt-transport-https -y
-
-  # Updating apt
-  echo "Updating apt-get"
-  apt-get update
-
-  # Installing actual Webmin packages
-  echo "Installing Webmin packages"
-  if ! apt-get install webmin -y; then
-    echo "Installation failed - Attempting fix"
-    rm /var/lib/dpkg/info/apt-show*
-    apt-get -f install apt-show-versions -y
-    apt-get install webmin -y
-    if apt-get install webmin -y; then
-      echo "Fix successfully applied"
-    fi
-  fi
+  webmin-download-bundle
+  webmin-install-bundle
 
   # Get local IP address for this machine
-  LOCAL_IP=$(hostname -I)
+  ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
 
   # End
   echo
   echo "Installation done."
   echo
-  echo "You can now access the Webmin control panel at http://$LOCAL_IP:10000"
+  echo "You can now access the Webmin control panel at https://$ip_address:10000"
+  echo
+  echo "Do remember than any user with sudo access can log in by default."
   echo
   echo "For more information and tutorials, visit http://www.webmin.com/docs.html"
   echo
   echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
+  unset pwd
   return 0
 }
 
@@ -106,12 +124,10 @@ function webmin-upgrade-package {
   # Show info
   webmin-show-short-info
   webmin-show-copyright-info
-  webmin-check-repo
-
-  echo "Updating apt-get"
-  apt-get update
-
+  webmin-fix-deps
   echo "Checking for Webmin updates"
-  apt-get upgrade webmin -y
+  webmin-download-bundle
+  webmin-install-bundle
+  unset pwd
   return 0
 }
