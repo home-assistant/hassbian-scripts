@@ -1,5 +1,5 @@
 Package: hassbian-scripts
-Version: 0.7.0
+Version: 0.8.0
 Priority: optional
 Architecture: all
 Depends: bash, wget, git, python3, python3-venv, python3-pip, python3-dev, bluetooth, libbluetooth-dev, avahi-daemon, build-essential, libssl-dev, libffi-dev, python-dev, libudev-dev
