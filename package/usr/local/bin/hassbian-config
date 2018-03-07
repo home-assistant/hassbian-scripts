@@ -81,7 +81,7 @@ function check-permission {
 
 function share-log {
   if [ ! -f $LOGFILE ];then
-    echo "No logfile exiting..."
+    echo "No logfile, exiting..."
     return 0
   fi
   if [ "$ACCEPT" == "true" ]; then
