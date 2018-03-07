@@ -57,7 +57,7 @@ function webmin-make-temp-dir {
     echo "Done"
   fi
   cd /tmp/webmin_download || return 1
-  if ! rm -f * ; then
+  if ! rm -f ./* ; then
     echo "Cleaning /tmp/webmin_download failed"
   fi
   cd || return 1
