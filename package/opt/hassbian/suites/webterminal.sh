@@ -49,7 +49,7 @@ if [ "$SSL" == "y" ] || [ "$SSL" == "Y" ]; then
   cat "$FULLCHAIN" "$PRIVKEY" > /var/lib/shellinabox/certificate-"$DOMAIN".pem
   chown shellinabox:shellinabox -R /var/lib/shellinabox/
   echo "Adding crong job to copy certs..."
-  (crontab -l ; echo "0 1 1 * * bash /opt/hassbian/suites/files/webterminalsslhelper.sh")| crontab -
+  (crontab -l ; echo "0 1 1 * * bash /opt/hassbian/suites/files/webterminalsslhelper.sh >/dev/null 2>&1")| crontab -
 else
   sed -i 's/--no-beep/--no-beep --disable-ssl/g' /etc/default/shellinabox
 fi
