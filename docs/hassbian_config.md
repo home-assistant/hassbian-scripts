@@ -18,7 +18,7 @@ Optional flags:
 - `-f | --force` This will force run an script. This is useful if you need to reinstall a package.
 - `-D | --debug` This will output every comand to the console.
 
-Other available comands:
+Other available commands:
 - `-V | --version` This will show you the installed version of `hassbian-config`.
 - `-H | --help` Shows help for the tool, with all available commands.
 

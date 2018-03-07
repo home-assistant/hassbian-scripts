@@ -5,7 +5,7 @@ function tradfri-show-short-info {
 }
 
 function tradfri-show-long-info {
-	echo "Installs the libraries needed to control IKEA Tradfri devices from this Pi."
+    echo "Installs the libraries needed to control IKEA Tradfri devices from this Pi."
 }
 
 function tradfri-show-copyright-info {
@@ -45,7 +45,7 @@ if [ ! -z "${validation}" ]; then
   echo -e "\\e[32mInstallation done..\\e[0m"
   echo
   echo "To continue have a look at https://home-assistant.io/components/tradfri/"
-  echo "It's recomended that you restart your Tradfri Gateway before continuing."
+  echo "It's recommended that you restart your Tradfri Gateway before continuing."
   echo
 else
   echo

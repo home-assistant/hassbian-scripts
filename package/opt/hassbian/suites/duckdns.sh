@@ -4,7 +4,7 @@ function duckdns-show-short-info {
 }
 
 function duckdns-show-long-info {
-  echo "This script adds an cron job to auto uppdate you the WAN IP address for the defined domain."
+  echo "This script adds an cron job to auto update you the WAN IP address for the defined domain."
   echo "This script can also generate SSL certificate for https with Let’s Encrypt."
 }
 

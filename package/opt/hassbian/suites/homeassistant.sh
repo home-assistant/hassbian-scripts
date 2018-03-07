@@ -50,7 +50,7 @@ validation=$(pgrep -x hass)
 if [ ! -z "${validation}" ]; then
   echo
   echo -e "\\e[32mInstallation done..\\e[0m"
-  echo "Your Home Assistant installation is running at $ip_address:8123 or if prefered http://hassbian.local:8123"
+  echo "Your Home Assistant installation is running at $ip_address:8123 or if preferred http://hassbian.local:8123"
   echo "To continue have a look at https://home-assistant.io/getting-started/configuration/"
   echo
   echo

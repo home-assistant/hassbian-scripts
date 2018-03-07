@@ -1,14 +1,14 @@
 #!/bin/bash
 function webterminal-show-short-info {
-  echo "Installs an websevice terminal."
+  echo "Installs an webservice terminal."
 }
 
 function webterminal-show-long-info {
-  echo "Installs an websevice terminal to control your installation."
+  echo "Installs an webservice terminal to control your installation."
 }
 
 function webterminal-show-copyright-info {
-	echo "Original concept by Ludeeus <https://github.com/ludeeus>"
+    echo "Original concept by Ludeeus <https://github.com/ludeeus>"
 }
 
 function webterminal-install-package {

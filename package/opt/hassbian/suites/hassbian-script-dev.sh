@@ -1,16 +1,16 @@
 #!/bin/bash
 function hassbian-script-dev-show-short-info {
-  echo "Uppdates scripts from the dev branch."
+  echo "Updates scripts from the dev branch."
 }
 
 function hassbian-script-dev-show-long-info {
   echo "This scripts downloads new scripts directly from the dev branch on github."
   echo "you can use this to be on the 'bleeding edge of the development of Hassbian.'"
-  echo "This is not recomended for daily use."
+  echo "This is not recommended for daily use."
 }
 
 function hassbian-script-dev-show-copyright-info {
-	echo "Original concept by Ludeeus <https://github.com/Ludeeus>"
+    echo "Original concept by Ludeeus <https://github.com/Ludeeus>"
 }
 
 function hassbian-script-dev-upgrade-package {

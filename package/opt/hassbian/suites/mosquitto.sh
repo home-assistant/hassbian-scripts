@@ -93,7 +93,7 @@ if [ ! -z "${validation}" ]; then
   echo
   echo -e "\\e[32mInstallation done.\\e[0m"
   echo
-  echo "Your MQTT broker is running at $ip_address:1883 or if prefered hassbian.local:1883"
+  echo "Your MQTT broker is running at $ip_address:1883 or if preferred hassbian.local:1883"
   echo ""
   echo "To continue have a look at https://home-assistant.io/docs/mqtt/"
   echo "For more information see this repo:"
