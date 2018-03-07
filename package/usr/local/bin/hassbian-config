@@ -47,19 +47,38 @@ function get-all-suite-installers {
 
 
 function show-suites {
-  echo -e "Install scripts: (Usage 'sudo hassbian-config install \e[32msuite-name\e[0m')"
+  printf "This is a list over all suites in hassbian-config\\n"
+  printf "If a \\e[1msuite\\e[0m has \\e[32mgreen color\\e[0m in the name, you have already installed it.\\n"
+  printf "\\n"
+  printf "Install scripts: (Usage 'sudo hassbian-config install \\e[1msuite\\e[0m')\\n"
   installers=$(get-all-suite-installers)
   for i in $installers
   do
-    if [ ! -f $SUITE_CONTROL_DIR/"$i" ]; then
-      SUITESTATE=""
+    if [ -f $SUITE_CONTROL_DIR/"$i" ]; then
+      SUITESTATE=$(grep "SCRIPTSTATE" $SUITE_CONTROL_DIR/"$i" | awk -F'=' '{print $2}')
     else
-      SUITESTATE=$(grep SCRIPTSTATE $SUITE_CONTROL_DIR/"$i" | awk -F'=' '{printf $2}')
-      SUITESTATE=$(printf "\e[34m $SUITESTATE%-7s")
+      SUITESTATE=""
     fi
-    printf "\e[32m%-20s\e[0m %s\n" "$i$SUITESTATE" "$(show-suite-info "$i")"
+    INSTALLER=$(grep "$i"-install-package $SUITE_INSTALL_DIR/"$i".sh)
+    if [ "$INSTALLER" != "" ]; then
+      if [ "$SUITESTATE" == "installed" ]; then
+        printf "\\e[1m\\e[32m%-20s\\e[0m %s\\n" "$i" "$(show-suite-info "$i")"
+      else
+        printf "\\e[1m%-20s\\e[0m %s\\n" "$i" "$(show-suite-info "$i")"
+      fi
+    fi
   done
-  echo -e "To view more info about a suite type: 'hassbian-config show \e[32msuite-name\e[0m'"
+  printf "\\n"
+  printf "Upgrade scripts: (Usage 'sudo hassbian-config upgrade \\e[1msuite\\e[0m')\\n"
+  for i in $installers
+  do
+    UPGRADE=$(grep "$i"-upgrade-package $SUITE_INSTALL_DIR/"$i".sh)
+    if [ "$UPGRADE" != "" ]; then
+      printf "\\e[1m%-20s\\e[0m %s\\n" "$i" "$(show-suite-info "$i")"
+    fi
+  done
+  printf "\\n"
+  printf "To view more info about a suite type: 'hassbian-config show \\e[1msuite\\e[0m\\n"
   return 0
 }
 
