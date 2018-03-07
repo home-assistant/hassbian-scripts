@@ -24,6 +24,7 @@ function help {
   printf "available optional [options]:\\n"
   printf "%-10s\\t%s\\n" " -y | --accept" "Accept defaults on scripts that allow this"
   printf "%-10s\\t%s\\n" " -f | --force" "Force run an script, this is useful if you need to reinstall a package"
+  printf "%-10s\\t%s\\n" " -D | --debug" "This will output every comand to the console."
   printf "\\n"
   printf "other [command] available:\\n"
   printf "%-10s\\t%s\\n" " -V | --version" "Prints the version of hassbian-config"
@@ -119,6 +120,9 @@ function install-suite {
     echo "This script must be run with sudo. Use 'sudo hassbian-config install $1'" 1>&2
     return 1
   fi
+  if [ "$DEBUG" == "true" ]; then
+    set -x
+  fi
   if [ ! -f $SUITE_CONTROL_DIR/"$1" ]; then
     touch $SUITE_CONTROL_DIR/"$1"
     echo "SCRIPTSTATE=uninstalled" > $SUITE_CONTROL_DIR/"$1"
@@ -135,7 +139,7 @@ function install-suite {
     echo "Upgrade script is not available..."
     echo "You can force run the install script like this:"
     echo "sudo hassbian-config -f install $1"
-    exit
+    return 0
   fi
     "$1"-upgrade-package | tee $LOGFILE
     sed -i -- 's/SCRIPTSTATE='"$SUITESTATE"'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/"$1"
@@ -144,6 +148,9 @@ function install-suite {
     "$1"-install-package | tee $LOGFILE
     sed -i -- 's/SCRIPTSTATE='"$SUITESTATE"'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/"$1"
   fi
+  if [ "$DEBUG" == "true" ]; then
+    set +x
+  fi
   return 0
 }
 
@@ -151,6 +158,9 @@ function upgrade-suite {
   if [ "$(id -u)" != "0" ]; then
     echo "This script must be run with sudo. Use 'sudo hassbian-config upgrade $1'" 1>&2
     return 1
+  fi
+  if [ "$DEBUG" == "true" ]; then
+    set -x
   fi
   UPGRADE=$(grep "$1"-upgrade-package $SUITE_INSTALL_DIR/"$1".sh)
   if [ "$UPGRADE" == "" ]; then
@@ -161,6 +171,9 @@ function upgrade-suite {
   check-permission
   source $SUITE_INSTALL_DIR/"$1".sh
   "$1"-upgrade-package | tee $LOGFILE
+  if [ "$DEBUG" == "true" ]; then
+    set +x
+  fi
   return 0
 }
 
@@ -205,6 +218,10 @@ case $COMMAND in
     ;;
   "-y"|"--accept")
     ACCEPT="true"
+    shift # past argument
+    ;;
+  "-D"|"--debug")
+    DEBUG="true"
     shift # past argument
     ;;
   "show")
