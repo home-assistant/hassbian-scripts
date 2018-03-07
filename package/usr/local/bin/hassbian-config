@@ -24,6 +24,7 @@ function help {
   printf "available optional [options]:\\n"
   printf "%-10s\\t%s\\n" " -y | --accept" "Accept defaults on scripts that allow this"
   printf "%-10s\\t%s\\n" " -f | --force" "Force run an script, this is useful if you need to reinstall a package"
+  printf "%-10s\\t%s\\n" " -D | --debug" "This will output every comand to the console."
   printf "\\n"
   printf "other [command] available:\\n"
   printf "%-10s\\t%s\\n" " -V | --version" "Prints the version of hassbian-config"
@@ -80,17 +81,36 @@ function check-permission {
 }
 
 function share-log {
+  if [ ! -f $LOGFILE ];then
+    echo "No logfile, exiting..."
+    return 0
+  fi
   if [ "$ACCEPT" == "true" ]; then
-    a=$(cat $LOGFILE); curl -X POST -s -d "$a" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}'
+    loglink=$(curl -X POST -s -d "$(cat "$LOGFILE")" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}')
+    if [[ $loglink != *"initial"*  ]]; then
+      echo "$loglink"
+    else
+      echo "There is an issue with your network connection, or with the Hastebin API."
+      echo "Try again later."
+      return 0
+    fi
   else
+
     echo "This will put the output from your last operation on hastebin."
     echo "This could include sensitive information."
     echo "If you are unsure about what it contains, you can run 'hassbian-config log' to check."
     echo -n "Do you want to create an hastebin link? [N/y] : "
     read -r  RESPONSE
     if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
-      echo ""
-    a=$(cat $LOGFILE); curl -X POST -s -d "$a" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}'
+      loglink=$(curl -X POST -s -d "$(cat "$LOGFILE")" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}')
+      if [[ $loglink != *"initial"*  ]]; then
+        echo "$loglink"
+      else
+        echo
+        echo "There is an issue with your network connection, or with the Hastebin API."
+        echo "Try again later."
+        return 0
+      fi
     fi
   fi
   return 0
@@ -100,6 +120,9 @@ function install-suite {
   if [ "$(id -u)" != "0" ]; then
     echo "This script must be run with sudo. Use 'sudo hassbian-config install $1'" 1>&2
     return 1
+  fi
+  if [ "$DEBUG" == "true" ]; then
+    set -x
   fi
   if [ ! -f $SUITE_CONTROL_DIR/"$1" ]; then
     touch $SUITE_CONTROL_DIR/"$1"
@@ -117,7 +140,7 @@ function install-suite {
     echo "Upgrade script is not available..."
     echo "You can force run the install script like this:"
     echo "sudo hassbian-config -f install $1"
-    exit
+    return 0
   fi
     "$1"-upgrade-package | tee $LOGFILE
     sed -i -- 's/SCRIPTSTATE='"$SUITESTATE"'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/"$1"
@@ -126,6 +149,9 @@ function install-suite {
     "$1"-install-package | tee $LOGFILE
     sed -i -- 's/SCRIPTSTATE='"$SUITESTATE"'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/"$1"
   fi
+  if [ "$DEBUG" == "true" ]; then
+    set +x
+  fi
   return 0
 }
 
@@ -133,6 +159,9 @@ function upgrade-suite {
   if [ "$(id -u)" != "0" ]; then
     echo "This script must be run with sudo. Use 'sudo hassbian-config upgrade $1'" 1>&2
     return 1
+  fi
+  if [ "$DEBUG" == "true" ]; then
+    set -x
   fi
   UPGRADE=$(grep "$1"-upgrade-package $SUITE_INSTALL_DIR/"$1".sh)
   if [ "$UPGRADE" == "" ]; then
@@ -143,6 +172,9 @@ function upgrade-suite {
   check-permission
   source $SUITE_INSTALL_DIR/"$1".sh
   "$1"-upgrade-package | tee $LOGFILE
+  if [ "$DEBUG" == "true" ]; then
+    set +x
+  fi
   return 0
 }
 
@@ -187,6 +219,10 @@ case $COMMAND in
     ;;
   "-y"|"--accept")
     ACCEPT="true"
+    shift # past argument
+    ;;
+  "-D"|"--debug")
+    DEBUG="true"
     shift # past argument
     ;;
   "show")
