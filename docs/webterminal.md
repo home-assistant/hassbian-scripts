@@ -31,7 +31,7 @@ panel_iframe:
 #### Notes for SSL
 If you enable the use of existing Let's Encrypt certificates you need to open ports in your firewall to use them.
 
-If SSL is used the panel_iframe has to use your domain.
+If SSL is used the panel_iframe has to use the same domain name as the one issued with your certificate.
 ```yaml
 panel_iframe:
   web_terminal:
