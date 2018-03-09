@@ -54,17 +54,17 @@ function show-suite-long-info {
 function check-permission {
    if (( $EUID != 0 ))
    then
-      echo "Error: hassbian-config must be run as root (with sudo) for this to be possible"
+      echo "Error: hassbian-config must be run as root (with sudo) for this to be possible. Try 'sudo $0'"
       exit 1
    fi
 }
 
 function share-log {
-    echo "This will put the output from your last operation on hastebin."
+    echo "This will put the output from your last operation on Hastebin.com ."
     echo "This could include sensitive informastion."
-    echo "If you are unsure about what it contains, you can rin 'hassbian-config log' to check."
-    read -p "Do you want to crate an hastebin link? [N/y] : " RESPONCE
-    if [ "$RESPONCE" == "y" ] || [ "$RESPONCE" == "Y" ]; then
+    echo "If you are unsure about what it contains, you can run 'hassbian-config log' to check."
+    read -p "Do you want to create an Hastebin link? [N/y] : " RESPONSE
+    if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
     echo ""
     a=$(cat $LOGFILE); curl -X POST -s -d "$a" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}'
     exit 1
