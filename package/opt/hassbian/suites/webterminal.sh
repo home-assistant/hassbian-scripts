@@ -40,13 +40,9 @@ if [ "$SSL" == "y" ] || [ "$SSL" == "Y" ]; then
   else
     CERTDIR=""
   fi
-  echo "Setting cert fullchain location..."
-  FULLCHAIN=$(find "$CERTDIR" -type f | grep fullchain)
-  echo "Setting cert privkey location..."
-  PRIVKEY=$(find "$CERTDIR" -type f | grep privkey)
-  DOMAIN=$(ls "$CERTDIR")
   echo "Merging files and adding to correct dir..."
-  cat "$FULLCHAIN" "$PRIVKEY" > /var/lib/shellinabox/certificate-"$DOMAIN".pem
+  DOMAIN=$(ls "$CERTDIR")
+  cat "$CERTDIR$DOMAIN/fullchain.pem" "$CERTDIR$DOMAIN/privkey.pem" > /var/lib/shellinabox/certificate-"$DOMAIN".pem
   chown shellinabox:shellinabox -R /var/lib/shellinabox/
   echo "Adding crong job to copy certs..."
   (crontab -l ; echo "5 1 1 * * bash /opt/hassbian/suites/files/webterminalsslhelper.sh >/dev/null 2>&1")| crontab -
