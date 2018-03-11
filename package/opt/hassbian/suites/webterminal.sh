@@ -52,7 +52,8 @@ fi
 
 echo "Reloading and starting the service."
 service shellinabox reload
-service shellinabox restart
+service shellinabox stop
+service shellinabox start
 
 ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
 

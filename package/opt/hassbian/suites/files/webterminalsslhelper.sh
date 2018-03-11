@@ -10,5 +10,7 @@ fi
 DOMAIN=$(ls "$CERTDIR")
 cat "$CERTDIR$DOMAIN/fullchain.pem" "$CERTDIR$DOMAIN/privkey.pem" > /var/lib/shellinabox/certificate-"$DOMAIN".pem
 chown shellinabox:shellinabox -R /var/lib/shellinabox/
-service shellinabox restart
+service shellinabox reload
+service shellinabox stop
+service shellinabox start
 exit 0
