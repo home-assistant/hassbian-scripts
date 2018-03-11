@@ -13,10 +13,6 @@ function duckdns-show-copyright-info {
 }
 
 function duckdns-install-package {
-duckdns-show-long-info
-duckdns-show-copyright-info
-
-echo
 echo "Please take a moment to setup autorenewal of duckdns."
 echo "If no choice is made the installation will exit."
 echo
@@ -108,8 +104,6 @@ if [ ! -z "${certvalidation}" ] && [ ! -z "${dnsvalidation}" ]; then
 else
   echo
   echo -e "\\e[31mInstallation failed..."
-  echo -e "\\e[31mAborting..."
-  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
   return 1
 fi

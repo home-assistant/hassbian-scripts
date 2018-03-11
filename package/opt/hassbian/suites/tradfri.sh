@@ -13,9 +13,6 @@ function tradfri-show-copyright-info {
 }
 
 function tradfri-install-package {
-tradfri-show-short-info
-tradfri-show-copyright-info
-
 echo "Running apt-get preparation"
 apt-get update
 apt-get install -y dh-autoreconf
@@ -50,8 +47,6 @@ if [ ! -z "${validation}" ]; then
 else
   echo
   echo -e "\\e[31mInstallation failed..."
-  echo -e "\\e[31mAborting..."
-  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
   return 1
 fi

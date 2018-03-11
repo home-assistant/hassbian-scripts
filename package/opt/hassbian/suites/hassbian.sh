@@ -13,9 +13,6 @@ function hassbian-show-copyright-info {
 }
 
 function hassbian-upgrade-package {
-hassbian-show-short-info
-hassbian-show-copyright-info
-
 echo "Updating package list"
 sudo apt update
 

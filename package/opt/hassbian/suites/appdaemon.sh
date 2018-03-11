@@ -12,9 +12,6 @@ function appdaemon-show-copyright-info {
 }
 
 function appdaemon-install-package {
-appdaemon-show-short-info
-appdaemon-show-copyright-info
-
 if [ "$ACCEPT" != "true" ]; then
   if [ -f "/usr/sbin/samba" ]; then
     echo -n "Do you want to add Samba share for AppDaemon configuration? [N/y] : "
@@ -89,8 +86,6 @@ if [ ! -z "${validation}" ]; then
 else
   echo
   echo -e "\\e[31mInstallation failed..."
-  echo -e "\\e[31mAborting..."
-  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
   return 1
 fi
@@ -98,9 +93,6 @@ return 0
 }
 
 function appdaemon-upgrade-package {
-appdaemon-show-short-info
-appdaemon-show-copyright-info
-
 echo "Stopping AppDaemon service..."
 systemctl stop appdaemon@homeassistant.service
 
@@ -133,8 +125,6 @@ if [ ! -z "${validation}" ]; then
 else
   echo
   echo -e "\\e[31mUpgrade failed..."
-  echo -e "\\e[31mAborting..."
-  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
   return 1
 fi

@@ -12,9 +12,6 @@ function hassbian-script-show-copyright-info {
 }
 
 function hassbian-script-upgrade-package {
-hassbian-script-show-short-info
-hassbian-script-show-copyright-info
-
 echo "Changing to temporary folder"
 cd /tmp || exit
 
