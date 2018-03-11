@@ -82,7 +82,7 @@ function webmin-install-bundle {
   if ! dpkg --install "$PACKAGE_NAME" ; then
     echo "Package installation failed to due to missing dependencies"
     echo "Installing dependencies"
-    if ! webmin-fix-deps ; dpkg --install "$PACKAGE_NAME" ; then
+    if ! webmin-fix-deps ; apt --fix-missing install ; then
       echo "Installation failed; aborting"
       return 1
     fi
