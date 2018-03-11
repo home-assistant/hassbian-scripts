@@ -12,7 +12,7 @@ function homeassistant-dev-show-copyright-info {
 }
 
 function homeassistant-dev-install-package {
-cho "Stopping Home Assistant"
+echo "Stopping Home Assistant"
 systemctl stop home-assistant@homeassistant.service
 sync
 
