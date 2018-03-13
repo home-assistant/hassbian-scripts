@@ -14,9 +14,6 @@ function hassbian-script-dev-show-copyright-info {
 }
 
 function hassbian-script-dev-upgrade-package {
-hassbian-script-dev-show-short-info
-hassbian-script-dev-show-copyright-info
-
 echo "Creation and changing in to temporary folder."
 cd || exit
 sudo mkdir /tmp/hassbian_config_update

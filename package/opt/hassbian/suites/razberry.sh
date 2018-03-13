@@ -16,9 +16,6 @@ function razberry-show-copyright-info {
 }
 
 function razberry-install-package {
-razberry-show-short-info
-razberry-show-copyright-info
-
 echo "Checking for version of Raspberry Pi"
 RPI_BOARD_REVISION=$(grep Revision /proc/cpuinfo | cut -d: -f2 | tr -d " ")
 if [[ $RPI_BOARD_REVISION ==  "a02082" || $RPI_BOARD_REVISION == "a22082" ]]

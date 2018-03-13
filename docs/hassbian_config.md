@@ -14,8 +14,8 @@ where command is one of:
 - `share-log` This will generate an hastebin link of the last hassbian-config operation.
 
 Optional flags:
-- `-y | --accept` This will accept defaults on scripts that allow this.
-- `-f | --force` This will force run an script. This is useful if you need to reinstall a package.
+- `-Y | --accept` This will accept defaults on scripts that allow this.
+- `-F | --force` This will force run an script. This is useful if you need to reinstall a package.
 - `-D | --debug` This will output every comand to the console.
 
 Other available commands:

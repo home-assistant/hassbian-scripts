@@ -22,8 +22,8 @@ function help {
   printf "%-8s\\t%s\\n" "  share-log" "Generates an hastebin link of the last operation"
   printf "\\n"
   printf "available optional [options]:\\n"
-  printf "%-10s\\t%s\\n" " -y | --accept" "Accept defaults on scripts that allow this"
-  printf "%-10s\\t%s\\n" " -f | --force" "Force run an script, this is useful if you need to reinstall a package"
+  printf "%-10s\\t%s\\n" " -Y | --accept" "Accept defaults on scripts that allow this"
+  printf "%-10s\\t%s\\n" " -F | --force" "Force run an script, this is useful if you need to reinstall a package"
   printf "%-10s\\t%s\\n" " -D | --debug" "This will output every comand to the console."
   printf "\\n"
   printf "other [command] available:\\n"
@@ -44,7 +44,6 @@ function get-all-suite-installers {
   echo "$ALLSUITES"
   return 0
 }
-
 
 function show-suites {
   printf "This is a list over all suites in hassbian-config\\n"
@@ -114,7 +113,6 @@ function share-log {
       return 0
     fi
   else
-
     echo "This will put the output from your last operation on hastebin."
     echo "This could include sensitive information."
     echo "If you are unsure about what it contains, you can run 'hassbian-config log' to check."
@@ -135,65 +133,47 @@ function share-log {
   return 0
 }
 
-function install-suite {
-  if [ "$(id -u)" != "0" ]; then
-    echo "This script must be run with sudo. Use 'sudo hassbian-config install $1'" 1>&2
-    return 1
-  fi
-  if [ "$DEBUG" == "true" ]; then
-    set -x
-  fi
-  if [ ! -f $SUITE_CONTROL_DIR/"$1" ]; then
-    touch $SUITE_CONTROL_DIR/"$1"
-    echo "SCRIPTSTATE=uninstalled" > $SUITE_CONTROL_DIR/"$1"
-  fi
-    SUITESTATE=$(grep "SCRIPTSTATE" $SUITE_CONTROL_DIR/"$1" | awk -F'=' '{print $2}')
-    source $SUITE_INSTALL_DIR/"$1".sh
-  if [ "$FORCE" == "true" ]; then
-    "$1"-install-package | tee $LOGFILE
-    sed -i -- 's/SCRIPTSTATE='"$SUITESTATE"'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/"$1"
-  elif [ "$SUITESTATE" == "installed" ]; then
-    echo "$1 is already installed, trying upgrade script..."
-    UPGRADE=$(grep "$1"-upgrade-package $SUITE_INSTALL_DIR/"$1".sh)
-  if [ "$UPGRADE" == "" ]; then
-    echo "Upgrade script is not available..."
-    echo "You can force run the install script like this:"
-    echo "sudo hassbian-config -f install $1"
-    return 0
-  fi
-    "$1"-upgrade-package | tee $LOGFILE
-    sed -i -- 's/SCRIPTSTATE='"$SUITESTATE"'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/"$1"
+function run-suite { #This is the function the actually run install/upgrade.
+  source "$SUITE_INSTALL_DIR/$2".sh #Sourcing the script file.
+  "$2"-show-short-info && "$2"-show-copyright-info && printf "\\n" #Prints suite-show-short-info & suite-show-copyright-info to console.
+  if [ "$DEBUG" == "true" ]; then set -x; fi #Activating debug if --debug is used.
+  "$2"-"$1"-package #Running the script function install/upgrade SUITE.
+  RETURN=("$?") # Return value after script execution.
+  if [ "$DEBUG" == "true" ]; then set +x; fi #Deactivating debug if --debug is used.
+  if [ "$RETURN" == "0" ]; then STATE="installed"; else printf "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord.\\n" && STATE="failed"; fi #Set suite state to installed if 0 is returned, failed otherwise.
+  echo "SCRIPTSTATE=$STATE" > "$SUITE_CONTROL_DIR/$2" #Setting status in control file.
+  return 0
+}
+
+function install-suite { #This function do checks if we can/want to install.
+  check-permission
+  INSTALL=$(grep "$1"-install-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has install function.
+  SUITESTATE=$(if [ -f "$SUITE_CONTROL_DIR/$1" ]; then grep "SCRIPTSTATE" "$SUITE_CONTROL_DIR/$1" | awk -F'=' '{print $2}'; else echo ""; fi) #Checking current suite state.
+  if [ "$FORCE" == "true" ]; then #Go straight to run-suite if --force is used.
+    run-suite install "$1" | tee "$LOGFILE" #Run if -F/-f/--force is used.
+  elif [ "$SUITESTATE" == "installed" ] || [ "$INSTALL" == "" ]; then #Try redirect to upgrade script if already installed.
+    printf "%s is already installed or install script is not available...\\n" "$1"
+    UPGRADE=$(grep "$1"-upgrade-package "$SUITE_INSTALL_DIR/$1".sh)
+    if [ "$UPGRADE" == "" ]; then
+      printf "Upgrade script is not available...\\n\\nYou can force run the install script like this:\\nsudo hassbian-config install %s --force\\n" "$1"
+      return 0
+    fi
+    printf "upgrade script for %s found, running that...\\n\\n" "$1"
+    run-suite upgrade "$1" | tee "$LOGFILE" #Redirects to upgrade script.
   else
-    source $SUITE_INSTALL_DIR/"$1".sh
-    "$1"-install-package | tee $LOGFILE
-    sed -i -- 's/SCRIPTSTATE='"$SUITESTATE"'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/"$1"
-  fi
-  if [ "$DEBUG" == "true" ]; then
-    set +x
+    run-suite install "$1" | tee "$LOGFILE" #This is the default run, if no options is used.
   fi
   return 0
 }
 
-function upgrade-suite {
-  if [ "$(id -u)" != "0" ]; then
-    echo "This script must be run with sudo. Use 'sudo hassbian-config upgrade $1'" 1>&2
-    return 1
-  fi
-  if [ "$DEBUG" == "true" ]; then
-    set -x
-  fi
-  UPGRADE=$(grep "$1"-upgrade-package $SUITE_INSTALL_DIR/"$1".sh)
-  if [ "$UPGRADE" == "" ]; then
-    echo "Upgrade script is not available..."
-    echo "You can force run the install script like this:"
-    echo "sudo hassbian-config -f install $1"
-  fi
+function upgrade-suite { #This function do checks if we can to upgrade.
   check-permission
-  source $SUITE_INSTALL_DIR/"$1".sh
-  "$1"-upgrade-package | tee $LOGFILE
-  if [ "$DEBUG" == "true" ]; then
-    set +x
+  UPGRADE=$(grep "$1"-upgrade-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has upgrade function.
+  if [ "$UPGRADE" == "" ]; then
+    printf "Upgrade script is not available...\\n\\nYou can force run the install script like this:\\nsudo hassbian-config install %s --force\\n" "$1"
+    return 0
   fi
+  run-suite upgrade "$1" | tee "$LOGFILE" #This is the default run.
   return 0
 }
 
@@ -230,13 +210,12 @@ do
 COMMAND=$1
 SUITE=$2
 
-
 case $COMMAND in
-  "-f"|"--force")
+  "-F"|"-f"|"--force")
     FORCE="true"
     shift # past argument
     ;;
-  "-y"|"--accept")
+  "-Y"|"-y"|"--accept")
     ACCEPT="true"
     shift # past argument
     ;;
@@ -304,6 +283,6 @@ esac
 done
 if [ "$RUN" != "" ]; then
   $RUN
-  exit
+  exit 0
 fi
 exit 0

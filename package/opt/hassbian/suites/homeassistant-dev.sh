@@ -12,9 +12,6 @@ function homeassistant-dev-show-copyright-info {
 }
 
 function homeassistant-dev-install-package {
-homeassistant-dev-show-short-info
-homeassistant-dev-show-copyright-info
-
 echo "Stopping Home Assistant"
 systemctl stop home-assistant@homeassistant.service
 sync
@@ -54,8 +51,6 @@ if [ ! -z "${validation}" ]; then
 else
   echo
   echo -e "\\e[31mInstallation failed..."
-  echo -e "\\e[31mAborting..."
-  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
   return 1
 fi

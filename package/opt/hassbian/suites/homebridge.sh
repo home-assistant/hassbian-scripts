@@ -14,9 +14,6 @@ function homebridge-show-copyright-info {
 }
 
 function homebridge-install-package {
-homebridge-show-long-info
-homebridge-show-copyright-info
-
 if [ "$ACCEPT" == "true" ]; then
   HOMEASSISTANT_URL="http://127.0.0.1:8123"
   HOMEASSISTANT_PASSWORD=""
@@ -141,8 +138,6 @@ if [ ! -z "${validation}" ]; then
 else
   echo
   echo -e "\\e[31mInstallation failed..."
-  echo -e "\\e[31mAborting..."
-  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
     return 1
 fi

@@ -14,9 +14,6 @@ function mosquitto-show-copyright-info {
 }
 
 function mosquitto-install-package {
-mosquitto-show-short-info
-mosquitto-show-copyright-info
-
 if [ "$ACCEPT" == "true" ]; then
   mqtt_username=pi
   mqtt_password=raspberry
@@ -102,8 +99,6 @@ if [ ! -z "${validation}" ]; then
 else
   echo
   echo -e "\\e[31mInstallation failed..."
-  echo -e "\\e[31mAborting..."
-  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
   return 1
 fi

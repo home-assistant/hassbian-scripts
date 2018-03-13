@@ -12,9 +12,6 @@ function python-show-copyright-info {
 }
 
 function python-upgrade-package {
-python-show-short-info
-python-show-copyright-info
-
 if [ "$FORCE" == "" ]; then
   printf "\\n\\n"
   echo "This script will change a lot on your pi."
@@ -107,7 +104,6 @@ else
   rm -R /srv/homeassistant
   mv /srv/homeassistant_"$currentpython" /srv/homeassistant
   systemctl start home-assistant@homeassistant.service
-  echo -e "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord."
   echo
   return 1
 fi
