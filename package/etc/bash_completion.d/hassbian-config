@@ -1,22 +1,28 @@
 _hassbian-config()
 {
-    local cur prev opts
+    local cur prev opts cmdopts
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="install upgrade show log share-log"
+    opts="install upgrade show log share-log --version --help"
+    altopts="--accept --force --debug --version --help"
+    inst=$(find /opt/hassbian/suites/ -maxdepth 1 -type f | awk -F'/|_' ' {print $NF}' | awk -F. '{print $1}')
+
+    if [[ ${cur} == -* ]] ; then
+      COMPREPLY=( $(compgen -W "${altopts}" -- ${cur}) )
+      return 0
+    fi
 
     case "${prev}" in
-        install|upgrade|show)
-            local inst=$(find /opt/hassbian/suites/ -maxdepth 1 -type f | awk -F'/|_' ' {print $NF}' | awk -F. '{print $1}')
-            COMPREPLY=( $(compgen -W "${inst}" -- ${cur}) )
-            return 0
-            ;;
-        *)
-        ;;
+    install|upgrade|show)
+    COMPREPLY=( $(compgen -W "${inst}" -- ${cur}) )
+    return 0
+    ;;
+    *)
+    ;;
     esac
 
-   COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
-   return 0
+    COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+    return 0
 }
 complete -F _hassbian-config hassbian-config
