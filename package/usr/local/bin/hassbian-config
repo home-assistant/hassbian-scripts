@@ -133,7 +133,7 @@ function share-log {
   return 0
 }
 
-function run-suite { #This is the function the actually run install/upgrade.
+function run-suite { #This function do checks if we can/want to install.
   source "$SUITE_INSTALL_DIR/$2".sh #Sourcing the script file.
   "$2"-show-short-info && "$2"-show-copyright-info && printf "\\n" #Prints suite-show-short-info & suite-show-copyright-info to console.
   if [ "$DEBUG" == "true" ]; then set -x; fi #Activating debug if --debug is used.
