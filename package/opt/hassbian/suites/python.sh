@@ -68,11 +68,6 @@ echo "Stopping Home Assistant."
 systemctl stop home-assistant@homeassistant.service
 
 echo "Backing up previous virutal enviorment."
-sudo -u homeassistant -H /bin/bash << EOF
-source /srv/homeassistant/bin/activate
-pip3 freeze —local > /tmp/requirements.txt
-deactivate
-EOF
 mv /srv/homeassistant /srv/homeassistant_"$currentpython"
 
 echo "Creating new virutal environment using Python $PYTHONVERSION"
@@ -84,7 +79,6 @@ pip"${PYTHONVERSION:: -2}" install --upgrade virtualenv
 sudo -u homeassistant -H /bin/bash << EOF
 source /srv/homeassistant/bin/activate
 pip3 install --upgrade setuptools wheel
-pip3 install -r /tmp/requirements.txt
 pip3 install --upgrade homeassistant
 deactivate
 EOF
@@ -102,7 +96,8 @@ EOF
 if [ "$validation" == "$PYTHONVERSION" ]; then
   echo
   echo -e "\\e[32mUpgrade done..\\e[0m"
-  echo "First time Home Assistant starts, it will use a long time. This is normal."
+  echo "First time Home Assistant starts it will take a long time. This is normal."
+  echo "You can run 'sudo journalctl -u home-assistant@homeassistant.service -f' to see the live service log."
   echo
 else
   echo
