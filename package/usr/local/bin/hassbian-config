@@ -133,7 +133,7 @@ function share-log {
   return 0
 }
 
-function run-suite { #This function do checks if we can/want to install.
+function run-suite { #This is the function the actually run install/upgrade.
   source "$SUITE_INSTALL_DIR/$2".sh #Sourcing the script file.
   "$2"-show-short-info && "$2"-show-copyright-info && printf "\\n" #Prints suite-show-short-info & suite-show-copyright-info to console.
   if [ "$DEBUG" == "true" ]; then set -x; fi #Activating debug if --debug is used.
@@ -145,7 +145,7 @@ function run-suite { #This function do checks if we can/want to install.
   return 0
 }
 
-function install-suite { #This function do checks if we want/can to install.
+function install-suite { #This function do checks if we can/want to install.
   check-permission
   INSTALL=$(grep "$1"-install-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has install function.
   SUITESTATE=$(if [ -f "$SUITE_CONTROL_DIR/$1" ]; then grep "SCRIPTSTATE" "$SUITE_CONTROL_DIR/$1" | awk -F'=' '{print $2}'; else echo ""; fi) #Checking current suite state.
