@@ -96,7 +96,7 @@ EOF
 if [ "$validation" == "$PYTHONVERSION" ]; then
   echo
   echo -e "\\e[32mUpgrade done..\\e[0m"
-  echo "First time Home Assistant starts it will use a long time. This is normal."
+  echo "First time Home Assistant starts it will take a long time. This is normal."
   echo "You can run 'sudo journalctl -u home-assistant@homeassistant.service -f' to see the live service log."
   echo
 else
