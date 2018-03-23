@@ -1,27 +1,19 @@
 #!/bin/bash
 
 function samba-show-short-info {
-	echo "Samba install script for Hassbian"
+  echo "Samba install script for Hassbian."
 }
 
 function samba-show-long-info {
-	echo "Installs the samba package for sharing the hassbian configuration files"
-	echo "over the network."
+  echo "Installs the samba package for sharing the Hassbian configuration files."
+  echo "over the network."
 }
 
 function samba-show-copyright-info {
-	echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
+  echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
 function samba-install-package {
-samba-show-short-info
-samba-show-copyright-info
-
-if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-   return 1
-fi
-
 echo "Running apt-get preparation"
 apt-get update
 apt-get install -y samba
@@ -30,7 +22,7 @@ echo "Adding homeassistant Samba user"
 sudo smbpasswd -a homeassistant -n
 
 echo "Adding shared folder for Home Assistant configuration directory"
-cd /etc/samba/
+cd /etc/samba/ || exit
 sudo patch <<'EOF'
 --- smb.conf 2017-02-02 20:29:42.383603738 +0000
 +++ smb_ha.conf 2017-02-02 20:37:12.418960977 +0000
@@ -54,14 +46,21 @@ sudo systemctl restart smbd.service
 
 ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
 
-echo
-echo "Installation done."
-echo
-echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
-echo
-echo "Configuration is now available as a Samba share at \\\\$ip_address\homeassistant"
-echo
+echo "Checking the installation..."
+validation=$(pgrep -x smbd)
+if [ ! -z "${validation}" ]; then
+  echo
+  echo -e "\\e[32mInstallation done..\\e[0m"
+  echo
+  echo "Configuration is now available as a Samba share at \\\\$ip_address\\homeassistant"
+  echo
+else
+  echo
+  echo -e "\\e[31mInstallation failed..."
+  echo
+  return 1
+fi
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

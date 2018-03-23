@@ -6,8 +6,8 @@ PACKAGE=$(grep package  -i package/DEBIAN/control | cut -d ":" -f2 | tr -d [:spa
 PACKAGENAME="${PACKAGE}_${VERSION}.deb"
 
 if [ -f $PACKAGENAME ]; then
-	echo "Previous package exists. Deleting"
-	rm $PACKAGENAME
+    echo "Previous package exists. Deleting"
+    rm "$PACKAGENAME"
 fi
 
 echo "Building package $PACKAGE version $VERSION"

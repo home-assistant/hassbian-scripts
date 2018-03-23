@@ -10,7 +10,7 @@ $ sudo hassbian-config install duckdns
 ## Additional info
 Running as: `homeassistant`  
 
-If you choose to aslo generate SSL certificates with this you would need to add this under `http:` to your `configuration.yaml`
+If you choose to also generate SSL certificates with this you would need to add this under `http:` to your `configuration.yaml`
 ```
   ssl_certificate: /home/homeassistant/dehydrated/certs/YOURDOMAIN.duckdns.org/fullchain.pem
   ssl_key: /home/homeassistant/dehydrated/certs/YOURDOMAIN.duckdns.org/privkey.pem

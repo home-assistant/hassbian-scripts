@@ -1,21 +1,18 @@
 #!/bin/bash
 function homeassistant-dev-show-short-info {
-    echo "Home Assistant developement branch install script for Hassbian"
+  echo "Home Assistant development branch install script for Hassbian."
 }
 
 function homeassistant-dev-show-long-info {
-    echo "Installs Home Assistant from the developement branch from github onto this system."
+  echo "Installs Home Assistant from the development branch from github onto this system."
 }
 
 function homeassistant-dev-show-copyright-info {
-    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
+  echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
 function homeassistant-dev-install-package {
-homeassistant-dev-show-short-info
-homeassistant-dev-show-copyright-info
-
-echo "Stoping Home Assistant"
+echo "Stopping Home Assistant"
 systemctl stop home-assistant@homeassistant.service
 sync
 
@@ -44,12 +41,20 @@ systemctl start home-assistant@homeassistant.service
 
 ip_address=$(ifconfig | awk -F':' '/inet addr/&&!/127.0.0.1/{split($2,_," ");print _[1]}')
 
-echo
-echo "Installation done."
-echo
-echo "Your Home Assistant development branch installation is running at $ip_address:8123 or if prefered http://hassbian.local:8123"
-echo
+echo "Checking the installation..."
+validation=$(pgrep -x hass)
+if [ ! -z "${validation}" ]; then
+  echo
+  echo -e "\\e[32mInstallation done..\\e[0m"
+  echo "Your Home Assistant development branch installation is running at $ip_address:8123 or if preferred http://hassbian.local:8123"
+  echo
+else
+  echo
+  echo -e "\\e[31mInstallation failed..."
+  echo
+  return 1
+fi
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

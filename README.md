@@ -1,6 +1,6 @@
 ## Hassbian-scripts
-These are the scripts used in the [HASSbian](https://github.com/home-assistant/pi-gen) image.
-The scripts in this repository where made to be used with the HASSbian image and the included Home Assistant instance.  
+These are the scripts used in the [Hassbian](https://github.com/home-assistant/pi-gen) image.
+The scripts in this repository where made to be used with the Hassbian image and the included Home Assistant instance.  
 
 
 ## The included scripts
@@ -9,7 +9,7 @@ The following scripts are currently included. You can view the documentation bel
 * [hassbian-config](/docs/hassbian_config.md)
   * [AppDaemon](/docs/appdaemon.md)
   * [Duck DNS](/docs/duckdns.md)
-  * [HASSbian](/docs/hassbian.md)
+  * [Hassbian](/docs/hassbian.md)
   * [Home Assistant](/docs/homeassistant.md)
   * [Homebridge](/docs/homebridge.md)
   * [HUE](/docs/hue.md)
@@ -26,7 +26,7 @@ The following scripts are currently included. You can view the documentation bel
 
 ***
 ## Raspbian Jessie
-If this package is used with a Debian Jessie based distrbution then you need to uncomment the source repositores in  `/etc/apt/sources.list`
+If this package is used with a Debian Jessie based distribution then you need to uncomment the source repositories in  `/etc/apt/sources.list`
 
 ```text
 # Uncomment line below then 'apt-get update' to enable 'apt-get source'

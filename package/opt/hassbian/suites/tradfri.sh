@@ -5,7 +5,7 @@ function tradfri-show-short-info {
 }
 
 function tradfri-show-long-info {
-	echo "Installs the libraries needed to controll IKEA Tradfri devices from this Pi."
+    echo "Installs the libraries needed to control IKEA Tradfri devices from this Pi."
 }
 
 function tradfri-show-copyright-info {
@@ -13,14 +13,6 @@ function tradfri-show-copyright-info {
 }
 
 function tradfri-install-package {
-tradfri-show-short-info
-tradfri-show-copyright-info
-
-if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-   return 1
-fi
-
 echo "Running apt-get preparation"
 apt-get update
 apt-get install -y dh-autoreconf
@@ -28,7 +20,7 @@ apt-get install -y dh-autoreconf
 echo "Changing to homeassistant user"
 sudo -u homeassistant -H /bin/bash <<EOF
 
-echo "Activating to Home Assistant venv"
+echo "Activating Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
 echo "Installing dependencies for Tradfri."
@@ -39,15 +31,26 @@ echo "Deactivating virtualenv"
 deactivate
 EOF
 
-echo
-echo "Installation done."
-echo
-echo "If you have issues with this script, please say something in the #Hassbian channel on Discord."
-echo
-echo "To continue have a look at https://home-assistant.io/components/tradfri/"
-echo "It's recomended that you restart your Tradfri Gateway before continuing."
-echo
+echo "Checking the installation..."
+validation=$(sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'
+source /srv/homeassistant/bin/activate
+pip3 show cython
+EOF
+)
+if [ ! -z "${validation}" ]; then
+  echo
+  echo -e "\\e[32mInstallation done..\\e[0m"
+  echo
+  echo "To continue have a look at https://home-assistant.io/components/tradfri/"
+  echo "It's recommended that you restart your Tradfri Gateway before continuing."
+  echo
+else
+  echo
+  echo -e "\\e[31mInstallation failed..."
+  echo
+  return 1
+fi
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

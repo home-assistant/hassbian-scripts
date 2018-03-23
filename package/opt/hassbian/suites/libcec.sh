@@ -1,26 +1,18 @@
 #!/bin/bash
 
 function libcec-show-short-info {
-    echo "libcec install script for Hassbian"
+  echo "libcec install script for Hassbian."
 }
 
 function libcec-show-long-info {
-	echo "Installs the libcec package for controlling CEC devices from this Pi"
+  echo "Installs the libcec package for controlling CEC devices from this Pi."
 }
 
 function libcec-show-copyright-info {
-    echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>"
+  echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
 function libcec-install-package {
-libcec-show-short-info
-libcec-show-copyright-info
-
-if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run with sudo. Use \"sudo ${0} ${*}\"" 1>&2
-   return 1
-fi
-
 echo "Running apt-get preparation"
 apt-get update
 apt-get install -y cmake libudev-dev libxrandr-dev swig
@@ -45,7 +37,7 @@ make
 EOF
 
 echo "Installing Pulse-Eight platform"
-cd /srv/homeassistant/src/platform/build
+cd /srv/homeassistant/src/platform/build || exit
 sudo make install
 sudo ldconfig
 
@@ -65,25 +57,32 @@ make -j4
 EOF
 
 echo "Installing Pulse-Eight libcec"
-cd /srv/homeassistant/src/libcec/build
+cd /srv/homeassistant/src/libcec/build || exit
 sudo make install
 sudo ldconfig
 
 echo "Linking libcec to venv site packages"
-PYTHONVER=$(ls /usr/local/lib/ | grep python | tail -1)
+PYTHONVER=$(echo /usr/local/lib/*python* | awk -F/ '{print $NF}')
 sudo -u homeassistant -H /bin/bash <<EOF
 ln -s /usr/local/lib/$PYTHONVER/dist-packages/cec /srv/homeassistant/lib/$PYTHONVER/site-packages/
 EOF
 
-echo
-echo "Installation done."
-echo
-echo "If you have issues with this script, please say something in the #devs_hassbian channel on Discord."
-echo
-echo "To continue have a look at https://home-assistant.io/components/hdmi_cec/"
-echo "It's recomended that you restart your Pi before continuing with testing libcec."
-echo
+echo "Checking the installation..."
+validation=$(which cec-client)
+if [ ! -z "${validation}" ]; then
+  echo
+  echo -e "\\e[32mInstallation done..\\e[0m"
+  echo
+  echo "To continue have a look at https://home-assistant.io/components/hdmi_cec/"
+  echo "It's recommended that you restart your Pi before continuing with testing libcec."
+  echo
+else
+  echo
+  echo -e "\\e[31mInstallation failed..."
+  echo
+  return 1
+fi
 return 0
 }
 
-[[ $_ == $0 ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

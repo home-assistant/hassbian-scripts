@@ -4,144 +4,205 @@ SUITE_INSTALL_DIR=/opt/hassbian/suites
 SUITE_CONTROL_DIR=/srv/homeassistant/hassbian/control
 
 function usage {
-   echo hassbian-config usage:
-   echo
-   echo hassbian-config \<command\> \<suite\>
-   echo where \<command\> is one of:
-   echo     install   - installs a software suite
-   echo     upgrade   - upgrades a software suite
-   echo     show      - shows software suites available
-   echo     log       - displays an log of the last operation
-   echo     share-log - generates an hastebin link of the last operation
-   echo and \<suite\> is the name of a software component to operate on.
-   echo
+  printf "usage: hassbian-config [command] [suite] [options]\\n"
+  printf "run 'hassbian-config --help' to see all options\\n"
+  return 0
+}
+
+function help {
+  printf "hassbian-config\\n"
+  printf "%s\\n" "version: $(hassbian-config -V)"
+  printf "\\n"
+  printf "usage: hassbian-config [command] [suite] [options]\\n"
+  printf "where [command] is one of:\\n"
+  printf "%-8s\\t%s\\n" "  install" "Installs a software [suite]"
+  printf "%-8s\\t%s\\n" "  upgrade" "Upgrades a software [suite]"
+  printf "%-8s\\t%s\\n" "  show" "To see available [suite] for install/upgrade"
+  printf "%-8s\\t%s\\n" "  log" "Displays an log of the last operation"
+  printf "%-8s\\t%s\\n" "  share-log" "Generates an hastebin link of the last operation"
+  printf "\\n"
+  printf "available optional [options]:\\n"
+  printf "%-10s\\t%s\\n" " -Y | --accept" "Accept defaults on scripts that allow this"
+  printf "%-10s\\t%s\\n" " -F | --force" "Force run an script, this is useful if you need to reinstall a package"
+  printf "%-10s\\t%s\\n" " -D | --debug" "This will output every comand to the console."
+  printf "\\n"
+  printf "other [command] available:\\n"
+  printf "%-10s\\t%s\\n" " -V | --version" "Prints the version of hassbian-config"
+  printf "%-10s\\t%s\\n" " -H | --help" "Shows this help"
+  printf "\\n"
+  return 0
 }
 
 function show-suite-info {
-   source $SUITE_INSTALL_DIR/$1.sh
-   $1-show-short-info
+  source $SUITE_INSTALL_DIR/"$1".sh
+  "$1"-show-short-info
+  return 0
 }
 
 function get-all-suite-installers {
-   echo $(find $SUITE_INSTALL_DIR/ -maxdepth 1 -type f | sort | awk -F'/' ' {print $NF}' | awk -F. '{print $1}')
+  ALLSUITES=$(find $SUITE_INSTALL_DIR/ -maxdepth 1 -type f | sort | awk -F'/' ' {print $NF}' | awk -F. '{print $1}')
+  echo "$ALLSUITES"
+  return 0
 }
 
-
 function show-suites {
-	echo -e "Install scripts: (Usage 'sudo hassbian-config install \e[32msuite-name\e[0m')"
-	installers=$(get-all-suite-installers)
-	for i in $installers
-	do
-    if [ ! -f $SUITE_CONTROL_DIR/$i ]; then
-      SUITESTATE=""
+  printf "This is a list over all suites in hassbian-config\\n"
+  printf "If a \\e[1msuite\\e[0m has \\e[32mgreen color\\e[0m in the name, you have already installed it.\\n"
+  printf "\\n"
+  printf "Install scripts: (Usage 'sudo hassbian-config install \\e[1msuite\\e[0m')\\n"
+  installers=$(get-all-suite-installers)
+  for i in $installers
+  do
+    if [ -f $SUITE_CONTROL_DIR/"$i" ]; then
+      SUITESTATE=$(grep "SCRIPTSTATE" $SUITE_CONTROL_DIR/"$i" | awk -F'=' '{print $2}')
     else
-      SUITESTATE=$(cat $SUITE_CONTROL_DIR/$i | grep SCRIPTSTATE | awk -F'=' '{printf $2}')
-      SUITESTATE=$(printf "\e[34m $SUITESTATE%-7s")
+      SUITESTATE=""
     fi
-	  printf "\e[32m%-20s\e[0m %s\n" "$i$SUITESTATE" "$(show-suite-info $i)"
-	done
-    echo -e "To view more info about a suite type: 'hassbian-config show \e[32msuite-name\e[0m'"
+    INSTALLER=$(grep "$i"-install-package $SUITE_INSTALL_DIR/"$i".sh)
+    if [ "$INSTALLER" != "" ]; then
+      if [ "$SUITESTATE" == "installed" ]; then
+        printf "\\e[1m\\e[32m%-20s\\e[0m %s\\n" "$i" "$(show-suite-info "$i")"
+      else
+        printf "\\e[1m%-20s\\e[0m %s\\n" "$i" "$(show-suite-info "$i")"
+      fi
+    fi
+  done
+  printf "\\n"
+  printf "Upgrade scripts: (Usage 'sudo hassbian-config upgrade \\e[1msuite\\e[0m')\\n"
+  for i in $installers
+  do
+    UPGRADE=$(grep "$i"-upgrade-package $SUITE_INSTALL_DIR/"$i".sh)
+    if [ "$UPGRADE" != "" ]; then
+      printf "\\e[1m%-20s\\e[0m %s\\n" "$i" "$(show-suite-info "$i")"
+    fi
+  done
+  printf "\\n"
+  printf "To view more info about a suite type: 'hassbian-config show \\e[1msuite\\e[0m\\n"
+  return 0
 }
 
 function show-suite-long-info {
-   # Shows long info for the suite.
-   source $SUITE_INSTALL_DIR/$1.sh
-   $1-show-short-info
-   $1-show-long-info
-   $1-show-copyright-info
+  source $SUITE_INSTALL_DIR/"$1".sh
+  "$1"-show-short-info
+  "$1"-show-long-info
+  "$1"-show-copyright-info
+  return 0
 }
 
 function check-permission {
-   if (( $EUID != 0 ))
-   then
-      echo "Error: hassbian-config must be run as root (with sudo) for this to be possible"
-      exit 1
-   fi
-}
-
-function share-log {
-    echo "This will put the output from your last operation on hastebin."
-    echo "This could include sensitive informastion."
-    echo "If you are unsure about what it contains, you can rin 'hassbian-config log' to check."
-    read -p "Do you want to crate an hastebin link? [N/y] : " RESPONCE
-    if [ "$RESPONCE" == "y" ] || [ "$RESPONCE" == "Y" ]; then
-    echo ""
-    a=$(cat $LOGFILE); curl -X POST -s -d "$a" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}'
+  if (( EUID != 0 ))
+  then
+    echo "Error: hassbian-config must be run as root (with sudo) for this to be possible"
     exit 1
-    fi
-    exit 1
-}
-
-function install-suite {
-  if [ ! -f $SUITE_CONTROL_DIR/$1 ]; then
-    touch $SUITE_CONTROL_DIR/$1
-    echo "SCRIPTSTATE=uninstalled" > $SUITE_CONTROL_DIR/$1
-  fi
-  SUITESTATE=$(cat $SUITE_CONTROL_DIR/$1 | grep SCRIPTSTATE | awk -F'=' '{print $2}')
-  source $SUITE_INSTALL_DIR/$1.sh
-  if [ "$FORCE" == "true" ]; then
-    $1-install-package | tee $LOGFILE
-    sed -i -- 's/SCRIPTSTATE='$SUITESTATE'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/$1
-  elif [ "$SUITESTATE" == "installed" ]; then
-    echo "$1 is already installed, trying upgrade script..."
-    UPGRADE=$(cat $SUITE_INSTALL_DIR/$1.sh | grep $1-upgrade-package)
-      if [ "$UPGRADE" == "" ]; then
-        echo "Upgrade script is not available..."
-        echo "You can force run the install script like this:"
-        echo "sudo hassbian-config -f install $1"
-        exit
-      fi
-      $1-upgrade-package | tee $LOGFILE
-      sed -i -- 's/SCRIPTSTATE='$SUITESTATE'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/$1
-  else
-    source $SUITE_INSTALL_DIR/$1.sh
-    $1-install-package | tee $LOGFILE
-    sed -i -- 's/SCRIPTSTATE='$SUITESTATE'/SCRIPTSTATE=installed/g' $SUITE_CONTROL_DIR/$1
   fi
   return 0
 }
 
-function upgrade-suite {
-   # Having got here, the installer script exists; source it, then run the installer function.
-   UPGRADE=$(cat $SUITE_INSTALL_DIR/$1.sh | grep $1-upgrade-package)
-     if [ "$UPGRADE" == "" ]; then
-       echo "Upgrade script is not available..."
-       echo "You can force run the install script like this:"
-       echo "sudo hassbian-config -f install $1"
-       exit
-     fi
-   check-permission
-   source $SUITE_INSTALL_DIR/$1.sh
-   $1-upgrade-package
+function share-log {
+  if [ ! -f $LOGFILE ];then
+    echo "No logfile, exiting..."
+    return 0
+  fi
+  if [ "$ACCEPT" == "true" ]; then
+    loglink=$(curl -X POST -s -d "$(cat "$LOGFILE")" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}')
+    if [[ $loglink != *"initial"*  ]]; then
+      echo "$loglink"
+    else
+      echo "There is an issue with your network connection, or with the Hastebin API."
+      echo "Try again later."
+      return 0
+    fi
+  else
+    echo "This will put the output from your last operation on hastebin."
+    echo "This could include sensitive information."
+    echo "If you are unsure about what it contains, you can run 'hassbian-config log' to check."
+    echo -n "Do you want to create an hastebin link? [N/y] : "
+    read -r  RESPONSE
+    if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
+      loglink=$(curl -X POST -s -d "$(cat "$LOGFILE")" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}')
+      if [[ $loglink != *"initial"*  ]]; then
+        echo "$loglink"
+      else
+        echo
+        echo "There is an issue with your network connection, or with the Hastebin API."
+        echo "Try again later."
+        return 0
+      fi
+    fi
+  fi
+  return 0
+}
+
+function run-suite { #This is the function the actually run install/upgrade.
+  source "$SUITE_INSTALL_DIR/$2".sh #Sourcing the script file.
+  "$2"-show-short-info && "$2"-show-copyright-info && printf "\\n" #Prints suite-show-short-info & suite-show-copyright-info to console.
+  if [ "$DEBUG" == "true" ]; then set -x; fi #Activating debug if --debug is used.
+  "$2"-"$1"-package #Running the script function install/upgrade SUITE.
+  RETURN=("$?") # Return value after script execution.
+  if [ "$DEBUG" == "true" ]; then set +x; fi #Deactivating debug if --debug is used.
+  if [ "$RETURN" == "0" ]; then STATE="installed"; else printf "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord.\\n" && STATE="failed"; fi #Set suite state to installed if 0 is returned, failed otherwise.
+  echo "SCRIPTSTATE=$STATE" > "$SUITE_CONTROL_DIR/$2" #Setting status in control file.
+  return 0
+}
+
+function install-suite { #This function do checks if we can/want to install.
+  check-permission
+  INSTALL=$(grep "$1"-install-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has install function.
+  SUITESTATE=$(if [ -f "$SUITE_CONTROL_DIR/$1" ]; then grep "SCRIPTSTATE" "$SUITE_CONTROL_DIR/$1" | awk -F'=' '{print $2}'; else echo ""; fi) #Checking current suite state.
+  if [ "$FORCE" == "true" ]; then #Go straight to run-suite if --force is used.
+    run-suite install "$1" | tee "$LOGFILE" #Run if -F/-f/--force is used.
+  elif [ "$SUITESTATE" == "installed" ] || [ "$INSTALL" == "" ]; then #Try redirect to upgrade script if already installed.
+    printf "%s is already installed or install script is not available...\\n" "$1"
+    UPGRADE=$(grep "$1"-upgrade-package "$SUITE_INSTALL_DIR/$1".sh)
+    if [ "$UPGRADE" == "" ]; then
+      printf "Upgrade script is not available...\\n\\nYou can force run the install script like this:\\nsudo hassbian-config install %s --force\\n" "$1"
+      return 0
+    fi
+    printf "upgrade script for %s found, running that...\\n\\n" "$1"
+    run-suite upgrade "$1" | tee "$LOGFILE" #Redirects to upgrade script.
+  else
+    run-suite install "$1" | tee "$LOGFILE" #This is the default run, if no options is used.
+  fi
+  return 0
+}
+
+function upgrade-suite { #This function do checks if we can to upgrade.
+  check-permission
+  UPGRADE=$(grep "$1"-upgrade-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has upgrade function.
+  if [ "$UPGRADE" == "" ]; then
+    printf "Upgrade script is not available...\\n\\nYou can force run the install script like this:\\nsudo hassbian-config install %s --force\\n" "$1"
+    return 0
+  fi
+  run-suite upgrade "$1" | tee "$LOGFILE" #This is the default run.
+  return 0
 }
 
 function verify-suite {
-   # Check that the suite specified actually exists
-   if [ -f "$SUITE_INSTALL_DIR/$1.sh" ]
-   then
-      retval=0 # beware - 0 is true in bash.
-   else
-      retval=1
-   fi
-   return $retval
+  if [ -f "$SUITE_INSTALL_DIR/$1.sh" ]; then
+    retval=0 # beware - 0 is true in bash.
+  else
+    retval=1
+  fi
+  return $retval
 }
 
 function show-installed-suites {
-  INSTALLERS=$(find $SUITE_CONTROL_DIR/ -maxdepth 1 -type f | awk -F'/|_' ' {print $NF}' | grep -v 'homeassistant' | awk -F. '{print $1}')
+  INSTALLERS=$(find $SUITE_INSTALL_DIR/ -maxdepth 1 -type f | sort | awk -F'/' ' {print $NF}' | awk -F. '{print $1}')
   for i in $INSTALLERS
   do
-  STATE=$(cat $SUITE_CONTROL_DIR/$i | grep SCRIPTSTATE=installed | awk -F'=' '{print $2}')
-  if [ "$STATE" != "" ]; then
-  echo "$i:" $STATE
+  if [ -f "$SUITE_CONTROL_DIR/$i" ]; then
+    STATE=$(grep "SCRIPTSTATE=installed" $SUITE_CONTROL_DIR/"$i" | awk -F'=' '{print $2}')
+    if [ "$STATE" != "" ]; then
+      echo "$i:" "$STATE"
+    fi
   fi
   done
   return 0
 }
 
-if [ $# -lt 1 ]
-then
-   usage
-   exit
+if [ $# -lt 1 ]; then
+  usage
+  exit 0
 fi
 
 while [[ $# -gt 0 ]]
@@ -149,25 +210,26 @@ do
 COMMAND=$1
 SUITE=$2
 
-
 case $COMMAND in
-  "-f")
+  "-F"|"-f"|"--force")
     FORCE="true"
     shift # past argument
     ;;
-  "-y")
+  "-Y"|"-y"|"--accept")
     ACCEPT="true"
     shift # past argument
     ;;
+  "-D"|"--debug")
+    DEBUG="true"
+    shift # past argument
+    ;;
   "show")
-    if [ "$SUITE" != "" ]
-    then
-      if verify-suite $SUITE
-      then
+    if [ "$SUITE" != "" ]; then
+      if verify-suite "$SUITE"; then
         RUN="show-suite-long-info $SUITE"
       else
         RUN="echo suite $SUITE doesn't exist."
-       fi
+      fi
     else
       RUN="show-suites"
     fi
@@ -175,19 +237,8 @@ case $COMMAND in
     shift # past value
     ;;
   "install")
-    if verify-suite $SUITE
-    then
+    if verify-suite "$SUITE"; then
       RUN="install-suite $SUITE"
-    else
-      RUN="echo suite $SUITE doesn't exist."
-    fi
-    shift # past argument
-    shift # past value
-     ;;
-  "info")
-    if verify-suite $SUITE
-    then
-      RUN="info-suite $SUITE"
     else
       RUN="echo suite $SUITE doesn't exist."
     fi
@@ -195,39 +246,43 @@ case $COMMAND in
     shift # past value
     ;;
   "upgrade")
-    if verify-suite $SUITE
-    then
+    if verify-suite "$SUITE"; then
       RUN="upgrade-suite $SUITE"
     else
       RUN="echo suite $SUITE doesn't exist."
     fi
     shift # past argument
     shift # past value
-     ;;
+    ;;
   "log")
-     RUN="more $LOGFILE"
-     shift # past argument
-     ;;
+    RUN="more $LOGFILE"
+    shift # past argument
+    ;;
   "share-log")
-     RUN="share-log"
-     shift # past argument
-     ;;
-  "-V")
-     VERSION=$(dpkg -s hassbian-scripts | grep 'Version:' | awk '{print $2}')
-     RUN="echo $VERSION"
-     shift # past argument
+    RUN="share-log"
+    shift # past argument
+    ;;
+  "-V"|"--version")
+    VERSION=$(dpkg -s hassbian-scripts | grep 'Version:' | awk '{print $2}')
+    RUN="echo $VERSION"
+    shift # past argument
     ;;
   "show-installed")
-     RUN="show-installed-suites"
-     shift # past argument
-     ;;
+    RUN="show-installed-suites"
+    shift # past argument
+    ;;
+  "-H"|"--help")
+    RUN="help"
+    shift # past argument
+    ;;
   *)
-     RUN="usage"
-     shift # past argument
-     ;;
+    RUN="usage"
+    shift # past argument
+  ;;
 esac
 done
 if [ "$RUN" != "" ]; then
   $RUN
-	exit
+  exit 0
 fi
+exit 0

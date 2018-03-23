@@ -1,5 +1,5 @@
 ## Description
-This script installs the tools needed to connect to a MS SQL databse and it's dependencies for use with the recorder component in Home Assistant. No database or database user is created during this setup and will need to be created manually.
+This script installs the tools needed to connect to a MS SQL database and it's dependencies for use with the recorder component in Home Assistant. No database or database user is created during this setup and will need to be created manually.
 
 ## Installation
 ```
@@ -7,7 +7,7 @@ $ sudo hassbian-config install mssql
 ```
 
 ## Upgrade
-No script avaiable, maybe you could write one?  
+No script available, maybe you could write one?  
 If so, add an PR here when you are done:  
 [homeassistant/hassbian-scripts](https://github.com/home-assistant/hassbian-scripts/pulls)
 

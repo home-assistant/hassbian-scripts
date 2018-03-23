@@ -12,14 +12,18 @@ where command is one of:
 - `show` This will show you all available suites.
 - `log` This will show you the log of last hassbian-config operation.
 - `share-log` This will generate an hastebin link of the last hassbian-config operation.
-- `-V` This will show you the installed version of `hassbian-config`.
 
 Optional flags:
-- `-y` This will accept defaults on scripts that allow this.
-- `-f` This will force run an script. This is useful if you need to reinstall a package.
+- `-Y | --accept` This will accept defaults on scripts that allow this.
+- `-F | --force` This will force run an script. This is useful if you need to reinstall a package.
+- `-D | --debug` This will output every comand to the console.
+
+Other available commands:
+- `-V | --version` This will show you the installed version of `hassbian-config`.
+- `-H | --help` Shows help for the tool, with all available commands.
 
 ## Installation
-This package is pre-installed on the [HASSbian image](https://github.com/home-assistant/pi-gen/releases).
+This package is pre-installed on the [Hassbian image](https://github.com/home-assistant/pi-gen/releases).
 This package can be used with Raspbian lite but it's not recommended.
 ```
 $ curl https://api.github.com/repos/home-assistant/hassbian-scripts/releases/latest | grep "browser_download_url.*deb" | cut -d : -f 2,3 | tr -d \" | wget -qi -
