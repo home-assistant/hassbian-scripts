@@ -17,6 +17,11 @@ if [ "$ACCEPT" != "true" ]; then
     echo -n "Do you want to add Samba share for AppDaemon configuration? [N/y] : "
     read -r SAMBA
   fi
+  echo -n "Enter your Home Assistant API password: "
+  read -s -r HOMEASSISTANT_PASSWORD
+  printf "\\n"
+else
+  HOMEASSISTANT_PASSWORD=""
 fi
 
 echo "Creating directory for AppDaemon Venv"
@@ -42,7 +47,9 @@ pip3 install appdaemon
 
 echo "Copying AppDaemon config file"
 cp /opt/hassbian/suites/files/appdaemon.conf /home/homeassistant/appdaemon/appdaemon.yaml
-touch /home/homeassistant/appdaemon/apps.yaml
+if [ ! -z "${HOMEASSISTANT_PASSWORD}" ]; then
+    sed -i 's/#ha_key:/ha_key: $HOMEASSISTANT_PASSWORD/g' /home/homeassistant/appdaemon/appdaemon.yaml
+fi
 
 echo "Deactivating virtualenv"
 deactivate
