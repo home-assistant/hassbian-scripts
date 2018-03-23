@@ -1,0 +1,9 @@
+[Unit]
+Description=Cloud9
+After=home-assistant@homeassistant.service
+[Service]
+Type=simple
+User=homeassistant
+ExecStart=/home/homeassistant/c9sdk/server.js -l 0.0.0.0 -a : -w /home/homeassistant/.homeassistant/
+[Install]
+WantedBy=multi-user.target
