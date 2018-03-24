@@ -8,6 +8,7 @@ The following scripts are currently included. You can view the documentation bel
 <!--- When adding stuff here, please keep it alphabetical --->
 * [hassbian-config](/docs/hassbian_config.md)
   * [AppDaemon](/docs/appdaemon.md)
+  * [Cloud9](/docs/cloud9.md)
   * [Duck DNS](/docs/duckdns.md)
   * [Hassbian](/docs/hassbian.md)
   * [Home Assistant](/docs/homeassistant.md)

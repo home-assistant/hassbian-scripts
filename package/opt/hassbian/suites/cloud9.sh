@@ -4,8 +4,8 @@ function cloud9-show-short-info {
 }
 
 function cloud9-show-long-info {
-  printf "Installs Cloud9 IDE onto this system.\\n"
-  printf "Cloud9 IDE is an online integrated development environment. It supports hundreds of programming languages.\\n"
+  printf "Installs Cloud9 SDK onto this system.\\n"
+  printf "Cloud9 SDK is an webservice IDE that makes it easy to manage you configuration files.\\n"
 }
 
 function cloud9-show-copyright-info {
@@ -16,7 +16,7 @@ function cloud9-install-package {
 node=$(which node)
 if [ -z "${node}" ]; then #Installing NodeJS if not already installed.
   printf "Downloading and installing NodeJS...\\n"
-  curl -sL https://deb.nodesource.com/setup_8.x | bash -
+  curl -sL https://deb.nodesource.com/setup_9.x | bash -
   apt install -y nodejs
 fi
 
@@ -25,6 +25,7 @@ sudo -u homeassistant -H /bin/bash << EOF
   printf "Downloading and installing Cloud9 SDK...\\n"
   git clone git://github.com/c9/core.git /home/homeassistant/c9sdk
   bash /home/homeassistant/c9sdk/scripts/install-sdk.sh
+  echo '{"projecttree": {"@showhidden": true,"@hiddenFilePattern": ".n*,*c9*,.b*,.p*,.w*,*.db"}}' | tee /home/homeassistant/.c9/user.settings
 EOF
 
 echo "Copying Cloud9 service file..."
@@ -90,7 +91,6 @@ sync
 bash /home/homeassistant/c9sdk/scripts/uninstall-c9.sh
 rm -R /home/homeassistant/c9sdk
 rm -R /home/homeassistant/.c9
-rm -R /home/homeassistant/.homeassistant/.c9
 
 printf "\\e[32mRemoval done..\\e[0m\\n"
 }
