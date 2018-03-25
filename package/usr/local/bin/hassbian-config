@@ -256,6 +256,12 @@ case $COMMAND in
     shift # past value
     ;;
   "upgrade")
+    if [[ "$SUITE" = *"="* ]]; then
+      VERSIONNUMBER=$(echo "$SUITE" | awk -F'=' '{print $2}')
+      SUITE=$(echo "$SUITE" | awk -F'=' '{print $1}')
+    else
+      VERSIONNUMBER=""
+    fi
     if verify-suite "$SUITE"; then
       RUN="upgrade-suite $SUITE"
     else

@@ -77,6 +77,9 @@ else
   echo "Checking current version"
   if [ "$BETA" == "true" ]; then
     newversion=$(curl -s https://pypi.python.org/pypi/homeassistant/json | grep '"version":' | awk -F'"' '{print $4}')
+  elif [ ! -z "${VERSIONNUMBER}" ]; then
+    echo "Spesicic version number supplied, skipping version check..."
+    newversion="$VERSIONNUMBER"
   else
     newversion=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases/latest | grep tag_name | awk -F'"' '{print $4}')
   fi
