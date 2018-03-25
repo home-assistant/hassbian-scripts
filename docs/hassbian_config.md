@@ -38,5 +38,5 @@ $ sudo hassbian-config upgrade hassbian-script
 
 ## Upgrade to dev branch
 ```
-$ sudo hassbian-config upgrade hassbian-script-dev
+$ sudo hassbian-config upgrade hassbian-script --dev
 ```

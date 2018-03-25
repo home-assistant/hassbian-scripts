@@ -61,6 +61,18 @@ return 0
 }
 
 function homeassistant-upgrade-package {
+if [ "$DEV" == "true"  ] then
+  echo "This scripts downloads new scripts directly from the dev branch on github."
+  echo "you can use this to be on the 'bleeding edge of the development of Home Assistant.'"
+  echo "This is not recommended for daily use."
+  echo -n "Are you really sure you want to continue? [N/y] : "
+  read -r RESPONSE
+  if [ "$RESPONSE" != "y" ] || [ "$RESPONSE" != "Y" ]; then
+    echo "Exiting.."
+    return 0
+  fi
+
+fi
 echo "Checking current version"
 pypiversion=$(curl -s https://pypi.python.org/pypi/homeassistant/json | grep '"version":' | awk -F'"' '{print $4}')
 
@@ -85,7 +97,13 @@ source /srv/homeassistant/bin/activate
 
 echo "Installing latest version of Home Assistant"
 pip3 install --upgrade setuptools wheel
-pip3 install --upgrade homeassistant
+if [ "$DEV" == "true" ]; then
+  pip3 install git+https://github.com/home-assistant/home-assistant@dev
+elif [ "$BETA" == "true" ]; then
+  pip3 install --pre --upgrade homeassistant
+else
+  pip3 install --upgrade homeassistant
+fi
 
 echo "Deactivating virtualenv"
 deactivate

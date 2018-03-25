@@ -223,6 +223,14 @@ case $COMMAND in
     DEBUG="true"
     shift # past argument
     ;;
+  "--dev")
+    DEV="true"
+    shift # past argument
+    ;;
+  "-B"|"--beta")
+    BETA="true"
+    shift # past argument
+    ;;
   "show")
     if [ "$SUITE" != "" ]; then
       if verify-suite "$SUITE"; then
