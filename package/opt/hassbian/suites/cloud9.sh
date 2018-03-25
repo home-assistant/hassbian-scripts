@@ -20,6 +20,10 @@ if [ -z "${node}" ]; then #Installing NodeJS if not already installed.
   apt install -y nodejs
 fi
 
+echo "Creating installation directory..."
+mkdir /opt/c9sdk
+chown homeassistant:homeassistant /opt/c9sdk
+
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
   printf "Downloading and installing Cloud9 SDK...\\n"
