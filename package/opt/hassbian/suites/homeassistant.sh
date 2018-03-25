@@ -73,20 +73,23 @@ if [ "$DEV" == "true"  ]; then
     echo "Exiting..."
     return 0
   fi
-fi
-echo "Checking current version"
-pypiversion=$(curl -s https://pypi.python.org/pypi/homeassistant/json | grep '"version":' | awk -F'"' '{print $4}')
-
-sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'|while read -r version; do if [[ "${pypiversion}" == "${version}" ]]; then echo "You already have the latest version: $version";exit 1;fi;done
-source /srv/homeassistant/bin/activate
-pip3 show homeassistant
+else
+  echo "Checking current version"
+  if [ "$BETA" == "true" ]; then
+    newversion=$(curl -s https://pypi.python.org/pypi/homeassistant/json | grep '"version":' | awk -F'"' '{print $4}')
+  else
+    newversion=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases/latest | grep tag_name | awk -F'"' '{print $4}')
+  fi
+  sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'|while read -r version; do if [[ "${newversion}" == "${version}" ]]; then echo "You already have the latest version: $version";exit 1;fi;done
+  source /srv/homeassistant/bin/activate
+  pip3 show homeassistant
 EOF
 
-if [[ $? == 1 ]]; then
-  echo "Stopping upgrade"
-  exit 1
+  if [[ $? == 1 ]]; then
+    echo "Stopping upgrade"
+    exit 1
+  fi
 fi
-
 echo "Stopping Home Assistant"
 systemctl stop home-assistant@homeassistant.service
 
@@ -100,10 +103,8 @@ echo "Installing latest version of Home Assistant"
 pip3 install --upgrade setuptools wheel
 if [ "$DEV" == "true" ]; then
   pip3 install git+https://github.com/home-assistant/home-assistant@dev
-elif [ "$BETA" == "true" ]; then
-  pip3 install --pre --upgrade homeassistant
 else
-  pip3 install --upgrade homeassistant
+  pip3 install --upgrade homeassistant=="$newversion"
 fi
 
 echo "Deactivating virtualenv"
