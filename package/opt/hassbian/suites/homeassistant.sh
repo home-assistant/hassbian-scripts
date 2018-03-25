@@ -78,8 +78,14 @@ else
   if [ "$BETA" == "true" ]; then
     newversion=$(curl -s https://pypi.python.org/pypi/homeassistant/json | grep '"version":' | awk -F'"' '{print $4}')
   elif [ ! -z "${VERSIONNUMBER}" ]; then
-    echo "Spesicic version number supplied, skipping version check..."
-    newversion="$VERSIONNUMBER"
+    verify=$(curl -s https://pypi.python.org/pypi/homeassistant/"$VERSIONNUMBER"/json)
+    if [[ "$verify" = *"Not Found"* ]]; then
+      echo "Version $VERSIONNUMBER Not found..."
+      echo "Exiting..."
+      return 0
+    else
+      newversion="$VERSIONNUMBER"
+    fi
   else
     newversion=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases/latest | grep tag_name | awk -F'"' '{print $4}')
   fi
