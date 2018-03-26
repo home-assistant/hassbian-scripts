@@ -14,7 +14,7 @@ function hassbian-script-show-copyright-info {
 function hassbian-script-upgrade-package {
 
 if [ "$DEV" == "true"  ]; then
-  echo "This scripts downloads new scripts directly from the dev branch on github."
+  echo "This script downloads new scripts directly from the dev branch on Github."
   echo "you can use this to be on the 'bleeding edge of the development of Hassbian.'"
   echo "This is not recommended for daily use."
   echo -n "Are you really sure you want to continue? [N/y] : "
