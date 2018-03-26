@@ -44,8 +44,12 @@ fi
 echo "Preparing system, and adding dependencies..."
 sudo apt update
 sudo apt -y upgrade
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-sudo apt install -y nodejs
+node=$(which node)
+if [ -z "${node}" ]; then #Installing NodeJS if not already installed.
+  printf "Downloading and installing NodeJS...\\n"
+  curl -sL https://deb.nodesource.com/setup_9.x | bash -
+  apt install -y nodejs
+fi
 sudo apt install -y libavahi-compat-libdnssd-dev
 
 echo "Installing Homebridge for Home Assistant..."
