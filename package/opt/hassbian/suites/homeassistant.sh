@@ -61,19 +61,35 @@ return 0
 }
 
 function homeassistant-upgrade-package {
-echo "Checking current version"
-pypiversion=$(curl -s https://pypi.python.org/pypi/homeassistant/json | grep '"version":' | awk -F'"' '{print $4}')
-
-sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'|while read -r version; do if [[ "${pypiversion}" == "${version}" ]]; then echo "You already have the latest version: $version";exit 1;fi;done
-source /srv/homeassistant/bin/activate
-pip3 show homeassistant
+if [ "$DEV" == "true"  ]; then
+  echo "This script downloads Home Assistant directly from the dev branch on Github."
+  echo "you can use this to be on the 'bleeding edge of the development of Home Assistant.'"
+  echo "This is not recommended for daily use."
+  echo -n "Are you really sure you want to continue? [N/y] : "
+  read -r RESPONSE
+  if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
+    RESPONSE="Y"
+  else
+    echo "Exiting..."
+    return 0
+  fi
+else
+  echo "Checking current version"
+  if [ "$BETA" == "true" ]; then
+    newversion=$(curl -s https://pypi.python.org/pypi/homeassistant/json | grep '"version":' | awk -F'"' '{print $4}')
+  else
+    newversion=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases/latest | grep tag_name | awk -F'"' '{print $4}')
+  fi
+  sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'|while read -r version; do if [[ "${newversion}" == "${version}" ]]; then echo "You already have the latest version: $version";exit 1;fi;done
+  source /srv/homeassistant/bin/activate
+  pip3 show homeassistant
 EOF
 
-if [[ $? == 1 ]]; then
-  echo "Stopping upgrade"
-  exit 1
+  if [[ $? == 1 ]]; then
+    echo "Stopping upgrade"
+    exit 1
+  fi
 fi
-
 echo "Stopping Home Assistant"
 systemctl stop home-assistant@homeassistant.service
 
@@ -85,7 +101,11 @@ source /srv/homeassistant/bin/activate
 
 echo "Installing latest version of Home Assistant"
 pip3 install --upgrade setuptools wheel
-pip3 install --upgrade homeassistant
+if [ "$DEV" == "true" ]; then
+  pip3 install git+https://github.com/home-assistant/home-assistant@dev
+else
+  pip3 install --upgrade homeassistant=="$newversion"
+fi
 
 echo "Deactivating virtualenv"
 deactivate
