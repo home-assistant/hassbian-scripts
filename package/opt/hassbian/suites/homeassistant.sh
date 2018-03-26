@@ -62,7 +62,7 @@ return 0
 
 function homeassistant-upgrade-package {
 if [ "$DEV" == "true"  ]; then
-  echo "This scripts downloads Home Assistant directly from the dev branch on github."
+  echo "This script downloads Home Assistant directly from the dev branch on github."
   echo "you can use this to be on the 'bleeding edge of the development of Home Assistant.'"
   echo "This is not recommended for daily use."
   echo -n "Are you really sure you want to continue? [N/y] : "
