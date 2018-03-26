@@ -5,7 +5,7 @@ function cloud9-show-short-info {
 
 function cloud9-show-long-info {
   printf "Installs Cloud9 SDK onto this system.\\n"
-  printf "Cloud9 SDK is an webservice IDE that makes it easy to manage you configuration files.\\n"
+  printf "Cloud9 SDK is an webservice IDE that makes it easy to manage your configuration files.\\n"
 }
 
 function cloud9-show-copyright-info {
