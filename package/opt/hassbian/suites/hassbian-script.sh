@@ -1,6 +1,6 @@
 #!/bin/bash
 function hassbian-script-show-short-info {
-    echo "Hassbian-Script upgrade script for Hassbian"
+    echo "Hassbian-script upgrade script for Hassbian"
 }
 
 function hassbian-script-show-long-info {
@@ -25,7 +25,7 @@ if [ "$DEV" == "true"  ]; then
     echo "Exiting..."
     return 0
   fi
-  echo "Creation and changing in to temporary folder."
+  echo "Creating and changing in to a temporary folder."
   cd || exit
   sudo mkdir /tmp/hassbian_config_update
   cd /tmp/hassbian_config_update || exit
@@ -33,7 +33,7 @@ if [ "$DEV" == "true"  ]; then
   echo "Downloading new scripts from github."
   curl -L https://api.github.com/repos/home-assistant/hassbian-scripts/tarball| sudo tar xz --strip=1
 
-  echo "Moving scripts to the correct folder."
+  echo "Moving scripts to the install folder."
   yes | sudo cp -rf /tmp/hassbian_config_update/package/usr/local/bin/hassbian-config /usr/local/bin/hassbian-config
   yes | sudo cp -rf /tmp/hassbian_config_update/package/opt/hassbian/suites/* /opt/hassbian/suites/
 
@@ -41,16 +41,16 @@ if [ "$DEV" == "true"  ]; then
   cd || exit
   sudo rm -r /tmp/hassbian_config_update
 else
-  echo "Changing to temporary folder"
+  echo "Changing to a temporary folder"
   cd /tmp || exit
 
-  echo "Downloading newest release"
+  echo "Downloading latest release"
   curl https://api.github.com/repos/home-assistant/hassbian-scripts/releases/latest | grep "browser_download_url.*deb" | cut -d : -f 2,3 | tr -d \" | wget -qi -
 
   # Setting package name
   HASSBIAN_PACKAGE=$(echo hassbian*.deb)
 
-  echo "Installing newest release"
+  echo "Installing latest release"
   sudo apt install -y /tmp/"$HASSBIAN_PACKAGE"
 
   echo "Cleanup"
