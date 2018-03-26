@@ -77,10 +77,19 @@ else
   echo "Checking current version"
   if [ "$BETA" == "true" ]; then
     newversion=$(curl -s https://pypi.python.org/pypi/homeassistant/json | grep '"version":' | awk -F'"' '{print $4}')
+  elif [ ! -z "${VERSIONNUMBER}" ]; then
+    verify=$(curl -s https://pypi.python.org/pypi/homeassistant/"$VERSIONNUMBER"/json)
+    if [[ "$verify" = *"Not Found"* ]]; then
+      echo "Version $VERSIONNUMBER not found..."
+      echo "Exiting..."
+      return 0
+    else
+      newversion="$VERSIONNUMBER"
+    fi
   else
     newversion=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases/latest | grep tag_name | awk -F'"' '{print $4}')
   fi
-  sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'|while read -r version; do if [[ "${newversion}" == "${version}" ]]; then echo "You already have the latest version: $version";exit 1;fi;done
+  sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'|while read -r version; do if [[ "${newversion}" == "${version}" ]]; then echo "You already have version: $version";exit 1;fi;done
   source /srv/homeassistant/bin/activate
   pip3 show homeassistant
 EOF
@@ -99,7 +108,7 @@ sudo -u homeassistant -H /bin/bash << EOF
 echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
-echo "Installing latest version of Home Assistant"
+echo "Upgrading Home Assistant"
 pip3 install --upgrade setuptools wheel
 if [ "$DEV" == "true" ]; then
   pip3 install git+https://github.com/home-assistant/home-assistant@dev
