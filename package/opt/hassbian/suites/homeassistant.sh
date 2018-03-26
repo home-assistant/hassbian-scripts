@@ -108,7 +108,7 @@ sudo -u homeassistant -H /bin/bash << EOF
 echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
-echo "Installing latest version of Home Assistant"
+echo "Upgrading Home Assistant"
 pip3 install --upgrade setuptools wheel
 if [ "$DEV" == "true" ]; then
   pip3 install git+https://github.com/home-assistant/home-assistant@dev
