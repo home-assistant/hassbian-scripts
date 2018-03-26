@@ -1,5 +1,5 @@
 ## Description
-Cloud9 SDK is an webservice IDE that makes it easy to manage you configuration files.
+Cloud9 SDK is an webservice IDE that makes it easy to manage your configuration files.
 
 ## Installation
 ```bash
