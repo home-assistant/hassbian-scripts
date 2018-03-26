@@ -80,7 +80,7 @@ else
   elif [ ! -z "${VERSIONNUMBER}" ]; then
     verify=$(curl -s https://pypi.python.org/pypi/homeassistant/"$VERSIONNUMBER"/json)
     if [[ "$verify" = *"Not Found"* ]]; then
-      echo "Version $VERSIONNUMBER Not found..."
+      echo "Version $VERSIONNUMBER not found..."
       echo "Exiting..."
       return 0
     else
