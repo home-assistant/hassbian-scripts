@@ -15,15 +15,16 @@ function help {
   printf "\\n"
   printf "usage: hassbian-config [command] [suite] [options]\\n"
   printf "where [command] is one of:\\n"
-  printf "%-8s\\t%s\\n" "  install" "Installs a software [suite]"
-  printf "%-8s\\t%s\\n" "  upgrade" "Upgrades a software [suite]"
-  printf "%-8s\\t%s\\n" "  show" "To see available [suite] for install/upgrade"
-  printf "%-8s\\t%s\\n" "  log" "Displays an log of the last operation"
-  printf "%-8s\\t%s\\n" "  share-log" "Generates an hastebin link of the last operation"
+  printf "%-8s\\t%s\\n" "  install" "Installs a software [suite]."
+  printf "%-8s\\t%s\\n" "  upgrade" "Upgrades a software [suite]."
+  printf "%-8s\\t%s\\n" "  show" "To see available [suite] for install/upgrade."
+  printf "%-8s\\t%s\\n" "  log" "Displays an log of the last operation."
+  printf "%-8s\\t%s\\n" "  share-log" "Generates an hastebin link of the last operation."
+  printf "%-8s\\t%s\\n" "  show-installed" "Generates a list of installed suites."
   printf "\\n"
   printf "available optional [options]:\\n"
-  printf "%-10s\\t%s\\n" " -Y | --accept" "Accept defaults on scripts that allow this"
-  printf "%-10s\\t%s\\n" " -F | --force" "Force run an script, this is useful if you need to reinstall a package"
+  printf "%-10s\\t%s\\n" " -Y | --accept" "Accept defaults on scripts that allows this."
+  printf "%-10s\\t%s\\n" " -F | --force" "Force run an script, this is useful if you need to reinstall a package."
   printf "%-10s\\t%s\\n" " -D | --debug" "This will output every comand to the console."
   printf "%-10s\\t%s\\n" " -B | --beta" "This will install the current beta version if implemented."
   printf "%-10s\\t%s\\n" " --dev" "This will install the current development version if implemented."
@@ -205,12 +206,13 @@ function verify-suite {
 
 function show-installed-suites {
   INSTALLERS=$(find $SUITE_INSTALL_DIR/ -maxdepth 1 -type f | sort | awk -F'/' ' {print $NF}' | awk -F. '{print $1}')
+  echo "These suites are installed:"
   for i in $INSTALLERS
   do
   if [ -f "$SUITE_CONTROL_DIR/$i" ]; then
     STATE=$(grep "SCRIPTSTATE=installed" $SUITE_CONTROL_DIR/"$i" | awk -F'=' '{print $2}')
     if [ "$STATE" != "" ]; then
-      echo "$i:" "$STATE"
+      echo "$i"
     fi
   fi
   done
