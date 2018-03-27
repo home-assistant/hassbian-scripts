@@ -100,6 +100,20 @@ function check-permission {
   return 0
 }
 
+function raspberry_pi_zero_check {
+## Start check for Raspberry Pi Zero
+if [ "$FORCE" != "true" ]; then
+  REVCODE=$(sudo cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}' | sed 's/^ *//g' | sed 's/ *$//g')
+  if [ "$REVCODE" = "90092" ] || [ "$REVCODE" = "90093" ] || [ "$REVCODE" = "0x9000C1" ]; then
+    if [[ "$1" =~ ^(mosquitto|homebridge|cloud9)$ ]]; then
+      echo "This suite can't be installed on Raspberry Pi Zero..."
+      exit 0
+    fi
+  fi
+fi
+## End check for Raspberry Pi Zero
+
+}
 function share-log {
   if [ ! -f $LOGFILE ];then
     echo "No logfile, exiting..."
@@ -149,6 +163,7 @@ function run-suite { #This is the function the actually run install/upgrade.
 
 function install-suite { #This function do checks if we can/want to install.
   check-permission
+  raspberry_pi_zero_check "$1"
   INSTALL=$(grep "$1"-install-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has install function.
   SUITESTATE=$(if [ -f "$SUITE_CONTROL_DIR/$1" ]; then grep "SCRIPTSTATE" "$SUITE_CONTROL_DIR/$1" | awk -F'=' '{print $2}'; else echo ""; fi) #Checking current suite state.
   if [ "$FORCE" == "true" ]; then #Go straight to run-suite if --force is used.
