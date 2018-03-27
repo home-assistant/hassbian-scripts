@@ -23,7 +23,7 @@ function help {
   printf "%-8s\\t%s\\n" "  show-installed" "Generates a list of installed suites."
   printf "\\n"
   printf "available optional [options]:\\n"
-  printf "%-10s\\t%s\\n" " -Y | --accept" "Accept defaults on scripts that allow this."
+  printf "%-10s\\t%s\\n" " -Y | --accept" "Accept defaults on scripts that allows this."
   printf "%-10s\\t%s\\n" " -F | --force" "Force run an script, this is useful if you need to reinstall a package."
   printf "%-10s\\t%s\\n" " -D | --debug" "This will output every comand to the console."
   printf "%-10s\\t%s\\n" " -B | --beta" "This will install the current beta version if implemented."
