@@ -63,9 +63,9 @@ else
   HASSBIAN_PACKAGE=$(echo hassbian*.deb)
 
   echo "Installing latest release"
-  downloadedversion=$(echo $HASSBIAN_PACKAGE | awk -F'_' '{print $2}' | cut -d . -f 1,2,3)
+  downloadedversion=$(echo "$HASSBIAN_PACKAGE" | awk -F'_' '{print $2}' | cut -d . -f 1,2,3)
   currentversion=$(hassbian-config -V)
-  if [ "$currentversion" > "$downloadedversion" ]; then
+  if [[ "$currentversion" > "$downloadedversion" ]]; then
     apt install -y /tmp/"$HASSBIAN_PACKAGE" --allow-downgrades
   else
     apt install -y /tmp/"$HASSBIAN_PACKAGE" --reinstall
