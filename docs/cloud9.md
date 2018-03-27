@@ -1,6 +1,8 @@
 ## Description
 Cloud9 SDK is an webservice IDE that makes it easy to manage your configuration files.
 
+*This suite can't be installed on Raspberry Pi Zero*  
+
 ## Installation
 ```bash
 $ sudo hassbian-config install cloud9
