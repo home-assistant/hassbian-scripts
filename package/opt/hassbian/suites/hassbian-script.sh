@@ -60,7 +60,6 @@ else
     curl https://api.github.com/repos/home-assistant/hassbian-scripts/releases/latest | grep "browser_download_url.*deb" | cut -d : -f 2,3 | tr -d \" | wget -qi -
   fi
 
-  # Setting package name
   HASSBIAN_PACKAGE=$(echo hassbian*.deb)
 
   echo "Installing latest release"
