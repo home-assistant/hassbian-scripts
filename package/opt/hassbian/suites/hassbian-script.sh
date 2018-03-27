@@ -45,14 +45,31 @@ else
   cd /tmp || exit
 
   echo "Downloading latest release"
-  curl https://api.github.com/repos/home-assistant/hassbian-scripts/releases/latest | grep "browser_download_url.*deb" | cut -d : -f 2,3 | tr -d \" | wget -qi -
+  if [ "$BETA" == "true"  ]; then
+    echo "Checking if there is an prerelease available..."
+    prerelease=$(curl https://api.github.com/repos/home-assistant/hassbian-scripts/releases | grep '"prerelease": true')
+    if [ ! -z "${prerelease}" ]; then
+      echo "Prerelease found..."
+      curl https://api.github.com/repos/home-assistant/hassbian-scripts/releases | grep "browser_download_url.*deb" | head -1 | cut -d : -f 2,3 | tr -d \" | wget -qi -
+    else
+      echo "Prerelease not found..."
+      echo "Downloading latest stable version..."
+      curl https://api.github.com/repos/home-assistant/hassbian-scripts/releases/latest | grep "browser_download_url.*deb" | cut -d : -f 2,3 | tr -d \" | wget -qi -
+    fi
+  else
+    curl https://api.github.com/repos/home-assistant/hassbian-scripts/releases/latest | grep "browser_download_url.*deb" | cut -d : -f 2,3 | tr -d \" | wget -qi -
+  fi
 
-  # Setting package name
   HASSBIAN_PACKAGE=$(echo hassbian*.deb)
 
   echo "Installing latest release"
-  sudo apt install -y /tmp/"$HASSBIAN_PACKAGE"
-
+  downloadedversion=$(echo "$HASSBIAN_PACKAGE" | awk -F'_' '{print $2}' | cut -d . -f 1,2,3)
+  currentversion=$(hassbian-config -V)
+  if [[ "$currentversion" > "$downloadedversion" ]]; then
+    apt install -y /tmp/"$HASSBIAN_PACKAGE" --allow-downgrades
+  else
+    apt install -y /tmp/"$HASSBIAN_PACKAGE" --reinstall
+  fi
   echo "Cleanup"
   rm "$HASSBIAN_PACKAGE"
 fi

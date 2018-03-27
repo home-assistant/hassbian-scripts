@@ -38,6 +38,11 @@ $ sudo apt install -y ./hassbian*
 $ sudo hassbian-config upgrade hassbian-script
 ```
 
+## Upgrade to prerelease
+```
+$ sudo hassbian-config upgrade hassbian-script --beta
+```
+
 ## Upgrade to dev branch
 ```
 $ sudo hassbian-config upgrade hassbian-script --dev
