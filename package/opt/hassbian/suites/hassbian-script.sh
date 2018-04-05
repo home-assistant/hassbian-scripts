@@ -73,6 +73,9 @@ else
   echo "Cleanup"
   rm "$HASSBIAN_PACKAGE"
 fi
+
+systemctl daemon-reload
+
 echo
 echo "Upgrade is now done."
 echo
