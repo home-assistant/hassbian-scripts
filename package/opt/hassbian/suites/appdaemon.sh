@@ -24,6 +24,10 @@ else
   HOMEASSISTANT_PASSWORD=""
 fi
 
+echo "Checking python version to use..."
+PYTHONVER=$(echo /usr/local/lib/*python* | awk -F/ '{print $NF}')
+echo "Using $PYTHONVER..."
+
 echo "Creating directory for AppDaemon Venv"
 sudo mkdir /srv/appdaemon
 sudo chown -R homeassistant:homeassistant /srv/appdaemon
@@ -32,7 +36,7 @@ echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
 
 echo "Creating AppDaemon venv"
-python3 -m venv /srv/appdaemon
+$PYTHONVER -m venv /srv/appdaemon
 
 echo "Changing to AppDaemon venv"
 source /srv/appdaemon/bin/activate
