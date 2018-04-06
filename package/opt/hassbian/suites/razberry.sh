@@ -22,19 +22,24 @@ if [[ $RPI_BOARD_REVISION ==  "a02082" || $RPI_BOARD_REVISION == "a22082" ]]
 then
   echo "Raspberry Pi 3 Detected. Disabling Bluetooth"
   systemctl disable hciuart
-  if grep -q "dtoverlay=pi3-miniuart-bt" /boot/config.txt
+  if ! grep -q "dtoverlay=pi3-miniuart-bt" /boot/config.txt
   then
     echo "Adding 'dtoverlay=pi3-miniuart-bt' to /boot/config.txt"
     echo "dtoverlay=pi3-miniuart-bt" >> /boot/config.txt
   fi
 fi
 
-echo
-echo "Installation done."
-echo
-echo "To continue have a look at https://home-assistant.io/components/emulated_hue/"
-echo
+validation=$(grep "dtoverlay=pi3-miniuart-bt" /boot/config.txt)
+if [ ! -z "${validation}" ]; then
+  echo
+  echo -e "\\e[32mInstallation done..\\e[0m"
+  echo
+else
+  echo
+  echo -e "\\e[31mInstallation failed..."
+  echo
+  return 1
+fi
 return 0
 }
-
 [[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"
