@@ -99,8 +99,6 @@ EOF
     exit 1
   fi
 fi
-echo "Stopping Home Assistant"
-systemctl stop home-assistant@homeassistant.service
 
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
@@ -121,7 +119,7 @@ deactivate
 EOF
 
 echo "Restarting Home Assistant"
-systemctl start home-assistant@homeassistant.service
+systemctl restart home-assistant@homeassistant.service
 
 echo "Checking the installation..."
 validation=$(pgrep -x hass)
