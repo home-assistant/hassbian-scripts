@@ -23,7 +23,7 @@ $ sudo hassbian-config upgrade homeassistant --beta
 $ sudo hassbian-config upgrade homeassistant --dev
 ```
 
-## Upgrade to to a spesific version
+## Upgrade to to a specific version
 ```
 $ sudo hassbian-config upgrade homeassistant=0.65.6
 ```
