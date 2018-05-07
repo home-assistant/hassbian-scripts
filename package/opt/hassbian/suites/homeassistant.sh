@@ -75,10 +75,8 @@ if [ "$DEV" == "true"  ]; then
   fi
 else
   echo "Checking current version"
-  if [ "$BETA" == "true" ]; then
-    newversion=$(curl -s https://pypi.python.org/pypi/homeassistant/json | grep '"version":' | awk -F'"' '{print $4}')
-  elif [ ! -z "${VERSIONNUMBER}" ]; then
-    verify=$(curl -s https://pypi.python.org/pypi/homeassistant/"$VERSIONNUMBER"/json)
+  if [ ! -z "${VERSIONNUMBER}" ]; then
+    verify=$(curl -s https://pypi.org/pypi/homeassistant/"$VERSIONNUMBER"/json)
     if [[ "$verify" = *"Not Found"* ]]; then
       echo "Version $VERSIONNUMBER not found..."
       echo "Exiting..."
@@ -110,6 +108,8 @@ echo "Upgrading Home Assistant"
 pip3 install --upgrade setuptools wheel
 if [ "$DEV" == "true" ]; then
   pip3 install git+https://github.com/home-assistant/home-assistant@dev
+elif [ "$BETA" == "true" ]; then
+  pip3 install --upgrade --pre homeassistant
 else
   pip3 install --upgrade homeassistant=="$newversion"
 fi
