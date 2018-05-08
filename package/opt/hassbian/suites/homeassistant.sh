@@ -76,16 +76,7 @@ if [ "$DEV" == "true"  ]; then
 else
   echo "Checking current version"
   if [ "$BETA" == "true"  ]; then
-  echo "Checking if there is an prerelease available..."
-  prerelease=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases | grep '"prerelease": true')
-  if [ ! -z "${prerelease}" ]; then
-    echo "Prerelease found..."
-    newversion=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases | grep tag_name | head -1 | awk -F'"' '{print $4}')
-  else
-    echo "Prerelease not found..."
-    echo "Trying latest stable version..."
-    newversion=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases/latest | grep tag_name | awk -F'"' '{print $4}')
-  fi
+  newversion=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases | grep tag_name | head -1 | awk -F'"' '{print $4}')
   elif [ ! -z "${VERSIONNUMBER}" ]; then
     verify=$(curl -s https://pypi.org/pypi/homeassistant/"$VERSIONNUMBER"/json)
     if [[ "$verify" = *"Not Found"* ]]; then
