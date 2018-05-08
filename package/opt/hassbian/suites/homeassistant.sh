@@ -75,7 +75,9 @@ if [ "$DEV" == "true"  ]; then
   fi
 else
   echo "Checking current version"
-  if [ ! -z "${VERSIONNUMBER}" ]; then
+  if [ "$BETA" == "true"  ]; then
+  newversion=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases | grep tag_name | head -1 | awk -F'"' '{print $4}')
+  elif [ ! -z "${VERSIONNUMBER}" ]; then
     verify=$(curl -s https://pypi.org/pypi/homeassistant/"$VERSIONNUMBER"/json)
     if [[ "$verify" = *"Not Found"* ]]; then
       echo "Version $VERSIONNUMBER not found..."
