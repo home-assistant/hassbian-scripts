@@ -25,7 +25,7 @@ fi
 
 echo "Installing Node-RED for Home Assistant"
 sudo npm install -g --unsafe-perm node-red
-cd ~/.node-red
+cd ~/.node-red || exit
 npm install node-red-contrib-home-assistant
 
 echo "Enabling Node-RED service"
