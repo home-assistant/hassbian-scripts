@@ -48,7 +48,7 @@ if [ ! -z "${validation}" ]; then
   echo
   echo -e "\\e[32mInstallation done...\\e[0m"
   echo "Your Node-RED installation is running at $ip_address:1880"
-  echo "You can use node-red-start/stop launch or stop service easily."
+  echo "You can use node-red-start/stop to launch or stop service easily."
 else
   echo
   echo -e "\\e[31mInstallation failed..."
