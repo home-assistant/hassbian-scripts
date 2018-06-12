@@ -1,5 +1,5 @@
 ## Description
-This is a copy of the installation script run during first boot of your Raspberry Pi with the [Hassbian image](https://github.com/home-assistant/pi-gen/releases/latest)  
+This is a copy of the installation script run during first boot of your Raspberry Pi with the [Hassbian image](https://github.com/home-assistant/pi-gen/releases/latest)\
 And an easy way to upgrade Home Assistant to the newest version.
 
 ## Installation
@@ -29,12 +29,16 @@ $ sudo hassbian-config upgrade homeassistant=0.65.6
 ```
 
 ## Additional info
-Running as: `homeassistant`  
-Configuration dir: `/home/homeassistant/.homeassistant/`  
-Start service: `sudo systemctl start home-assistant@homeassistant.service`  
-Stop service: `sudo systemctl stop home-assistant@homeassistant.service`  
-Restart service: `sudo systemctl restart home-assistant@homeassistant.service`  
-Service status: `sudo systemctl status home-assistant@homeassistant.service`  
+Description | Command/value
+:--- | :---
+Running as: | homeassistant
+Configuration dir: | /home/homeassistant/.homeassistant/
+Start service: | `sudo systemctl start home-assistant@homeassistant.service`
+Stop service: | `sudo systemctl stop home-assistant@homeassistant.service`
+Restart service: | `sudo systemctl restart home-assistant@homeassistant.service`
+Service status: | `sudo systemctl status home-assistant@homeassistant.service`
+|
+
 Enter the virtual environment where Home Assistant is installed as `homeassistant`:
 ```
 sudo su -s /bin/bash homeassistant

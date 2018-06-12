@@ -8,8 +8,8 @@ $ sudo hassbian-config install libcec
 ```
 
 ## Upgrade
-No script available, maybe you could write one?  
-If so, add an PR here when you are done:  
+No script available, maybe you could write one?\
+If so, add an PR here when you are done:\
 [homeassistant/hassbian-scripts](https://github.com/home-assistant/hassbian-scripts/pulls)
 
 ## Additional info

@@ -7,10 +7,13 @@ $ sudo hassbian-config upgrade hassbian
 ```
 
 ## Additional info
-Default username: `pi`  
-Default password: `raspberry`  
-Hostname: `hassbian`  
-SSH enabled: `true`  
+Description | Command/value
+:--- | :---
+Running as: | pi
+Default password: | raspberry
+Hostname: | hassbian
+SSH enabled: | true
+|
 
 ***
 This script was originally contributed by [@Landrash](https://github.com/Landrash).
