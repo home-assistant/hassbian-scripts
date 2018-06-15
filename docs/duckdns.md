@@ -1,5 +1,5 @@
 ## Description
-This script adds an cron job to auto update you the WAN IP address for the defined domain.
+This script adds an cron job to auto update you the WAN IP address for the defined domain.\
 Before running this script you should already have an Duck DNS account, during the installation you will be asked to supply your domain name and the token for your account.
 
 ## Installation

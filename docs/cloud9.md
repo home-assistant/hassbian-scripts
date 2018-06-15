@@ -1,7 +1,7 @@
 ## Description
 Cloud9 SDK is an webservice IDE that makes it easy to manage your configuration files.
 
-*This suite can't be installed on Raspberry Pi Zero*  
+*This suite can't be installed on Raspberry Pi Zero*
 
 ## Installation
 ```bash
@@ -14,13 +14,16 @@ $ sudo hassbian-config upgrade cloud9
 ```
 
 ## Additional info
-Running as: `homeassistant`
-Default workspace: `/home/homeassistant/`    
-Default port: `8181`  
-Start service: `sudo systemctl start cloud9@homeassistant.service`  
-Stop service: `sudo systemctl stop cloud9@homeassistant.service`  
-Restart service: `sudo systemctl restart cloud9@homeassistant.service`  
-Service status: `sudo systemctl status cloud9@homeassistant.service`
+Description | Command/value
+:--- | :---
+Running as: | homeassistant
+Default workspace: | /home/homeassistant/
+Default port: | 8181
+Start service: | `sudo systemctl start cloud9@homeassistant.service`
+Stop service: | `sudo systemctl stop cloud9@homeassistant.service`
+Restart service: | `sudo systemctl restart cloud9@homeassistant.service`
+Service status: | `sudo systemctl status cloud9@homeassistant.service`
+|
 
 ***
 This script was originally contributed by [@Ludeeus](https://github.com/ludeeus).

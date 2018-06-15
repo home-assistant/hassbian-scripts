@@ -1,5 +1,5 @@
 ## Description
-This Installs AppDaemon in a separate Venv onto this system.  
+This Installs AppDaemon in a separate Venv onto this system.\
 For more information about AppDaemon see the [documentation.](http://appdaemon.readthedocs.io/en/latest/)
 
 ## Installation
@@ -13,12 +13,16 @@ $ sudo hassbian-config upgrade appdaemon
 ```
 
 ## Additional info
-Running as: `homeassistant`  
-Configuration dir: `/home/homeassistant/appdaemon/`  
-Start service: `sudo systemctl start appdaemon@homeassistant.service`  
-Stop service: `sudo systemctl stop appdaemon@homeassistant.service`  
-Restart service: `sudo systemctl restart appdaemon@homeassistant.service`  
-Service status: `sudo systemctl status appdaemon@homeassistant.service`  
+Description | Command/value
+:--- | :---
+Running as: | homeassistant
+Configuration dir: | /home/homeassistant/appdaemon/
+Start service: | `sudo systemctl start appdaemon@homeassistant.service`
+Stop service: | `sudo systemctl stop appdaemon@homeassistant.service`
+Restart service: | `sudo systemctl restart appdaemon@homeassistant.service`
+Service status: | `sudo systemctl status appdaemon@homeassistant.service`
+|
+
 Enter the virtual environment where AppDaemon is installed as `homeassistant`:
 ```bash
 $ sudo su -s /bin/bash homeassistant
