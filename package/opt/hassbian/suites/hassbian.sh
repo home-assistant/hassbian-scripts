@@ -97,7 +97,7 @@ function check_packages () {
   if [[ "$count" -eq "0" ]]; then
     echo "No available updates on the following device: $(cat /etc/hostname)"
   else
-    printf "$count available updates on the following device: $(cat /etc/hostname)\\nHere is the package list\\n $packagelist\\n"
+    printf "%s available updates on the following device: %s\\nHere is the package list\\n%s\\n" "$count" "$(cat /etc/hostname)" "$packagelist"
     upgrade_process
     sleep 10
   fi 
