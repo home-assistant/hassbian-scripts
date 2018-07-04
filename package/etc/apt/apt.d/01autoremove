@@ -4,6 +4,8 @@ APT
   {
 	"^firmware-linux.*";
 	"^linux-firmware$";
+	"^hassbian-scripts$";
+	"^raspberrypi-kernel$";
   };
 
   VersionedKernelPackages
