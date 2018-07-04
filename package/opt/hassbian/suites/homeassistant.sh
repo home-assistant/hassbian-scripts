@@ -120,6 +120,34 @@ echo "Deactivating virtualenv"
 deactivate
 EOF
 
+if [ "$FORCE" != "true"  ]; then
+  current_version=$(cat /home/homeassistant/.homeassistant/.HA_VERSION)
+  config_check=$(sudo -u homeassistant -H /bin/bash << EOF
+  source /srv/homeassistant/bin/activate
+  hass --script check_config -c /home/homeassistant/.homeassistant/
+EOF
+  )
+  config_check_lines=$(echo "$config_check" | wc -l)
+  if (( config_check_lines > 1 ));then
+    if [ "$ACCEPT" != "true" ]; then
+      echo -n "Config check failed for new version, do you want to revert? [Y/n] : "
+      read -r 
+      if [ ! "$RESPONSE" ]; then
+        RESPONSE="Y"
+      fi
+    else
+      RESPONSE="Y"
+    fi
+    if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
+      sudo -u homeassistant -H /bin/bash << EOF
+      source /srv/homeassistant/bin/activate
+      pip3 install --upgrade homeassistant=="$current_version"
+      deactivate
+EOF
+    fi
+  fi
+fi
+
 echo "Restarting Home Assistant"
 systemctl restart home-assistant@homeassistant.service
 
@@ -127,7 +155,7 @@ echo "Checking the installation..."
 validation=$(pgrep -x hass)
 if [ ! -z "${validation}" ]; then
   echo
-  echo -e "\\e[32mUpgrade complete..\\e[0m"
+  echo -e "\\e[32mUpgrade script completed..\\e[0m"
   echo "Note that it may take some time to start up after an upgrade."
   echo
 else
