@@ -5,6 +5,7 @@ This script will upgrade Python to the latest stable version.\
 It will also create a new virtual environment to be used for Home Assistant.\
 _This upgrade takes long time to finish._\
 _This prosess takes about a hour on an Raspberry Pi 3_
+_There are issues with 3.7.x and Home Assistant, this script has an limit of version 3.6.6_
 
 ## Upgrade
 ```

@@ -31,8 +31,9 @@ else
   return 0
 fi
 
-PYTHONVERSION=$(curl -s https://www.python.org/downloads/source/ | grep "Latest Python 3 Release" | cut -d "<" -f 3 | awk -F ' ' '{print $NF}')
-
+# PYTHONVERSION=$(curl -s https://www.python.org/downloads/source/ | grep "Latest Python 3 Release" | cut -d "<" -f 3 | awk -F ' ' '{print $NF}')
+# Latest (3.7.0) break parts of Home Assistant.
+PYTHONVERSION=3.6.6
 echo "Checking current version..."
 currentpython=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
 source /srv/homeassistant/bin/activate
