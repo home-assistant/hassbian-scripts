@@ -54,10 +54,6 @@ source /srv/homeassistant/bin/activate
 
 When you are done, type `exit` to return to the `pi` user.
 
-***
-The installation script was originally contributed by [@Landrash](https://github.com/landrash).  
-The upgrade scripts was originally contributed by [@Ludeeus](https://github.com/ludeeus).
-
 ## Included bash aliases
 
 ### For the user `pi`
@@ -77,3 +73,7 @@ Alias | Command
 :--- | :---
 hacheckconf | `source /srv/homeassistant/bin/activate;hass --script check_config`
 hapyshell | `source /srv/homeassistant/bin/activate;cd ~/.homeassistant`
+
+***
+The installation script was originally contributed by [@Landrash](https://github.com/landrash).  
+The upgrade scripts was originally contributed by [@Ludeeus](https://github.com/ludeeus).
