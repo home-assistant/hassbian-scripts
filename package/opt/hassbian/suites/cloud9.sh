@@ -30,6 +30,9 @@ sudo -u homeassistant -H /bin/bash << EOF
   git clone git://github.com/c9/core.git /opt/c9sdk
   bash /opt/c9sdk/scripts/install-sdk.sh
   echo '{"projecttree": {"@showhidden": true,"@hiddenFilePattern": ".n*,*c9*,.b*,.p*,.w*,*.db"}}' | tee /home/homeassistant/.c9/user.settings
+  mkdir /home/homeassistant/c9workspace
+  ln -s /home/homeassistant/.homeassistant/ /home/homeassistant/c9workspace
+  mv /home/homeassistant/.homeassistant /home/homeassistant/homeassistant
 EOF
 
 echo "Copying Cloud9 service file..."
