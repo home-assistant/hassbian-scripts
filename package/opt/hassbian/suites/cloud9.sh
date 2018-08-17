@@ -33,7 +33,7 @@ sudo -u homeassistant -H /bin/bash << EOF
   mkdir /home/homeassistant/c9workspace
   ln -s /home/homeassistant/.homeassistant/ /home/homeassistant/c9workspace
   ln -s /home/homeassistant/.c9 /home/homeassistant/c9workspace
-  mv /home/homeassistant/.homeassistant /home/homeassistant/homeassistant
+  mv /home/homeassistant/c9workspace/.homeassistant /home/homeassistant/c9workspace/homeassistant
 EOF
 
 echo "Copying Cloud9 service file..."
