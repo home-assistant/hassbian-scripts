@@ -75,6 +75,7 @@ EOF
 
 if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
   cp /opt/hassbian/suites/files/dehydrated_cron /etc/cron.daily/dehydrated
+  chmod +x /etc/cron.daily/dehydrated
 fi
 
 echo "Restarting cron service..."
