@@ -29,11 +29,12 @@ sudo -u homeassistant -H /bin/bash << EOF
   printf "Downloading and installing Cloud9 SDK...\\n"
   git clone git://github.com/c9/core.git /opt/c9sdk
   bash /opt/c9sdk/scripts/install-sdk.sh
-  echo '{"projecttree": {"@showhidden": false,"@hiddenFilePattern": ".n*,*c9*,.b*,.p*,.w*,*.db"}}' | tee /home/homeassistant/.c9/user.settings
-  mkdir /home/homeassistant/c9workspace
-  ln -s /home/homeassistant/.homeassistant/ /home/homeassistant/c9workspace
-  ln -s /home/homeassistant/.c9 /home/homeassistant/c9workspace
-  mv /home/homeassistant/c9workspace/.homeassistant /home/homeassistant/c9workspace/homeassistant
+  echo "Creating workspace for Cloud9."
+  mkdir -p /home/homeassistant/c9workspace/.c9
+  echo "Create default config."
+  echo '{"projecttree": {"@showhidden": false,"@hiddenFilePattern": ".*,.n*,*c9*,.b*,.p*,.w*,*.db"}}' | tee /home/homeassistant/c9workspace/.c9/user.settings
+  echo "Symlinking /home/homeassistant/.homeassistant to the workspace."
+  ln -s /home/homeassistant/.homeassistant/ /home/homeassistant/c9workspace/homeassistant
 EOF
 
 echo "Copying Cloud9 service file..."
@@ -98,6 +99,7 @@ rm /etc/systemd/system/cloud9@homeassistant.service
 sync
 bash /opt/c9sdk/scripts/uninstall-c9.sh
 rm -R /opt/c9sdk
+rm -R /home/homeassistant/c9workspace
 
 printf "\\e[32mRemoval done..\\e[0m\\n"
 }
