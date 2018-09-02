@@ -1,5 +1,5 @@
 #!/bin/bash
-# Updates run the dehydrated script to renew certificates
+# Run the dehydrated script to renew certificates
 
 echo "Changing to homeassistant user..."
 sudo -u homeassistant -H /bin/bash << EOF
