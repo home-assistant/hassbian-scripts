@@ -70,12 +70,12 @@ chmod 700 duck.sh
 
 echo "Creating cron job..."
 (crontab -l ; echo "*/5 * * * * /home/homeassistant/duckdns/duck.sh >/dev/null 2>&1")| crontab -
-if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
-(crontab -l ; echo "0 1 1 * * /home/homeassistant/dehydrated/dehydrated -c")| crontab -
-fi
 
-echo "Changing to root user..."
 EOF
+
+if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
+  cp /opt/hassbian/suites/files/dehydrated_cron /etc/cron.daily/dehydrated
+fi
 
 echo "Restarting cron service..."
 sudo systemctl restart cron.service
