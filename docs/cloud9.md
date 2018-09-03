@@ -17,7 +17,7 @@ $ sudo hassbian-config upgrade cloud9
 Description | Command/value
 :--- | :---
 Running as: | homeassistant
-Default workspace: | /home/homeassistant/
+Default workspace: | /home/homeassistant/c9workspace/
 Default port: | 8181
 Start service: | `sudo systemctl start cloud9@homeassistant.service`
 Stop service: | `sudo systemctl stop cloud9@homeassistant.service`
