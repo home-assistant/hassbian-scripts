@@ -12,7 +12,6 @@ The following scripts are currently included. You can view the documentation bel
   * [Duck DNS](/docs/duckdns.md)
   * [Hassbian](/docs/hassbian.md)
   * [Home Assistant](/docs/homeassistant.md)
-  * [Homebridge](/docs/homebridge.md)
   * [HUE](/docs/hue.md)
   * [LibCEC](/docs/libcec.md)
   * [MariaDB](/docs/mariadb.md)
