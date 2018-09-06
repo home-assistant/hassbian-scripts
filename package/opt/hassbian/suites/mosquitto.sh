@@ -93,8 +93,6 @@ if [ ! -z "${validation}" ]; then
   echo "Your MQTT broker is running at $ip_address:1883 or if preferred hassbian.local:1883"
   echo ""
   echo "To continue have a look at https://home-assistant.io/docs/mqtt/"
-  echo "For more information see this repo:"
-  echo "https://github.com/home-assistant/homebridge-homeassistant#customization"
   echo
 else
   echo
