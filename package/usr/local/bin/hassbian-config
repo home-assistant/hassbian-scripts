@@ -16,7 +16,8 @@ function help {
   printf "usage: hassbian-config [command] [suite] [options]\\n"
   printf "where [command] is one of:\\n"
   printf "%-8s\\t%s\\n" "  install" "Installs a software [suite]."
-  printf "%-8s\\t%s\\n" "  upgrade" "Upgrades a software [suite]."
+  printf "%-8s\\t%s\\n" "  upgrade" "Upgrades software [suite]."
+  printf "%-8s\\t%s\\n" "  remove" "Remove software [suite]."
   printf "%-8s\\t%s\\n" "  show" "To see available [suite] for install/upgrade."
   printf "%-8s\\t%s\\n" "  log" "Displays an log of the last operation."
   printf "%-8s\\t%s\\n" "  share-log" "Generates an hastebin link of the last operation."
@@ -184,7 +185,7 @@ function install-suite { #This function do checks if we can/want to install.
   return 0
 }
 
-function upgrade-suite { #This function do checks if we can to upgrade.
+function upgrade-suite { #This function do checks if we can upgrade.
   check-permission
   UPGRADE=$(grep "$1"-upgrade-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has upgrade function.
   if [ "$UPGRADE" == "" ]; then
@@ -192,6 +193,17 @@ function upgrade-suite { #This function do checks if we can to upgrade.
     return 0
   fi
   run-suite upgrade "$1" | tee "$LOGFILE" #This is the default run.
+  return 0
+}
+
+function remove-suite { #This function do checks if we can remove.
+  check-permission
+  REMOVABLE=$(grep "$1"-remove-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has remove function.
+  if [ "$REMOVABLE" == "" ]; then
+    printf "Remove function not avaialable for this suite.\\n"
+    return 0
+  fi
+  run-suite remove "$1" | tee "$LOGFILE" #This is the default run.
   return 0
 }
 
@@ -281,6 +293,15 @@ case $COMMAND in
     fi
     if verify-suite "$SUITE"; then
       RUN="upgrade-suite $SUITE"
+    else
+      RUN="echo suite $SUITE doesn't exist."
+    fi
+    shift # past argument
+    shift # past value
+    ;;
+  "remove")
+    if verify-suite "$SUITE"; then
+      RUN="remove-suite $SUITE"
     else
       RUN="echo suite $SUITE doesn't exist."
     fi

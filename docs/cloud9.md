@@ -13,6 +13,11 @@ $ sudo hassbian-config install cloud9
 $ sudo hassbian-config upgrade cloud9
 ```
 
+## Remove
+```bash
+$ sudo hassbian-config remove cloud9
+```
+
 ## Additional info
 Description | Command/value
 :--- | :---
