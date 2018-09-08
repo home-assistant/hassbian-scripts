@@ -1,10 +1,10 @@
 #!/bin/bash
 function cloud9-show-short-info {
-  printf "Cloud9 install script for Hassbian.\\n"
+  printf "Cloud9 script for Hassbian.\\n"
 }
 
 function cloud9-show-long-info {
-  printf "Installs Cloud9 SDK onto this system.\\n"
+  printf "Cloud9 script for Hassbian.\\n"
   printf "Cloud9 SDK is an webservice IDE that makes it easy to manage your configuration files.\\n"
 }
 
