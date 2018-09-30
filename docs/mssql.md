@@ -1,26 +1,40 @@
-## Description
-This script installs the tools needed to connect to a MS SQL database and it's dependencies for use with the recorder component in Home Assistant. No database or database user is created during this setup and will need to be created manually.
+# MS SQL
+
+This script installs the tools needed to connect to a MS SQL database
+and it's dependencies for use with the [recorder][recorder] component in
+Home Assistant. No database or database user is created during this setup and
+will need to be created manually.
 
 ## Installation
-```
-$ sudo hassbian-config install mssql
+
+```bash
+sudo hassbian-config install mssql
 ```
 
 ## Upgrade
+
 No script available, maybe you could write one?  
-If so, add an PR here when you are done:\
-[homeassistant/hassbian-scripts](https://github.com/home-assistant/hassbian-scripts/pulls)
+If so, add an PR here when you are done:  
+[homeassistant/hassbian-scripts][repo]
 
 ## Additional info
+
 Example for creating database:
-```
-$ sudo mysql -u root -p
-$ CREATE DATABASE homeassistant;
-$ CREATE USER 'homeassistantuser' IDENTIFIED BY 'password';
-$ GRANT ALL PRIVILEGES ON homeassistant.* TO 'homeassistantuser';
-$ FLUSH PRIVILEGES;
-$ exit
+
+```sql
+sudo mysql -u root -p
+CREATE DATABASE homeassistant;
+CREATE USER 'homeassistantuser' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON homeassistant.* TO 'homeassistantuser';
+FLUSH PRIVILEGES;
+exit
 ```
 
 ***
-This script was originally contributed by [@Landrash](https://github.com/Landrash).
+
+The installation script was originally contributed by [@Landrash][landrash].
+
+<!--- Links --->
+[landrash]: https://github.com/landrash
+[recorder]: https://www.home-assistant.io/components/recorder
+[repo]: https://github.com/home-assistant/hassbian-scripts/pulls

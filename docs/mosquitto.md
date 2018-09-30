@@ -22,7 +22,7 @@ If so, add an PR here when you are done:
 
 Description | Command/value
 :--- | :---
-Running as: | root 
+Running as: | root
 Default username: | pi
 Default password: | raspberry
 Default port: | 1883
