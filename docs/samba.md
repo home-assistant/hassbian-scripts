@@ -1,4 +1,4 @@
-## Samba
+# Samba
 
 After this script has been run, the configuration directory used by
 Home Assistant is available over Samba and can be accessed from example
@@ -33,3 +33,4 @@ This script was originally contributed by [@Landrash][landrash].
 
 <!--- Links --->
 [landrash]: https://github.com/Landrash
+[repo]: https://github.com/home-assistant/hassbian-scripts/pulls

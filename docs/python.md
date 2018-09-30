@@ -21,6 +21,7 @@ If you have installed additional components directly to `/srv/homeassistant/`
 like `libcec` thoese will need to be reinstalled.
 
 ***
+
 This script was originally contributed by [@Ludeeus][ludeeus].
 With inspiration from [blog.ceard.tech][blog].
 
