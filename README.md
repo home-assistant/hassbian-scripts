@@ -21,6 +21,7 @@ The following scripts are currently included. You can view the documentation bel
   * [RaZberry ](/docs/razberry.md)
   * [Samba](/docs/samba.md)
   * [Trådfri](/docs/tradfri.md)
+  * [Webmin](/docs/webmin.md)
   * [Webterminal](/docs/webterminal.md)
 * [Changelog](https://github.com/home-assistant/hassbian-scripts/releases)
 
