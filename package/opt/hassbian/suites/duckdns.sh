@@ -111,7 +111,7 @@ fi
 return 0
 }
 
-function duckdns-install-package {
+function duckdns-remove-package {
   echo "Removing certificates if installed."
   rm -R /home/homeassistant/dehydrated >/dev/null 2>&1
 
