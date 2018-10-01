@@ -131,7 +131,7 @@ EOF
   if (( config_check_lines > 1 ));then
     if [ "$ACCEPT" != "true" ]; then
       echo -n "Config check failed for new version, do you want to revert? [Y/n] : "
-      read -r 
+      read -r RESPONSE
       if [ ! "$RESPONSE" ]; then
         RESPONSE="Y"
       fi
