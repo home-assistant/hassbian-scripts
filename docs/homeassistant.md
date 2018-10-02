@@ -1,6 +1,7 @@
-## Description
+# Home Assistant
 
-This is a copy of the installation script run during first boot of your Raspberry Pi with the [Hassbian image](https://github.com/home-assistant/pi-gen/releases/latest)\
+This is a copy of the installation script run during first
+boot of your Raspberry Pi with the [Hassbian image][hassbian-image]  
 And an easy way to upgrade Home Assistant to the newest version.
 
 ## Installation
@@ -36,6 +37,7 @@ sudo hassbian-config upgrade homeassistant=0.65.6
 ```
 
 ## Additional info
+
 Description | Command/value
 :--- | :---
 Running as: | homeassistant
@@ -75,5 +77,11 @@ hacheckconf | `source /srv/homeassistant/bin/activate;hass --script check_config
 hapyshell | `source /srv/homeassistant/bin/activate;cd ~/.homeassistant`
 
 ***
-The installation script was originally contributed by [@Landrash](https://github.com/landrash).  
-The upgrade scripts was originally contributed by [@Ludeeus](https://github.com/ludeeus).
+
+The installation script was originally contributed by [@Landrash][landrash].  
+The upgrade script was originally contributed by [@Ludeeus][ludeeus].
+
+<!--- Links --->
+[hassbian-image]: https://github.com/home-assistant/pi-gen/releases/latest
+[landrash]: https://github.com/landrash
+[ludeeus]: https://github.com/ludeeus
