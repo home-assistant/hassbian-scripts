@@ -111,4 +111,18 @@ fi
 return 0
 }
 
+function duckdns-remove-package {
+  echo "Removing certificates if installed."
+  rm -R /home/homeassistant/dehydrated >/dev/null 2>&1
+
+  echo "Removing cron jobs"
+  rm /etc/cron.daily/dehydrated >/dev/null 2>&1
+  crontab -u homeassistant -l | grep -v 'duck.sh'  | crontab -u homeassistant -
+
+  echo
+  echo -e "\\e[32mRemoval done..\\e[0m"
+  echo
+  return 0
+}
+
 [[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead"

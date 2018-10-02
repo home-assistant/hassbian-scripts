@@ -7,6 +7,11 @@ Before running this script you should already have an Duck DNS account, during t
 $ sudo hassbian-config install duckdns
 ```
 
+# Remove
+```bash
+sudo hassbian-config remove duckdns
+```
+
 ## Additional info
 Running as: `homeassistant`  
 
