@@ -8,7 +8,7 @@ After=network.target
 
 [Service]
 ExecStartPre=/usr/local/bin/hassbian-config upgrade hassbian-script
-ExecStart=/usr/local/bin/hassbian-config install homeassistant
+ExecStart=/usr/local/bin/hassbian-config install homeassistant --force
 
 [Install]
 WantedBy=multi-user.target
