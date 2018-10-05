@@ -15,6 +15,7 @@ hassbian-config *command* *suite* *flag(optional)*
 ```
 
 where `*command*` is one of:
+
 Command | Description
 :--- | :---
 `install` | Use this to install an suite.
@@ -25,6 +26,7 @@ Command | Description
 `show-installed` | Generates a list of installed suites.
 
 **Optional flags:**
+
 Flag | Alt. flag | Description
 :--- | :--- | :---
 `--accept` | `-Y` | This will accept defaults on scripts that allow this.
@@ -34,6 +36,7 @@ Flag | Alt. flag | Description
 `--dev` | | This will install the current development version if implemented.
 
 **Other available commands:**
+
 Command | Alt. command | Description
 :--- | :--- | :---
 `--version` | - `-V` | This will show you the installed version of `hassbian-config`.
