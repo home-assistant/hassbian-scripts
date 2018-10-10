@@ -65,7 +65,7 @@ cd duckdns || exit
 echo "Creating a script file to be used by cron."
 echo "echo url='https://www.duckdns.org/update?domains=$domain&token=$token&ip=' | curl -k -o ~/duckdns/duck.log -K -" > duck.sh
 
-echo "Setting premissions..."
+echo "Setting permissions..."
 chmod 700 duck.sh
 
 echo "Creating cron job..."
