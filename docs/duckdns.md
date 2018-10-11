@@ -1,9 +1,9 @@
 # Duck DNS
 
-This script adds an cron job to auto update you the WAN IP address for the
+This script adds a cron job which auto updates the WAN IP address for the
 defined domain.  
-Before running this script you should already have an
-[Duck DNS account][duckdns], during the installation you will be asked to
+Before running this script you should already have a
+[Duck DNS account][duckdns]. During the installation you will be asked to
 supply your domain name and the token for your account.
 
 ## Installation
@@ -29,6 +29,8 @@ add this under `http:` to your `configuration.yaml`
   ssl_key: /home/homeassistant/dehydrated/certs/YOURDOMAIN.duckdns.org/privkey.pem
   base_url: YOURDOMAIN.duckdns.org:PORTNUMBER
 ```
+
+Keep in mind that after you added the ssl keys to your config and restarted hassbian, your installation won't be available through http anymore but then only through https.
 
 ***
 
