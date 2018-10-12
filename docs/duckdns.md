@@ -30,7 +30,7 @@ add this under `http:` to your `configuration.yaml`
   base_url: YOURDOMAIN.duckdns.org:PORTNUMBER
 ```
 
-Keep in mind that after you added the ssl keys to your config and restarted hassbian, your installation won't be available through http anymore but then only through https.
+Keep in mind that after you added the ssl keys to your config and restarted Home Assistant, your installation won't be available through http anymore but then only through https.
 
 ***
 
