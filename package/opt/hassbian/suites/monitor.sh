@@ -6,7 +6,7 @@ function monitor-show-short-info {
 function monitor-show-long-info {
   echo "This script installs Monitor a script for Bluetooth-based passive presence detection."
   echo "The Mosquitto suite will also be installed since it's a dependency for Monitor."
-  echo "This script also installs a service that can be enabled to run Monitor."
+  echo "This script also optionaly installs a service that can be enabled to run Monitor."
 }
 
 function monitor-show-copyright-info {
@@ -22,7 +22,7 @@ if [ ! -z "${validation}" ]; then
   echo "Existing Mosquitto install detected. Skipping install of Mosquitto."
 else
   echo "Installing Mosquitto"
-sudo hassbian-config install mosquitto
+hassbian-config install mosquitto accept
 fi
 
 echo "Creating Monitor folder..."
@@ -34,7 +34,7 @@ git clone git://github.com/andrewjfreyer/monitor
 
 echo "Running interactive setup"
 cd /opt/monitor || exit
-sudo bash /opt/monitor/monitor.sh
+bash /opt/monitor/monitor.sh
 
 echo "Checking the installation..."
 if [ ! -f /opt/monitor/monitor.sh ]; then
