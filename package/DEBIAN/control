@@ -2,7 +2,7 @@ Package: hassbian-scripts
 Version: 0.9.1
 Priority: optional
 Architecture: all
-Depends: bash, wget, git, python3, python3-venv, python3-pip, python3-dev, bluetooth, libbluetooth-dev, avahi-daemon, build-essential, libssl-dev, libffi-dev, python-dev, libudev-dev
+Depends: bash, wget, git, python3, python3-venv, python3-pip, python3-dev, bluetooth, libbluetooth-dev, avahi-daemon, build-essential, libssl-dev, libffi-dev, python3-dev, libudev-dev
 Maintainer: Fredrik Lindqvist <github.com/Landrash>
 Homepage: www.home-assistant.io
 Description: Hassbian scripts
