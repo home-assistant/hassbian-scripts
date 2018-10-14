@@ -20,6 +20,7 @@ below for usage and instructions.
   - [HUE](/docs/hue.md)
   - [LibCEC](/docs/libcec.md)
   - [MariaDB](/docs/mariadb.md)
+  - [Monitor](/docs/monitor.md)
   - [Mosquitto](/docs/mosquitto.md)
   - [PostgreSQL](/docs/postgresql.md)
   - [MS SQL](/docs/mssql.md)
