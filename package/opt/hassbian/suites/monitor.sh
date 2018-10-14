@@ -27,13 +27,13 @@ fi
 
 echo "Creating Monitor folder..."
 mkdir /opt/monitor || exit
-cd /opt
+cd /opt || exit
 
 echo "Cloning Monitor git repository"
 git clone git://github.com/andrewjfreyer/monitor
 
 echo "Running interactive setup"
-cd /opt/monitor
+cd /opt/monitor || exit
 sudo bash /opt/monitor/monitor.sh
 
 echo "Checking the installation..."
