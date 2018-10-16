@@ -17,6 +17,7 @@ below for usage and instructions.
   - [Duck DNS](/docs/duckdns.md)
   - [Hassbian](/docs/hassbian.md)
   - [Home Assistant](/docs/homeassistant.md)
+  - [Homebridge](/docs/homebridge.md)
   - [HUE](/docs/hue.md)
   - [LibCEC](/docs/libcec.md)
   - [MariaDB](/docs/mariadb.md)
