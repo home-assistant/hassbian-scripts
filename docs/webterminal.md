@@ -1,7 +1,7 @@
 # Webterminal
 
-This script installs an web terminal called 'shellinabox' to your system that
-give you SSH access in your web browser.
+This script installs a web terminal called 'shellinabox' to your system that
+gives you SSH access in your web browser.
 
 ## Installation
 
@@ -11,8 +11,8 @@ sudo hassbian-config install webterminal
 
 ## Upgrade
 
-No script available, maybe you could write one?  
-If so, add an PR here when you are done:  
+No script available. Maybe you could write one?  
+If so, add a PR here when you are done:  
 [homeassistant/hassbian-scripts][repo]
 
 ## Additional info
@@ -39,10 +39,10 @@ panel_iframe:
 
 ### Notes for SSL
 
-If you enable the use of existing Let's Encrypt certificates you need to open
+If you enable the use of existing Let's Encrypt certificates, you need to open
 ports in your firewall to use them.
 
-If SSL is used the panel_iframe has to use the same domain name as the one
+If SSL is used, the panel_iframe has to use the same domain name as the one
 issued with your certificate.
 
 ```yaml
