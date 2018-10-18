@@ -1,6 +1,6 @@
 # MariaDB
 
-This script installs MariaDB and it's dependencies for use with the
+This script installs MariaDB and its dependencies for use with the
 [recorder][recorder] component in Home Assistant. No database or database user
 is created during this setup and will need to be created manually.
 
@@ -12,13 +12,13 @@ sudo hassbian-config install mariadb
 
 ## Upgrade
 
-No script available, maybe you could write one?  
-If so, add an PR here when you are done:  
+No script available. Maybe you could write one?  
+If so, add a PR here when you are done:  
 [homeassistant/hassbian-scripts][repo]
 
 ## Additional info
 
-Example for creating database:
+Example of how to create the database:
 
 ```sql
 sudo mysql -u root -p
