@@ -22,7 +22,7 @@ if [ ! -z "${validation}" ]; then
   echo "Existing Mosquitto install detected. Skipping install of Mosquitto."
 else
   echo "Installing Mosquitto"
-hassbian-config install mosquitto accept
+hassbian-config install mosquitto --accept
 fi
 
 echo "Creating Monitor folder..."
@@ -34,6 +34,7 @@ git clone git://github.com/andrewjfreyer/monitor
 
 echo "Running interactive setup"
 cd /opt/monitor || exit
+chmod /opt/monitor/monitor.sh || exit
 bash /opt/monitor/monitor.sh
 
 echo "Checking the installation..."
