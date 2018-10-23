@@ -27,7 +27,6 @@ for i in ${!services[@]}; do
         out+="${services[$i]}:,${red}${service_status[$i]}${undim}\\n"
     fi
     # insert \n every $COLUMNS column
-        out+="\n"
     fi
 done
 out+="\n"
