@@ -22,7 +22,7 @@ out=""
 for i in ${!services[@]}; do
     # color green if service is active, else red
     if [[ "${service_status[$i]}" == "active" ]]; then
-        out+="${services[$i]}:,${green}${service_status[$i]}${undim},"
+        out+="${services[$i]}:,${green}${service_status[$i]}${undim}\\n"
     else
         out+="${services[$i]}:,${red}${service_status[$i]}${undim}\\n"
     fi
