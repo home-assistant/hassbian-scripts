@@ -1,8 +1,8 @@
 # Hassbian-scripts
 
-These are the scripts used in the [Hassbian][hassbian] image.  
+These are the scripts used in the [Hassbian][hassbian] image.
 The scripts in this repository where made to be used with the Hassbian image
-and the included Home Assistant instance.  
+and the included Home Assistant instance.
 
 ## The included scripts
 
@@ -23,6 +23,7 @@ below for usage and instructions.
   - [MariaDB](/docs/mariadb.md)
   - [Monitor](/docs/monitor.md)
   - [Mosquitto](/docs/mosquitto.md)
+  - [Pi-hole](/docs/pihole.md)
   - [PostgreSQL](/docs/postgresql.md)
   - [MS SQL](/docs/mssql.md)
   - [RaZberry](/docs/razberry.md)
