@@ -34,7 +34,7 @@ git clone git://github.com/andrewjfreyer/monitor
 
 echo "Running interactive setup"
 cd /opt/monitor || exit
-chmod /opt/monitor/monitor.sh || exit
+chmod +x /opt/monitor/monitor.sh || exit
 bash /opt/monitor/monitor.sh
 
 echo "Checking the installation..."
