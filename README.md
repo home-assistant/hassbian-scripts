@@ -1,8 +1,8 @@
 # Hassbian-scripts
 
-These are the scripts used in the [Hassbian][hassbian] image.  
+These are the scripts used in the [Hassbian][hassbian] image.
 The scripts in this repository where made to be used with the Hassbian image
-and the included Home Assistant instance.  
+and the included Home Assistant instance.
 
 ## The included scripts
 
@@ -29,6 +29,7 @@ below for usage and instructions.
   - [Samba](/docs/samba.md)
   - [Trådfri](/docs/tradfri.md)
   - [Webterminal](/docs/webterminal.md)
+  - [Zigbee2mqtt](/docs/zigbee2mqtt.md)
 - [Changelog][changelog]
 
 ***
