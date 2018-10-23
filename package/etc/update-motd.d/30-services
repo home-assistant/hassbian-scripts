@@ -27,7 +27,6 @@ for i in ${!services[@]}; do
         out+="${services[$i]}:,${red}${service_status[$i]}${undim}\\n"
     fi
     # insert \n every $COLUMNS column
-    if [ $((($i+1) % $COLUMNS)) -eq 0 ]; then
         out+="\n"
     fi
 done
