@@ -104,6 +104,7 @@ function check-permission {
 
 function developer-test-pr { # This function fetches a active PR and build a installation package from that and install it on the system.
     # This should only be used by maintainers to test PR's!
+    check-permission
     readonly PRNUMBER="$1"
     readonly INSTALLDIR="/tmp/hassbian_config_install_${PRNUMBER}"
     if [[ -z "$PRNUMBER" ]]; then
