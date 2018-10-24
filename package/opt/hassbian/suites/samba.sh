@@ -19,11 +19,11 @@ apt-get update
 apt-get install -y samba
 
 echo "Adding homeassistant Samba user"
-sudo smbpasswd -a homeassistant -n
+smbpasswd -a homeassistant -n
 
 echo "Adding shared folder for Home Assistant configuration directory"
 cd /etc/samba/ || exit
-sudo patch <<'EOF'
+patch <<'EOF'
 --- smb.conf 2017-02-02 20:29:42.383603738 +0000
 +++ smb_ha.conf 2017-02-02 20:37:12.418960977 +0000
 @@ -252,3 +252,11 @@
@@ -42,7 +42,7 @@ EOF
 
 
 echo "Restarting Samba service"
-sudo systemctl restart smbd.service
+systemctl restart smbd.service
 
 ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
 

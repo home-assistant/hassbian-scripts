@@ -14,10 +14,10 @@ function hassbian-show-copyright-info {
 
 function hassbian-upgrade-package {
 echo "Updating package list"
-sudo apt update
+apt update
 
 echo "Upgrading base operating system"
-sudo apt upgrade -y
+apt upgrade -y
 
 echo
 echo "Upgrade complete."
