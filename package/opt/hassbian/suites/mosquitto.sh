@@ -54,7 +54,7 @@ echo "Adding repository"
 OS_VERSION=$(lsb_release -cs)
 if [ ! -f /etc/apt/sources.list.d/mosquitto-"$OS_VERSION".list ]
 then
-  sudo curl -o /etc/apt/sources.list.d/mosquitto-"$OS_VERSION".list http://repo.mosquitto.org/debian/mosquitto-"$OS_VERSION".list
+  curl -o /etc/apt/sources.list.d/mosquitto-"$OS_VERSION".list http://repo.mosquitto.org/debian/mosquitto-"$OS_VERSION".list
 else
   echo "Already present, skipping..."
 fi

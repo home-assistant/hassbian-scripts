@@ -79,7 +79,7 @@ if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
 fi
 
 echo "Restarting cron service..."
-sudo systemctl restart cron.service
+systemctl restart cron.service
 
 echo "Checking the installation..."
 if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then

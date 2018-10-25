@@ -16,7 +16,7 @@ function hue-show-copyright-info {
 function hue-install-package {
 echo "Setting permissions for Python."
 PYTHONVER=$(echo /usr/lib/*python* | awk -F/ '{print $NF}')
-sudo setcap 'cap_net_bind_service=+ep' /usr/bin/"$PYTHONVER"
+setcap 'cap_net_bind_service=+ep' /usr/bin/"$PYTHONVER"
 
 echo "Checking the installation..."
 validation=$(getcap /usr/bin/"$PYTHONVER" | awk -F'= ' '{print $NF}')

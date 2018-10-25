@@ -28,7 +28,7 @@ else
 fi
 
 echo "Installing packages."
-sudo apt-get install -y openssl shellinabox
+apt-get install -y openssl shellinabox
 echo "Changing config."
 if [ "$SSL" == "y" ] || [ "$SSL" == "Y" ]; then
   echo "No need to change default configuration, skipping this step..."
