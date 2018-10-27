@@ -38,8 +38,8 @@ EOF
 
 echo "Installing Pulse-Eight platform"
 cd /srv/homeassistant/src/platform/build || exit
-sudo make install
-sudo ldconfig
+make install
+ldconfig
 
 echo "Changing back to homeassistant user"
 sudo -u homeassistant -H /bin/bash <<EOF
@@ -58,8 +58,8 @@ EOF
 
 echo "Installing Pulse-Eight libcec"
 cd /srv/homeassistant/src/libcec/build || exit
-sudo make install
-sudo ldconfig
+make install
+ldconfig
 
 echo "Linking libcec to venv site packages"
 PYTHONVER=$(echo /usr/local/lib/*python* | awk -F/ '{print $NF}')

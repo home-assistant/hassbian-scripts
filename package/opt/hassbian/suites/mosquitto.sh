@@ -54,7 +54,7 @@ echo "Adding repository"
 OS_VERSION=$(lsb_release -cs)
 if [ ! -f /etc/apt/sources.list.d/mosquitto-"$OS_VERSION".list ]
 then
-  sudo curl -o /etc/apt/sources.list.d/mosquitto-"$OS_VERSION".list http://repo.mosquitto.org/debian/mosquitto-"$OS_VERSION".list
+  curl -o /etc/apt/sources.list.d/mosquitto-"$OS_VERSION".list http://repo.mosquitto.org/debian/mosquitto-"$OS_VERSION".list
 else
   echo "Already present, skipping..."
 fi
@@ -93,8 +93,6 @@ if [ ! -z "${validation}" ]; then
   echo "Your MQTT broker is running at $ip_address:1883 or if preferred hassbian.local:1883"
   echo ""
   echo "To continue have a look at https://home-assistant.io/docs/mqtt/"
-  echo "For more information see this repo:"
-  echo "https://github.com/home-assistant/homebridge-homeassistant#customization"
   echo
 else
   echo

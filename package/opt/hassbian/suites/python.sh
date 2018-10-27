@@ -15,7 +15,7 @@ function python-upgrade-package {
 if [ "$FORCE" == "" ]; then
   printf "\\n\\n"
   echo "This script will change a lot on your pi."
-  echo "DO NOT run this if you absolutely have to."
+  echo "DO NOT run this if it's not absolutely necessary"
   echo "You can force run the upgrade script like this:"
   echo "sudo hassbian-config upgrade python --force"
   return 0
@@ -23,7 +23,7 @@ fi
 
 printf "\\n\\n"
 echo "It is NOT recomended to run this."
-echo -n "Are you really sure you want to run this script? [N/y]: "
+echo -n "Are you absolutely sure you want to run this script? [N/y]: "
 read -r RESPONSE
 if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
   RESPONSE="Y"

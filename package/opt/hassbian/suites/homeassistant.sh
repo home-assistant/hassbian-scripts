@@ -61,21 +61,44 @@ return 0
 }
 
 function homeassistant-upgrade-package {
-echo "Checking current version"
-pypiversion=$(curl -s https://pypi.python.org/pypi/homeassistant/json | grep '"version":' | awk -F'"' '{print $4}')
-
-sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'|while read -r version; do if [[ "${pypiversion}" == "${version}" ]]; then echo "You already have the latest version: $version";exit 1;fi;done
-source /srv/homeassistant/bin/activate
-pip3 show homeassistant
+if [ "$DEV" == "true"  ]; then
+  echo "This script downloads Home Assistant directly from the dev branch on Github."
+  echo "you can use this to be on the 'bleeding edge of the development of Home Assistant.'"
+  echo "This is not recommended for daily use."
+  echo -n "Are you really sure you want to continue? [N/y] : "
+  read -r RESPONSE
+  if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
+    RESPONSE="Y"
+  else
+    echo "Exiting..."
+    return 0
+  fi
+else
+  echo "Checking current version"
+  if [ "$BETA" == "true"  ]; then
+  newversion=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases | grep tag_name | head -1 | awk -F'"' '{print $4}')
+  elif [ ! -z "${VERSIONNUMBER}" ]; then
+    verify=$(curl -s https://pypi.org/pypi/homeassistant/"$VERSIONNUMBER"/json)
+    if [[ "$verify" = *"Not Found"* ]]; then
+      echo "Version $VERSIONNUMBER not found..."
+      echo "Exiting..."
+      return 0
+    else
+      newversion="$VERSIONNUMBER"
+    fi
+  else
+    newversion=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases/latest | grep tag_name | awk -F'"' '{print $4}')
+  fi
+  sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'|while read -r version; do if [[ "${newversion}" == "${version}" ]]; then echo "You already have version: $version";exit 1;fi;done
+  source /srv/homeassistant/bin/activate
+  pip3 show homeassistant
 EOF
 
-if [[ $? == 1 ]]; then
-  echo "Stopping upgrade"
-  exit 1
+  if [[ $? == 1 ]]; then
+    echo "Stopping upgrade"
+    exit 1
+  fi
 fi
-
-echo "Stopping Home Assistant"
-systemctl stop home-assistant@homeassistant.service
 
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
@@ -83,22 +106,56 @@ sudo -u homeassistant -H /bin/bash << EOF
 echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
-echo "Installing latest version of Home Assistant"
+echo "Upgrading Home Assistant"
 pip3 install --upgrade setuptools wheel
-pip3 install --upgrade homeassistant
+if [ "$DEV" == "true" ]; then
+  pip3 install git+https://github.com/home-assistant/home-assistant@dev
+elif [ "$BETA" == "true" ]; then
+  pip3 install --upgrade --pre homeassistant
+else
+  pip3 install --upgrade homeassistant=="$newversion"
+fi
 
 echo "Deactivating virtualenv"
 deactivate
 EOF
 
+if [ "$FORCE" != "true"  ]; then
+  current_version=$(cat /home/homeassistant/.homeassistant/.HA_VERSION)
+  config_check=$(sudo -u homeassistant -H /bin/bash << EOF
+  source /srv/homeassistant/bin/activate
+  hass --script check_config -c /home/homeassistant/.homeassistant/
+EOF
+  )
+  config_check_lines=$(echo "$config_check" | wc -l)
+  if (( config_check_lines > 1 ));then
+    if [ "$ACCEPT" != "true" ]; then
+      echo -n "Config check failed for new version, do you want to revert? [Y/n] : "
+      read -r RESPONSE
+      if [ ! "$RESPONSE" ]; then
+        RESPONSE="Y"
+      fi
+    else
+      RESPONSE="Y"
+    fi
+    if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
+      sudo -u homeassistant -H /bin/bash << EOF
+      source /srv/homeassistant/bin/activate
+      pip3 install --upgrade homeassistant=="$current_version"
+      deactivate
+EOF
+    fi
+  fi
+fi
+
 echo "Restarting Home Assistant"
-systemctl start home-assistant@homeassistant.service
+systemctl restart home-assistant@homeassistant.service
 
 echo "Checking the installation..."
 validation=$(pgrep -x hass)
 if [ ! -z "${validation}" ]; then
   echo
-  echo -e "\\e[32mUpgrade complete..\\e[0m"
+  echo -e "\\e[32mUpgrade script completed..\\e[0m"
   echo "Note that it may take some time to start up after an upgrade."
   echo
 else

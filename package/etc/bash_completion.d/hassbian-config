@@ -4,8 +4,8 @@ _hassbian-config()
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="install upgrade show log share-log --version --help"
-    altopts="--accept --force --debug --version --help"
+    opts="developer-test-pr install upgrade remove show log share-log --version --help"
+    altopts="--accept --force --debug --version --help --dev --beta"
     inst=$(find /opt/hassbian/suites/ -maxdepth 1 -type f | awk -F'/|_' ' {print $NF}' | awk -F. '{print $1}')
 
     if [[ ${cur} == -* ]] ; then

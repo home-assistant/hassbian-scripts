@@ -5,17 +5,17 @@ Everybody is invited and welcome to contribute to Hassbian-scripts.
 The process is straight-forward.
  - Read [How to get faster PR reviews](https://github.com/kubernetes/community/blob/master/contributors/guide/pull-requests.md#best-practices-for-faster-reviews) by Kubernetes (but skip step 0)
  - Fork the Hassbian-scripts [git repository](https://github.com/home-assistant/hassbian-scripts).
- - Add a new branch to your fork with a name that describe what you are implementing.
+ - Add a new branch to your fork with a name that describes what you are implementing.
  - Add or change the code.
  - Ensure tests work.
  - Ensure tests work. _Finding out during review that this does not work, will **not** result in a good review._
  - Create a Pull Request against the [**dev**](https://github.com/home-assistant/hassbian-scripts/tree/dev) branch of Hassbian-scripts.
 
 ## Pull Requests for new scripts.
-All new script must have meet the following criteria to even be reviewed:
+All new scripts must meet the following criteria to be considered to be reviewed:
 - Stickler-Ci should report no errors. (this is an automated review process based on [shellcheck](https://github.com/koalaman/shellcheck)
 - The Script must be tested with success locally, see [testing your code](#testing-your-code) for tips on how to test.
-- Every script should have an validation at the end, se [validation](#validation) for tips.
+- Every script should have a validation at the end, see [validation](#validation) for tips.
 - You **must** add [documentation](#documentation) to the /docs for the script.
 
 ### PR Naming
@@ -32,29 +32,29 @@ Create a good name for your PR, this will be used in the changelog.
 - Fixed typo.
 
 ### Description in the PR
-Remember that it is people that are reviewing your PR, pepole that most likly don't share your mindset.
+Remember that it is people that are reviewing your PR, people that most likely don't share your mindset.
 A good description of what the PR does, will certanly help during the review prosess.
 
 ### Comments
-Your PR will most likly get comments during the review prosess, this is _not_ to criticise your work.
-But feeback on how your PR can better match our "standards", you should have a look at exsiting scripts in the [repo](https://github.com/home-assistant/hassbian-scripts/tree/dev/package/opt/hassbian/suites).
-If some comments are unclear to you, use the thread under that comment to get clarification, or drop a line in the #devs_hassbian channel over at [Discord](https://discord.gg/c5DvZ4e), we want to help you help us getting Hassbian-scripts better.
+Your PR will most likely get comments during the review process, this is _not_ to criticise your work.
+But feedback on how your PR can better match our "standards", you should have a look at existing scripts in the [repo](https://github.com/home-assistant/hassbian-scripts/tree/dev/package/opt/hassbian/suites).
+If some comments are unclear to you, use the thread under that comment to get clarification, or drop a line in the #devs_hassbian channel over at [Discord](https://discord.gg/c5DvZ4e). We want to help you help us getting Hassbian-scripts better.
 
 ## Structure of the hassbian-scripts
-The scripts in Hassbian-scripts are referred to as suites, these suites are bash scripts with an `.sh` file extension.
+The scripts in Hassbian-scripts are referred to as suites. These suites are bash scripts with a `.sh` file extension.
 Each suite is built up of functions, and every script should have at least these functions:
  - suite-show-short-info.
   - This info will be printed at the start when the script runs and is also used by `hassbian-config show`.
-	- This will typically include a short description of the suit.
+	- This will typically include a short description of the suite.
  - suite-show-long-info.
   - This info will be printed when running `hassbian-config show suite`.
-	- This will typically include a longer description of the suit, and it's features.
+	- This will typically include a longer description of the suite, and it's features.
  - suite-show-copyright-info.
   - This info will be printed at the start when the script runs and is also used by `hassbian-config show suite`.
 	- This will typically include the name/username and a link to github of the person writing the script.
  - suite-install-package and or suite-upgrade-package, this is where the magic happens, this is where you include your script.
 
-## Spesial notations about install/upgrade functions
+## Special notations about install/upgrade functions
 ### User inputs
 If your script require user inputs, they should be at the top of the function.
 And if possible have an option to use `--accept (-Y)` flag, to set default values and omit the input.
@@ -164,7 +164,7 @@ return 0
 ```
 
 ## Testing your code
-Testing the code can be done in the folowing steps:
+Testing the code can be done in the following steps:
 1. Make sure you have the newest version from the upstream dev. branch. `sudo hassbian-config upgrade hassbian-script-dev`
 2. Put your `suite.sh` file in the `/opt/hassbian/suites/` directory.
 3. Run test with `sudo hassbian-config install suite` and/or `sudo hassbian-config upgrade suite`

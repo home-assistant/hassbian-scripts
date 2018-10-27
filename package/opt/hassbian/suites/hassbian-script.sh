@@ -1,6 +1,6 @@
 #!/bin/bash
 function hassbian-script-show-short-info {
-    echo "Hassbian-Script upgrade script for Hassbian"
+    echo "Hassbian-script upgrade script for Hassbian"
 }
 
 function hassbian-script-show-long-info {
@@ -12,20 +12,39 @@ function hassbian-script-show-copyright-info {
 }
 
 function hassbian-script-upgrade-package {
-echo "Changing to temporary folder"
-cd /tmp || exit
+if [ "$DEV" == "true"  ]; then
+  echo "This script downloads new scripts directly from the dev branch on Github."
+  echo "you can use this to be on the 'bleeding edge of the development of Hassbian.'"
+  echo "This is not recommended for daily use."
+  echo -n "Are you really sure you want to continue? [N/y] : "
+  read -r RESPONSE
+  if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
+    devbranch="-dev"
+  else
+    echo "Exiting..."
+    return 0
+  fi
+fi
+echo "Updating apt information..."
+echo "deb [trusted=yes] https://gitlab.com/hassbian/repository$devbranch/raw/master stretch main" | tee /etc/apt/sources.list.d/hassbian.list
+apt update
 
-echo "Downloading newest release"
-curl https://api.github.com/repos/home-assistant/hassbian-scripts/releases/latest | grep "browser_download_url.*deb" | cut -d : -f 2,3 | tr -d \" | wget -qi -
+echo "Checking installed version..."
+current_version=$(apt list hassbian-scripts | tail -1 | awk -F'[' '{print $NF}' |  awk -F']' '{print $1}')
+if [ "$current_version" != "installed" ]; then
+  echo "Removing old version of hassbian-scripts..."
+  apt purge -y hassbian-scripts
+  apt clean
 
-# Setting package name
-HASSBIAN_PACKAGE=$(echo hassbian*.deb)
-
-echo "Installing newest release"
-sudo apt install -y /tmp/"$HASSBIAN_PACKAGE"
-
-echo "Cleanup"
-rm "$HASSBIAN_PACKAGE"
+  echo "Installing newest version of hassbian-scripts..."
+  echo "deb [trusted=yes] https://gitlab.com/hassbian/repository$devbranch/raw/master stretch main" | tee /etc/apt/sources.list.d/hassbian.list
+  apt update
+  apt install -y hassbian-scripts
+else
+  echo "Installed version is up to date, exiting..."
+  return 0
+fi
+systemctl daemon-reload
 
 echo
 echo "Upgrade is now done."

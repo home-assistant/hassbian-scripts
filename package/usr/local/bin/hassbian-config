@@ -15,16 +15,20 @@ function help {
   printf "\\n"
   printf "usage: hassbian-config [command] [suite] [options]\\n"
   printf "where [command] is one of:\\n"
-  printf "%-8s\\t%s\\n" "  install" "Installs a software [suite]"
-  printf "%-8s\\t%s\\n" "  upgrade" "Upgrades a software [suite]"
-  printf "%-8s\\t%s\\n" "  show" "To see available [suite] for install/upgrade"
-  printf "%-8s\\t%s\\n" "  log" "Displays an log of the last operation"
-  printf "%-8s\\t%s\\n" "  share-log" "Generates an hastebin link of the last operation"
+  printf "%-8s\\t%s\\n" "  install" "Installs a software [suite]."
+  printf "%-8s\\t%s\\n" "  upgrade" "Upgrades software [suite]."
+  printf "%-8s\\t%s\\n" "  remove" "Remove software [suite]."
+  printf "%-8s\\t%s\\n" "  show" "To see available [suite] for install/upgrade."
+  printf "%-8s\\t%s\\n" "  log" "Displays an log of the last operation."
+  printf "%-8s\\t%s\\n" "  share-log" "Generates an hastebin link of the last operation."
+  printf "%-8s\\t%s\\n" "  show-installed" "Generates a list of installed suites."
   printf "\\n"
   printf "available optional [options]:\\n"
-  printf "%-10s\\t%s\\n" " -Y | --accept" "Accept defaults on scripts that allow this"
-  printf "%-10s\\t%s\\n" " -F | --force" "Force run an script, this is useful if you need to reinstall a package"
+  printf "%-10s\\t%s\\n" " -Y | --accept" "Accept defaults on scripts that allows this."
+  printf "%-10s\\t%s\\n" " -F | --force" "Force run an script, this is useful if you need to reinstall a package."
   printf "%-10s\\t%s\\n" " -D | --debug" "This will output every comand to the console."
+  printf "%-10s\\t%s\\n" " -B | --beta" "This will install the current beta version if implemented."
+  printf "%-10s\\t%s\\n" " --dev" "This will install the current development version if implemented."
   printf "\\n"
   printf "other [command] available:\\n"
   printf "%-10s\\t%s\\n" " -V | --version" "Prints the version of hassbian-config"
@@ -98,6 +102,44 @@ function check-permission {
   return 0
 }
 
+function developer-test-pr { # This function fetches a active PR and build a installation package from that and install it on the system.
+    # This should only be used by maintainers to test PR's!
+    check-permission
+    readonly PRNUMBER="$1"
+    readonly INSTALLDIR="/tmp/hassbian_config_install_${PRNUMBER}"
+    if [[ -z "$PRNUMBER" ]]; then
+        echo "Error: Missing PR argument."
+        echo ""
+        echo "Run: bash test_pr.sh PRNUMBER"
+        return 1
+    fi
+    git clone https://github.com/home-assistant/hassbian-scripts.git "$INSTALLDIR"
+    cd "$INSTALLDIR" || return 1
+    git fetch origin +refs/pull/"$PRNUMBER"/merge || return 1
+    git checkout FETCH_HEAD
+
+    chmod 755 -R package
+    dpkg-deb --build package/
+    apt install -y "$INSTALLDIR"/package.deb --reinstall --allow-downgrades
+
+    cd || return 1
+    rm -r "$INSTALLDIR"
+}
+
+function raspberry_pi_zero_check {
+## Start check for Raspberry Pi Zero
+if [ "$FORCE" != "true" ]; then
+  REVCODE=$(cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}' | sed 's/^ *//g' | sed 's/ *$//g')
+  if [ "$REVCODE" = "90092" ] || [ "$REVCODE" = "90093" ] || [ "$REVCODE" = "0x9000C1" ] || [ "$REVCODE" = "9000c1" ]; then
+    if [[ "$1" =~ ^(mosquitto|cloud9)$ ]]; then
+      echo "This suite can't be installed on Raspberry Pi Zero..."
+      exit 0
+    fi
+  fi
+fi
+## End check for Raspberry Pi Zero
+
+}
 function share-log {
   if [ ! -f $LOGFILE ];then
     echo "No logfile, exiting..."
@@ -147,6 +189,7 @@ function run-suite { #This is the function the actually run install/upgrade.
 
 function install-suite { #This function do checks if we can/want to install.
   check-permission
+  raspberry_pi_zero_check "$1"
   INSTALL=$(grep "$1"-install-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has install function.
   SUITESTATE=$(if [ -f "$SUITE_CONTROL_DIR/$1" ]; then grep "SCRIPTSTATE" "$SUITE_CONTROL_DIR/$1" | awk -F'=' '{print $2}'; else echo ""; fi) #Checking current suite state.
   if [ "$FORCE" == "true" ]; then #Go straight to run-suite if --force is used.
@@ -166,7 +209,7 @@ function install-suite { #This function do checks if we can/want to install.
   return 0
 }
 
-function upgrade-suite { #This function do checks if we can to upgrade.
+function upgrade-suite { #This function do checks if we can upgrade.
   check-permission
   UPGRADE=$(grep "$1"-upgrade-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has upgrade function.
   if [ "$UPGRADE" == "" ]; then
@@ -174,6 +217,17 @@ function upgrade-suite { #This function do checks if we can to upgrade.
     return 0
   fi
   run-suite upgrade "$1" | tee "$LOGFILE" #This is the default run.
+  return 0
+}
+
+function remove-suite { #This function do checks if we can remove.
+  check-permission
+  REMOVABLE=$(grep "$1"-remove-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has remove function.
+  if [ "$REMOVABLE" == "" ]; then
+    printf "Remove function not avaialable for this suite.\\n"
+    return 0
+  fi
+  run-suite remove "$1" | tee "$LOGFILE" #This is the default run.
   return 0
 }
 
@@ -188,12 +242,13 @@ function verify-suite {
 
 function show-installed-suites {
   INSTALLERS=$(find $SUITE_INSTALL_DIR/ -maxdepth 1 -type f | sort | awk -F'/' ' {print $NF}' | awk -F. '{print $1}')
+  echo "These suites are installed:"
   for i in $INSTALLERS
   do
   if [ -f "$SUITE_CONTROL_DIR/$i" ]; then
     STATE=$(grep "SCRIPTSTATE=installed" $SUITE_CONTROL_DIR/"$i" | awk -F'=' '{print $2}')
     if [ "$STATE" != "" ]; then
-      echo "$i:" "$STATE"
+      echo "$i"
     fi
   fi
   done
@@ -223,6 +278,14 @@ case $COMMAND in
     DEBUG="true"
     shift # past argument
     ;;
+  "--dev")
+    DEV="true"
+    shift # past argument
+    ;;
+  "-B"|"--beta")
+    BETA="true"
+    shift # past argument
+    ;;
   "show")
     if [ "$SUITE" != "" ]; then
       if verify-suite "$SUITE"; then
@@ -246,11 +309,31 @@ case $COMMAND in
     shift # past value
     ;;
   "upgrade")
+    if [[ "$SUITE" = *"="* ]]; then
+      VERSIONNUMBER=$(echo "$SUITE" | awk -F'=' '{print $2}')
+      SUITE=$(echo "$SUITE" | awk -F'=' '{print $1}')
+    else
+      VERSIONNUMBER=""
+    fi
     if verify-suite "$SUITE"; then
       RUN="upgrade-suite $SUITE"
     else
       RUN="echo suite $SUITE doesn't exist."
     fi
+    shift # past argument
+    shift # past value
+    ;;
+  "remove")
+    if verify-suite "$SUITE"; then
+      RUN="remove-suite $SUITE"
+    else
+      RUN="echo suite $SUITE doesn't exist."
+    fi
+    shift # past argument
+    shift # past value
+    ;;
+  "developer-test-pr")
+    RUN="developer-test-pr $2"
     shift # past argument
     shift # past value
     ;;

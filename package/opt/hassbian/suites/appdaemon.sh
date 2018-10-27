@@ -24,15 +24,19 @@ else
   HOMEASSISTANT_PASSWORD=""
 fi
 
+echo "Checking python version to use..."
+PYTHONVER=$(echo /usr/local/lib/*python* | awk -F/ '{print $NF}')
+echo "Using $PYTHONVER..."
+
 echo "Creating directory for AppDaemon Venv"
-sudo mkdir /srv/appdaemon
-sudo chown -R homeassistant:homeassistant /srv/appdaemon
+mkdir /srv/appdaemon
+chown -R homeassistant:homeassistant /srv/appdaemon
 
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
 
 echo "Creating AppDaemon venv"
-python3 -m venv /srv/appdaemon
+$PYTHONVER -m venv /srv/appdaemon
 
 echo "Changing to AppDaemon venv"
 source /srv/appdaemon/bin/activate
@@ -56,7 +60,7 @@ deactivate
 EOF
 
 echo "Copying AppDaemon service file"
-sudo cp /opt/hassbian/suites/files/appdaemon.service /etc/systemd/system/appdaemon@homeassistant.service
+cp /opt/hassbian/suites/files/appdaemon.service /etc/systemd/system/appdaemon@homeassistant.service
 
 echo "Enabling AppDaemon service"
 systemctl enable appdaemon@homeassistant.service
@@ -76,7 +80,7 @@ if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
   echo "force user = homeassistant" | tee -a /etc/samba/smb.conf
   echo "" | tee -a /etc/samba/smb.conf
   echo "Restarting Samba service"
-  sudo systemctl restart smbd.service
+  systemctl restart smbd.service
 fi
 
 echo "Checking the installation..."
