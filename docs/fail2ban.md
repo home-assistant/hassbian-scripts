@@ -1,4 +1,4 @@
-# Monitor
+# Fail2Ban
 
 This script installs the fail2ban service.
 Some further configuration is required after installation. More information [here](https://www.home-assistant.io/cookbook/fail2ban/).
