@@ -30,6 +30,7 @@ below for usage and instructions.
   - [Samba](/docs/samba.md)
   - [Trådfri](/docs/tradfri.md)
   - [Webterminal](/docs/webterminal.md)
+  - [Zigbee2mqtt](/docs/zigbee2mqtt.md)
 - [Changelog][changelog]
 
 ***
