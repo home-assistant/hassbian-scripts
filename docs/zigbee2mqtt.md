@@ -1,4 +1,4 @@
-# Monitor
+# Zigbee2mqtt
 
 This script installs the [Zigbee2mqtt bridge][zigbee2mqtt].
 After installation some further configuration is required. Instructions can be found [here][zigbee2mqttdocs].
