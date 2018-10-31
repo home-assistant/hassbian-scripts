@@ -1,4 +1,4 @@
-# Monitor
+# Pi-hole
 
 This script downloads and runs the [Pi-Hole][pihole] install script from https://pi-hole.net/ .
 ## Installation
