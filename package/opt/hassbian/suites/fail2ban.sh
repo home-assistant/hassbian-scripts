@@ -62,7 +62,7 @@ echo "Restarting fail2ban service"
 systemctl restart fail2ban
 
 echo "Checking the installation..."
-validation=$(which -x fail2ban-client)
+validation=$(which fail2ban-client)
 if [ ! -z "${validation}" ]; then
   echo
   echo -e "\\e[32mInstallation done.\\e[0m"
