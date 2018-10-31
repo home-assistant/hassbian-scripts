@@ -15,7 +15,7 @@ below for usage and instructions.
   - [AppDaemon](/docs/appdaemon.md)
   - [Cloud9](/docs/cloud9.md)
   - [Duck DNS](/docs/duckdns.md)
-  - [Fail2ban](/docs/fail2fail2ban.md)
+  - [Fail2ban](/docs/fail2ban.md)
   - [Hassbian](/docs/hassbian.md)
   - [Home Assistant](/docs/homeassistant.md)
   - [Homebridge](/docs/homebridge.md)
