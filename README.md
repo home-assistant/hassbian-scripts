@@ -15,6 +15,7 @@ below for usage and instructions.
   - [AppDaemon](/docs/appdaemon.md)
   - [Cloud9](/docs/cloud9.md)
   - [Duck DNS](/docs/duckdns.md)
+  - [Fail2ban](/docs/fail2ban.md)
   - [Hassbian](/docs/hassbian.md)
   - [Home Assistant](/docs/homeassistant.md)
   - [Homebridge](/docs/homebridge.md)
@@ -30,6 +31,7 @@ below for usage and instructions.
   - [Samba](/docs/samba.md)
   - [Trådfri](/docs/tradfri.md)
   - [Webterminal](/docs/webterminal.md)
+  - [Zigbee2mqtt](/docs/zigbee2mqtt.md)
 - [Changelog][changelog]
 
 ***
