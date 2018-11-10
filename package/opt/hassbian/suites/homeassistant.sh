@@ -128,7 +128,7 @@ if [ "$FORCE" != "true"  ]; then
 EOF
   )
   config_check_lines=$(echo "$config_check" | wc -l)
-  if (( config_check_lines > 1 ));then
+  if (( config_check_lines > 2 ));then
     if [ "$ACCEPT" != "true" ]; then
       echo -n "Config check failed for new version, do you want to revert? [Y/n] : "
       read -r RESPONSE
