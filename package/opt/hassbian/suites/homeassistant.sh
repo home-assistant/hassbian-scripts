@@ -12,6 +12,9 @@ function homeassistant-show-copyright-info {
 }
 
 function homeassistant-install-package {
+echo "Setting correct premissions"
+chown homeassistant:homeassistant -R /srv/homeassistant
+
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
 
@@ -99,6 +102,9 @@ EOF
     exit 1
   fi
 fi
+
+echo "Setting correct premissions"
+chown homeassistant:homeassistant -R /srv/homeassistant
 
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
