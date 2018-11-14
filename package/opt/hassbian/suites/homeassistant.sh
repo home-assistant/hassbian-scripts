@@ -12,6 +12,9 @@ function homeassistant-show-copyright-info {
 }
 
 function homeassistant-install-package {
+echo "Setting correct premissions"
+chown homeassistant:homeassistant -R /srv/homeassistant
+
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
 
@@ -22,8 +25,8 @@ echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
 echo "Installing latest version of Home Assistant"
-pip3 install setuptools wheel
-pip3 install homeassistant
+python3 -m pip install setuptools wheel
+python3 -m pip install homeassistant
 
 echo "Deactivating virtualenv"
 deactivate
@@ -91,7 +94,7 @@ else
   fi
   sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'|while read -r version; do if [[ "${newversion}" == "${version}" ]]; then echo "You already have version: $version";exit 1;fi;done
   source /srv/homeassistant/bin/activate
-  pip3 show homeassistant
+  python3 -m pip show homeassistant
 EOF
 
   if [[ $? == 1 ]]; then
@@ -100,6 +103,9 @@ EOF
   fi
 fi
 
+echo "Setting correct premissions"
+chown homeassistant:homeassistant -R /srv/homeassistant
+
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
 
@@ -107,13 +113,13 @@ echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
 echo "Upgrading Home Assistant"
-pip3 install --upgrade setuptools wheel
+python3 -m pip install --upgrade setuptools wheel
 if [ "$DEV" == "true" ]; then
-  pip3 install git+https://github.com/home-assistant/home-assistant@dev
+  python3 -m pip install git+https://github.com/home-assistant/home-assistant@dev
 elif [ "$BETA" == "true" ]; then
-  pip3 install --upgrade --pre homeassistant
+  python3 -m pip install --upgrade --pre homeassistant
 else
-  pip3 install --upgrade homeassistant=="$newversion"
+  python3 -m pip install --upgrade homeassistant=="$newversion"
 fi
 
 echo "Deactivating virtualenv"
@@ -128,7 +134,7 @@ if [ "$FORCE" != "true"  ]; then
 EOF
   )
   config_check_lines=$(echo "$config_check" | wc -l)
-  if (( config_check_lines > 1 ));then
+  if (( config_check_lines > 2 ));then
     if [ "$ACCEPT" != "true" ]; then
       echo -n "Config check failed for new version, do you want to revert? [Y/n] : "
       read -r RESPONSE
@@ -141,7 +147,7 @@ EOF
     if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
       sudo -u homeassistant -H /bin/bash << EOF
       source /srv/homeassistant/bin/activate
-      pip3 install --upgrade homeassistant=="$current_version"
+      python3 -m pip install --upgrade homeassistant=="$current_version"
       deactivate
 EOF
     fi
