@@ -20,13 +20,16 @@ If so, add a PR here when you are done:
 
 Example of how to create the database:
 
-```sql
-sudo mysql -u root -p
-CREATE DATABASE homeassistant;
-CREATE USER 'homeassistantuser' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON homeassistant.* TO 'homeassistantuser';
-FLUSH PRIVILEGES;
-exit
+```bash
+sudo -u postgres
+createuser homeassistant
+createdb -O homeassistant homeassistant
+```
+
+Example configuration
+```yaml
+recorder:
+  db_url: postgresql://@/homeassistant #Connects to Postgresql via Unix socket, allowed by default
 ```
 
 ***
