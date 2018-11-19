@@ -21,7 +21,7 @@ If so, add a PR here when you are done:
 Example of how to create the database:
 
 ```bash
-sudo -u postgres
+sudo -s -u postgres
 createuser homeassistant
 createdb -O homeassistant homeassistant
 ```
