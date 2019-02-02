@@ -2,6 +2,8 @@
 
 Hassbian manager is a web UI tool that can help you manage your suites.
 
+When installed the WEB UI are running on port `9999`
+
 ## Installation
 
 ```bash
