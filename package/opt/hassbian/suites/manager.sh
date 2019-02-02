@@ -74,7 +74,7 @@ systemctl disable hassbian-manager@homeassistant.service
 rm /etc/systemd/system/hassbian-manager@homeassistant.service
 sync
 
-echo "Upgrading Hassbian manager"
+echo "Removing Hassbian manager"
 python3 -m pip uninstall pyhassbian
 
 printf "\\e[32mRemoval done..\\e[0m\\n"
