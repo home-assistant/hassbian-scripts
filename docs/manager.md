@@ -1,0 +1,38 @@
+# Hassbian manager
+
+Hassbian manager is a web UI tool that can help you manage your suites.
+
+## Installation
+
+```bash
+sudo hassbian-config install manager
+```
+
+## Upgrade
+
+```bash
+sudo hassbian-config upgrade manager
+```
+
+## Remove to beta channel
+
+```bash
+sudo hassbian-config remoev manager
+```
+
+## Additional info
+
+Description | Command/value
+:--- | :---
+Running as: | homeassistant
+Start service: | `sudo systemctl start hassbian-manager@homeassistant.service`
+Stop service: | `sudo systemctl stop hassbian-manager@homeassistant.service`
+Restart service: | `sudo systemctl restart hassbian-manager@homeassistant.service`
+Service status: | `sudo systemctl status hassbian-manager@homeassistant.service`
+
+***
+
+The script was originally contributed by [@Ludeeus][ludeeus].
+
+<!--- Links --->
+[ludeeus]: https://github.com/ludeeus
