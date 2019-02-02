@@ -12,9 +12,6 @@ function manager-show-copyright-info {
 }
 
 function manager-install-package {
-echo "Setting correct premissions"
-chown homeassistant:homeassistant -R /srv/homeassistant
-
 
 echo "Installing latest version of Hassbian manager"
 python3 -m pip install setuptools wheel
