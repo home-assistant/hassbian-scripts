@@ -25,7 +25,7 @@ mkdir /opt/c9sdk
 chown homeassistant:homeassistant /opt/c9sdk
 
 echo "Installing npm"
-apt isntall -y npm
+apt install -y npm
 
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
