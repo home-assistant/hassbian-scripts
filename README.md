@@ -22,7 +22,6 @@ below for usage and instructions.
   - [Homebridge](/docs/homebridge.md)
   - [HUE](/docs/hue.md)
   - [LibCEC](/docs/libcec.md)
-  - [Manager](/docs/manager.md)
   - [MariaDB](/docs/mariadb.md)
   - [Monitor](/docs/monitor.md)
   - [Mosquitto](/docs/mosquitto.md)
