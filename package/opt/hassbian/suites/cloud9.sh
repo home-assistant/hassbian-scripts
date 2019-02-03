@@ -40,7 +40,7 @@ sudo -u homeassistant -H /bin/bash << EOF
   ln -s /home/homeassistant/.homeassistant/ /home/homeassistant/c9workspace/homeassistant
 EOF
 
-cd /opt/c9sdk || exit |
+cd /opt/c9sdk || exit 1
 npm install
 
 echo "Copying Cloud9 service file..."
