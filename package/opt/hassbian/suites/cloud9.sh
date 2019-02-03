@@ -24,6 +24,9 @@ echo "Creating installation directory..."
 mkdir /opt/c9sdk
 chown homeassistant:homeassistant /opt/c9sdk
 
+echo "Installing npm"
+apt isntall -y npm
+
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
   printf "Downloading and installing Cloud9 SDK...\\n"
@@ -36,6 +39,9 @@ sudo -u homeassistant -H /bin/bash << EOF
   echo "Symlinking /home/homeassistant/.homeassistant to the workspace."
   ln -s /home/homeassistant/.homeassistant/ /home/homeassistant/c9workspace/homeassistant
 EOF
+
+cd /opt/c9sdk || exit |
+npm install
 
 echo "Copying Cloud9 service file..."
 cp /opt/hassbian/suites/files/cloud9.service /etc/systemd/system/cloud9@homeassistant.service
