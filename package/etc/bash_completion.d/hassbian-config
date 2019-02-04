@@ -14,7 +14,7 @@ _hassbian-config()
     fi
 
     case "${prev}" in
-    install|upgrade|show)
+    install|upgrade|show|remove)
     COMPREPLY=( $(compgen -W "${inst}" -- ${cur}) )
     return 0
     ;;
