@@ -13,6 +13,28 @@ function manager-show-copyright-info {
 
 function manager-install-package {
 
+if [ "$ACCEPT" == "true" ]; then
+  username=pi
+  password=raspberry
+else
+  echo
+  echo "Please take a moment to setup your the user account"
+  echo
+
+  echo -n "Username: "
+  read -r username
+  if [ ! "$username" ]; then
+    username=pi
+  fi
+
+  echo -n "Password: "
+  read -s -r password
+  echo
+  if [ ! "$password" ]; then
+    password=raspberry
+  fi
+fi
+
 echo "Installing latest version of Hassbian manager"
 python3 -m pip install setuptools wheel
 python3 -m pip install pyhassbian
@@ -20,6 +42,10 @@ python3 -m pip install pyhassbian
 
 echo "Enabling Hassbian manager service"
 cp /opt/hassbian/suites/files/hassbian-manager@homeassistant.service /etc/systemd/system/hassbian-manager@homeassistant.service
+
+sed -i "s,%%USERNAME%%,${username},g" /etc/systemd/system/hassbian-manager@homeassistant.service
+sed -i "s,%%PASSWORD%%,${password},g" /etc/systemd/system/hassbian-manager@homeassistant.service
+
 systemctl enable hassbian-manager@homeassistant.service
 sync
 

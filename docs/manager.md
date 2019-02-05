@@ -27,6 +27,9 @@ sudo hassbian-config remoev manager
 Description | Command/value
 :--- | :---
 Running as: | homeassistant
+Default user: | `pi`
+Default password: | `raspberry`
+Port: | `9999`
 Start service: | `sudo systemctl start hassbian-manager@homeassistant.service`
 Stop service: | `sudo systemctl stop hassbian-manager@homeassistant.service`
 Restart service: | `sudo systemctl restart hassbian-manager@homeassistant.service`
