@@ -14,6 +14,7 @@ below for usage and instructions.
 - [hassbian-config](/docs/hassbian_config.md)
   - [AppDaemon](/docs/appdaemon.md)
   - [Cloud9](/docs/cloud9.md)
+  - [custom-component-store](/docs/custom-component-store.md)
   - [Duck DNS](/docs/duckdns.md)
   - [Fail2ban](/docs/fail2ban.md)
   - [Hassbian](/docs/hassbian.md)
