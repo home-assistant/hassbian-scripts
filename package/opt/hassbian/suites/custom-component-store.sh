@@ -103,7 +103,7 @@ rm /etc/systemd/system/custom-component-store@homeassistant.service
 sync
 
 
-python3 -m pip uninstall componentstore
+python3 -m pip uninstall --yes componentstore
 
 
 printf "\\e[32mRemoval done..\\e[0m\\n"
