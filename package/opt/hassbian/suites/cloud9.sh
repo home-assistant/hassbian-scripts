@@ -24,9 +24,6 @@ echo "Creating installation directory..."
 mkdir /opt/c9sdk
 chown homeassistant:homeassistant /opt/c9sdk
 
-echo "Installing npm"
-apt install -y npm
-
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
   printf "Downloading and installing Cloud9 SDK...\\n"
@@ -40,9 +37,6 @@ sudo -u homeassistant -H /bin/bash << EOF
   ln -s /home/homeassistant/.homeassistant/ /home/homeassistant/c9workspace/homeassistant
 EOF
 
-cd /opt/c9sdk || exit 1
-npm install
-
 echo "Copying Cloud9 service file..."
 cp /opt/hassbian/suites/files/cloud9.service /etc/systemd/system/cloud9@homeassistant.service
 
@@ -54,9 +48,23 @@ echo "Starting Cloud9 service..."
 systemctl start cloud9@homeassistant.service
 
 echo "Checking the installation..."
-ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
+sleep 15
 validation=$(pgrep -f cloud9)
 if [ ! -z "${validation}" ]; then
+  echo "Using fallback installation."
+  echo "Installing npm"
+  apt install -y npm
+
+  cd /opt/c9sdk || exit 1
+  npm install
+
+  echo "Checking the installation..."
+  sleep 15
+fi
+
+validation=$(pgrep -f cloud9)
+if [ -z "${validation}" ]; then
+  ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
   echo
   echo -e "\\e[32mInstallation done.\\e[0m"
   echo "Your Cloud9 IDE is now avaiable at http://$ip_address:8181"
@@ -83,6 +91,7 @@ printf "Starting Cloud9 service...\\n"
 systemctl start cloud9@homeassistant.service
 
 echo "Checking the installation..."
+sleep 15
 validation=$(pgrep -f cloud9)
 if [ ! -z "${validation}" ]; then
   echo
