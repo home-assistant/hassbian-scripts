@@ -13,16 +13,37 @@ function custom-component-store-show-copyright-info {
 
 function custom-component-store-install-package {
 
-echo "Installing latest version of Custom component store"
-git clone https://github.com/ludeeus/custom-component-store.git /tmp/custom-component-store
-cd /tmp/custom-component-store/rootfs/opt/store/ || exit 1
-sed -i "s,/config,/home/homeassistant/.homeassistant,g" componentstore/const.py
-sed -i "s,/config,/home/homeassistant/.homeassistant,g" componentstore/server.py
+if [ "$ACCEPT" == "true" ]; then
+  username=pi
+  password=raspberry
+else
+  echo
+  echo "Please take a moment to setup your the user account"
+  echo
 
-python3 setup.py install
+  echo -n "Username: "
+  read -r username
+  if [ ! "$username" ]; then
+    username=pi
+  fi
+
+  echo -n "Password: "
+  read -s -r password
+  echo
+  if [ ! "$password" ]; then
+    password=raspberry
+  fi
+fi
+
+echo "Installing latest version of Custom component store"
+python3 -m pip install componentstore
 
 echo "Enabling Custom component store service"
 cp /opt/hassbian/suites/files/custom-component-store@homeassistant.service /etc/systemd/system/custom-component-store@homeassistant.service
+
+sed -i "s,%%USERNAME%%,${username},g" /etc/systemd/system/custom-component-store@homeassistant.service
+sed -i "s,%%PASSWORD%%,${password},g" /etc/systemd/system/custom-component-store@homeassistant.service
+
 systemctl enable custom-component-store@homeassistant.service
 sync
 
@@ -54,16 +75,7 @@ return 0
 
 function custom-component-store-upgrade-package {
 echo "Upgrading Custom component store"
-git clone https://github.com/ludeeus/custom-component-store.git /tmp/custom-component-store
-cd /tmp/custom-component-store/rootfs/opt/store/ || exit 1
-sed -i "s,/config,/home/homeassistant/.homeassistant,g" componentstore/const.py
-sed -i "s,/config,/home/homeassistant/.homeassistant,g" componentstore/server.py
-
-python3 setup.py install
-
-echo "Starting cleanup"
-cd || exit 1
-rm -R /tmp/custom-component-store
+python3 -m pip install --upgrade componentstore
 
 echo "Restarting Custom component store"
 systemctl start custom-component-store@homeassistant.service
@@ -91,7 +103,7 @@ rm /etc/systemd/system/custom-component-store@homeassistant.service
 sync
 
 
-rm /usr/local/bin/componentstore
+python3 -m pip uninstall componentstore
 
 
 printf "\\e[32mRemoval done..\\e[0m\\n"

@@ -29,6 +29,9 @@ sudo hassbian-config remoev custom-component-store
 Description | Command/value
 :--- | :---
 Running as: | homeassistant
+Default user: | `pi`
+Default password: | `raspberry`
+Port: | `8120`
 Start service: | `sudo systemctl start custom-component-store@homeassistant.service`
 Stop service: | `sudo systemctl stop custom-component-store@homeassistant.service`
 Restart service: | `sudo systemctl restart custom-component-store@homeassistant.service`
