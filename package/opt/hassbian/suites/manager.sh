@@ -101,7 +101,7 @@ rm /etc/systemd/system/hassbian-manager@homeassistant.service
 sync
 
 echo "Removing Hassbian manager"
-python3 -m pip uninstall pyhassbian
+python3 -m pip uninstall --yes pyhassbian
 
 printf "\\e[32mRemoval done..\\e[0m\\n"
 }
