@@ -16,7 +16,7 @@ echo -n "Installing dependencies : "
 node=$(which npm)
 if [ -z "${node}" ]; then #Installing NodeJS if not already installed.
   printf "Downloading and installing NodeJS...\\n"
-  curl -sL https://deb.nodesource.com/setup_8.x | bash -
+  curl -sL https://deb.nodesource.com/setup_10.x | bash -
   apt install -y nodejs
 fi
 

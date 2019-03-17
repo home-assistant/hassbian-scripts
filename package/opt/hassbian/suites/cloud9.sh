@@ -16,7 +16,7 @@ function cloud9-install-package {
 node=$(which node)
 if [ -z "${node}" ]; then #Installing NodeJS if not already installed.
   printf "Downloading and installing NodeJS...\\n"
-  curl -sL https://deb.nodesource.com/setup_9.x | bash -
+  curl -sL https://deb.nodesource.com/setup_10.x | bash -
   apt install -y nodejs
 fi
 
@@ -48,9 +48,23 @@ echo "Starting Cloud9 service..."
 systemctl start cloud9@homeassistant.service
 
 echo "Checking the installation..."
-ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
+sleep 15
 validation=$(pgrep -f cloud9)
 if [ ! -z "${validation}" ]; then
+  echo "Using fallback installation."
+  echo "Installing npm"
+  apt install -y npm
+
+  cd /opt/c9sdk || exit 1
+  npm install
+
+  echo "Checking the installation..."
+  sleep 15
+fi
+
+validation=$(pgrep -f cloud9)
+if [ -z "${validation}" ]; then
+  ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
   echo
   echo -e "\\e[32mInstallation done.\\e[0m"
   echo "Your Cloud9 IDE is now avaiable at http://$ip_address:8181"
@@ -77,6 +91,7 @@ printf "Starting Cloud9 service...\\n"
 systemctl start cloud9@homeassistant.service
 
 echo "Checking the installation..."
+sleep 15
 validation=$(pgrep -f cloud9)
 if [ ! -z "${validation}" ]; then
   echo
