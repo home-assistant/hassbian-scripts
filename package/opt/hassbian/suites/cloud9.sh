@@ -16,7 +16,7 @@ function cloud9-install-package {
 node=$(which node)
 if [ -z "${node}" ]; then #Installing NodeJS if not already installed.
   printf "Downloading and installing NodeJS...\\n"
-  curl -sL https://deb.nodesource.com/setup_9.x | bash -
+  curl -sL https://deb.nodesource.com/setup_10.x | bash -
   apt install -y nodejs
 fi
 
