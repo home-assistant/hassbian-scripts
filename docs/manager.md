@@ -16,7 +16,7 @@ sudo hassbian-config install manager
 sudo hassbian-config upgrade manager
 ```
 
-## Remove to beta channel
+## Remove
 
 ```bash
 sudo hassbian-config remove manager
