@@ -19,7 +19,7 @@ sudo hassbian-config upgrade manager
 ## Remove to beta channel
 
 ```bash
-sudo hassbian-config remoev manager
+sudo hassbian-config remove manager
 ```
 
 ## Additional info
