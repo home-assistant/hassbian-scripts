@@ -21,15 +21,12 @@ function python-migration {
   readonly haversionwithrequirement='0.98.0'
 
   # Get the current python version HA is running under.
-  hapyversion$(currenthapyversion)
+  currenthapyversion
 
   # Check if the file exist
   if [ ! -f "$pythonmigrationfile" ]; then
     # file does not exist, let's create it.
-
-    if [[ "${hapyversion:0:2}" == "$targetpythonversion" ]]; then
-      echo "HAVENV=$hapyversion" > "$pythonmigrationfile"
-    fi
+    echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
   fi
 
   # Checks to see if migration is needed.
@@ -39,9 +36,9 @@ function python-migration {
     return 0
   fi
 
-  if [[ "${hapyversion:0:2}" == "$targetpythonversion" ]]; then
+  if [[ "${CURRENTHAPYVERSION:0:2}" == "$targetpythonversion" ]]; then
     # Migration not needed.
-    echo "HAVENV=$hapyversion" > "$pythonmigrationfile"
+    echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
     return 0
   fi
 
@@ -49,7 +46,7 @@ function python-migration {
   newversion=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases/latest | grep tag_name | awk -F'"' '{print $4}')
   if [[ "$newversion" < "$haversionwithrequirement" ]]; then
     # Migration not yet needed, store the current version.
-    echo "HAVENV=$hapyversion" > "$pythonmigrationfile"
+    echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
     return 0
   fi
 

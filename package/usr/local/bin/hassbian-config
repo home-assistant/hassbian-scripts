@@ -51,22 +51,21 @@ function get-all-suite-installers {
 
 function currenthapyversion {
 echo "Checking current version..."
-version=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
+CURRENTHAPYVERSION=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
 source /srv/homeassistant/bin/activate
 python -V
 EOF
 )
-return version
+echo "$version"
 }
 
 function currenthaversion {
 echo "Checking current version..."
-version=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
+CURRENTHAVERSION=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
 source /srv/homeassistant/bin/activate
 hass --version
 EOF
 )
-return version
 }
 
 function show-suites {
