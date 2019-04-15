@@ -92,6 +92,8 @@ function homeassistant-install-package {
 # Check if migration is needed.
 python-migration true
 
+newestinstalledpython
+
 echo "Setting correct premissions"
 chown homeassistant:homeassistant -R /srv/homeassistant
 
@@ -99,14 +101,14 @@ echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
 
   echo "Creating Home Assistant venv"
-  python3 -m venv /srv/homeassistant
+  python"${INSTALLEDPYTHON::-2}" -m venv /srv/homeassistant
 
   echo "Changing to Home Assistant venv"
   source /srv/homeassistant/bin/activate
 
   echo "Installing latest version of Home Assistant"
-  python3 -m pip install setuptools wheel
-  python3 -m pip install homeassistant
+  python -m pip install setuptools wheel
+  python -m pip install homeassistant
 
   echo "Deactivating virtualenv"
   deactivate
@@ -196,13 +198,13 @@ echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
 echo "Upgrading Home Assistant"
-python3 -m pip install --upgrade setuptools wheel
+python -m pip install --upgrade setuptools wheel
 if [ "$DEV" == "true" ]; then
-  python3 -m pip install git+https://github.com/home-assistant/home-assistant@dev
+  python -m pip install git+https://github.com/home-assistant/home-assistant@dev
 elif [ "$BETA" == "true" ]; then
-  python3 -m pip install --upgrade --pre homeassistant
+  python -m pip install --upgrade --pre homeassistant
 else
-  python3 -m pip install --upgrade homeassistant=="$newversion"
+  python -m pip install --upgrade homeassistant=="$newversion"
 fi
 
 echo "Deactivating virtualenv"
@@ -231,7 +233,7 @@ EOF
     if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
       sudo -u homeassistant -H /bin/bash << EOF
       source /srv/homeassistant/bin/activate
-      python3 -m pip install --upgrade homeassistant=="$current_version"
+      python -m pip install --upgrade homeassistant=="$current_version"
       deactivate
 EOF
     fi
