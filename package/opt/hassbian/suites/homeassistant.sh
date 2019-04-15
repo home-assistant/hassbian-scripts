@@ -33,7 +33,7 @@ function python-migration {
   fi
 
   # Checks to see if migration is needed.
-  pyversion=$(grep "HAVENV" $pythonmigrationfile | awk -F'=' '{print $2}')
+  pyversion=$(grep "HAVENV" $pythonmigrationfile || echo | awk -F'=' '{print $2}')
   if [[ "${pyversion:0:3}" == "$targetpythonversion" ]]; then
     # Migration not needed.
     return 0
@@ -41,7 +41,9 @@ function python-migration {
 
   if [[ "${CURRENTHAPYVERSION:0:3}" == "$targetpythonversion" ]]; then
     # Migration not needed.
-    echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
+    if [ -n "${CURRENTHAPYVERSION}" ]; then
+      echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
+    fi
     return 0
   fi
 
@@ -62,7 +64,8 @@ function python-migration {
         # shellcheck disable=SC1091
         source /opt/hassbian/suites/python.sh
         python-upgrade-package
-
+        currenthapyversion
+        echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
         # Quit when execution is done.
         exit 0
       fi
