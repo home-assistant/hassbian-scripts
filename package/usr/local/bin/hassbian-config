@@ -68,6 +68,16 @@ EOF
 )
 }
 
+function newestinstalledpython {
+  # Assing the version number of the newest installed version of Python to $INSTALLEDPYTHON
+  POTENTIAL="3.5 3.6 3.7 3.8"
+  for version in $POTENTIAL; do
+    echo "command -v python"$version""
+    if [[ -n "$(command -v python"$version")" ]]; then
+      INSTALLEDPYTHON="$(python"$version" -V | awk -F' ' '{print $2}')"
+    fi
+  done
+}
 function show-suites {
   printf "This is a list over all suites in hassbian-config\\n"
   printf "If a \\e[1msuite\\e[0m has \\e[32mgreen color\\e[0m in the name, you have already installed it.\\n"
