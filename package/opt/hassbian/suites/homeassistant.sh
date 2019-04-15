@@ -33,7 +33,7 @@ function python-migration {
   fi
 
   # Checks to see if migration is needed.
-  pyversion=$(grep "HAVENV" $pythonmigrationfile || echo | awk -F'=' '{print $2}')
+  pyversion=$(grep "HAVENV" $pythonmigrationfile | awk -F'=' '{print $2}')
   if [[ "${pyversion:0:3}" == "$targetpythonversion" ]]; then
     # Migration not needed.
     return 0
