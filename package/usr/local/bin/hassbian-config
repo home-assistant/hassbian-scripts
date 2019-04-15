@@ -73,7 +73,7 @@ fi
 
 function newestinstalledpython {
   # Assing the version number of the newest installed version of Python to $INSTALLEDPYTHON
-  POTENTIAL="3.5 3.6 3.7 3.8"
+  POTENTIAL="3.5 3.6 3.7"
   for version in $POTENTIAL; do
     if [[ -n "$(command -v python"$version")" ]]; then
       INSTALLEDPYTHON="$(python"$version" -V | awk -F' ' '{print $2}')"
