@@ -12,38 +12,18 @@ function python-show-copyright-info {
 }
 
 function python-upgrade-package {
-if [ "$FORCE" == "" ]; then
-  printf "\\n\\n"
-  echo "This script will change a lot on your pi."
-  echo "DO NOT run this if it's not absolutely necessary"
-  echo "You can force run the upgrade script like this:"
-  echo "sudo hassbian-config upgrade python --force"
-  return 0
-fi
-
-printf "\\n\\n"
-echo "It is NOT recomended to run this."
-echo -n "Are you absolutely sure you want to run this script? [N/y]: "
-read -r RESPONSE
-if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
-  RESPONSE="Y"
-else
-  return 0
-fi
 
 PYTHONVERSION=$(curl -s https://www.python.org/downloads/source/ | grep "Latest Python 3 Release" | cut -d "<" -f 3 | awk -F ' ' '{print $NF}')
 
 echo "Checking current version..."
-currentpython=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
-source /srv/homeassistant/bin/activate
-python -V
-EOF
-)
+hapyversion$(currenthapyversion)
 
-if [ "$currentpython" == "$PYTHONVERSION" ]; then
+if [ "$hapyversion" == "$PYTHONVERSION" ]; then
   echo "Python is already the highest stable version.."
   return 0
 fi
+
+
 echo "Upgrading to Python $PYTHONVERSION"
 apt-get -y update
 apt-get install -y build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev
@@ -65,11 +45,11 @@ echo "Stopping Home Assistant."
 systemctl stop home-assistant@homeassistant.service
 
 echo "Backing up previous virutal enviorment."
-mv /srv/homeassistant /srv/homeassistant_"$currentpython"
+mv /srv/homeassistant /srv/homeassistant_"$hapyversion"
 
 echo "Creating new virutal environment using Python $PYTHONVERSION"
 python"${PYTHONVERSION:: -2}" -m venv /srv/homeassistant
-mv /srv/homeassistant_"$currentpython"/hassbian /srv/homeassistant/hassbian
+mv /srv/homeassistant_"$hapyversion"/hassbian /srv/homeassistant/hassbian
 chown homeassistant:homeassistant -R /srv/homeassistant
 apt install python3-pip python3-dev
 pip"${PYTHONVERSION:: -2}" install --upgrade virtualenv
@@ -79,7 +59,7 @@ pip3 install --upgrade setuptools wheel
 pip3 install --upgrade homeassistant
 deactivate
 EOF
-mv /home/homeassistant/.homeassistant/deps /home/homeassistant/.homeassistant/deps_"$currentpython"
+mv /home/homeassistant/.homeassistant/deps /home/homeassistant/.homeassistant/deps_"$hapyversion"
 
 echo "Starting Home Assistant."
 systemctl start home-assistant@homeassistant.service
@@ -102,7 +82,7 @@ else
   echo -e "\\e[31mReverting..."
   systemctl stop home-assistant@homeassistant.service
   rm -R /srv/homeassistant
-  mv /srv/homeassistant_"$currentpython" /srv/homeassistant
+  mv /srv/homeassistant_"$hapyversion" /srv/homeassistant
   systemctl start home-assistant@homeassistant.service
   echo
   return 1

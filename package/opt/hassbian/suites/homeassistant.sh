@@ -11,25 +11,78 @@ function homeassistant-show-copyright-info {
   echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
+function python-migration {
+  # Implemented to cope with the announced D-Day of Python 3.5
+  # To track if this allready have been run, we create a file to hold that "state"
+  # /srv/homeassistant/hassbian/pythonmigration with HAVENV=pythonversion as the content.
+
+  readonly pythonmigrationfile='/srv/homeassistant/hassbian/pythonmigration'
+  readonly targetpythonversion='3.7'
+  readonly haversionwithrequirement='0.98.0'
+
+  # Get the current python version HA is running under.
+  hapyversion$(currenthapyversion)
+
+  # Check if the file exist
+  if [ ! -f "$pythonmigrationfile" ]; then
+    # file does not exist, let's create it.
+
+    if [[ "${hapyversion:0:2}" == "$targetpythonversion" ]]; then
+      echo "HAVENV=$hapyversion" > "$pythonmigrationfile"
+    fi
+  fi
+
+  # Checks to see if migration is needed.
+  pyversion=$(grep "HAVENV" $pythonmigrationfile | awk -F'=' '{print $2}')
+  if [[ "${pyversion:0:2}" == "$targetpythonversion" ]]; then
+    # Migration not needed.
+    return 0
+  fi
+
+  if [[ "${hapyversion:0:2}" == "$targetpythonversion" ]]; then
+    # Migration not needed.
+    echo "HAVENV=$hapyversion" > "$pythonmigrationfile"
+    return 0
+  fi
+
+  # Check if migration is needed for the newest HA version.
+  newversion=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases/latest | grep tag_name | awk -F'"' '{print $4}')
+  if [[ "$newversion" < "$haversionwithrequirement" ]]; then
+    # Migration not yet needed, store the current version.
+    echo "HAVENV=$hapyversion" > "$pythonmigrationfile"
+    return 0
+  fi
+
+  # If we get here, a migration is needed.
+  source /opt/hassbian/suites/python.sh
+  python-upgrade-package
+
+  # Quit when execution is done.
+  exit 0
+}
+
 function homeassistant-install-package {
 echo "Setting correct premissions"
 chown homeassistant:homeassistant -R /srv/homeassistant
 
+# Check if migration is needed.
+python-migration
+
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
 
-echo "Creating Home Assistant venv"
-python3 -m venv /srv/homeassistant
+  echo "Creating Home Assistant venv"
+  python3 -m venv /srv/homeassistant
 
-echo "Changing to Home Assistant venv"
-source /srv/homeassistant/bin/activate
+  echo "Changing to Home Assistant venv"
+  source /srv/homeassistant/bin/activate
 
-echo "Installing latest version of Home Assistant"
-python3 -m pip install setuptools wheel
-python3 -m pip install homeassistant
+  echo "Installing latest version of Home Assistant"
+  python3 -m pip install setuptools wheel
+  python3 -m pip install homeassistant
 
-echo "Deactivating virtualenv"
-deactivate
+  echo "Deactivating virtualenv"
+  deactivate
 EOF
 
 echo "Enabling Home Assistant service"
@@ -64,6 +117,9 @@ return 0
 }
 
 function homeassistant-upgrade-package {
+# Check if migration is needed.
+python-migration
+
 if [ "$DEV" == "true"  ]; then
   echo "This script downloads Home Assistant directly from the dev branch on Github."
   echo "you can use this to be on the 'bleeding edge of the development of Home Assistant.'"

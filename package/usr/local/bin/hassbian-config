@@ -49,6 +49,26 @@ function get-all-suite-installers {
   return 0
 }
 
+function currenthapyversion {
+echo "Checking current version..."
+version=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
+source /srv/homeassistant/bin/activate
+python -V
+EOF
+)
+return version
+}
+
+function currenthaversion {
+echo "Checking current version..."
+version=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
+source /srv/homeassistant/bin/activate
+hass --version
+EOF
+)
+return version
+}
+
 function show-suites {
   printf "This is a list over all suites in hassbian-config\\n"
   printf "If a \\e[1msuite\\e[0m has \\e[32mgreen color\\e[0m in the name, you have already installed it.\\n"
