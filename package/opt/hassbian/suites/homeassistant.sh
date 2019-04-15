@@ -57,6 +57,7 @@ function python-migration {
       echo -n "Do you want to start this migration now? [N/y] : "
       read -r RESPONSE
       if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
+        # shellcheck disable=SC1091
         source /opt/hassbian/suites/python.sh
         python-upgrade-package
 
@@ -76,6 +77,7 @@ function python-migration {
 # AFTER THIS MIGRATION YOUR HOME ASSISTANT INSTANCE WILL BE RUNNING UNDER PYTHON $targetpythonversion
 #"
     sleep 20
+    # shellcheck disable=SC1091
     source /opt/hassbian/suites/python.sh
     python-upgrade-package
 
