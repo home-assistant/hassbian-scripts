@@ -24,9 +24,9 @@ if [ "$hapyversion" == "$PYTHONVERSION" ]; then
   return 0
 fi
 
-isinstalled=$(which python${PYTHONVERSION:0:3})
+isinstalled=$(which python"${PYTHONVERSION:0:3}")
 if [ ! -z "${isinstalled}" ]; then
-  currentversion$(python${PYTHONVERSION:0:3} -V)
+  currentversion$(python"${PYTHONVERSION:0:3}" -V)
   if [[ "${currentversion:6}" != "$PYTHONVERSION" ]]; then
     echo "Upgrading to Python $PYTHONVERSION"
     apt-get -y update
