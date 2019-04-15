@@ -86,11 +86,12 @@ function python-migration {
 }
 
 function homeassistant-install-package {
-echo "Setting correct premissions"
-chown homeassistant:homeassistant -R /srv/homeassistant
 
 # Check if migration is needed.
 python-migration true
+
+echo "Setting correct premissions"
+chown homeassistant:homeassistant -R /srv/homeassistant
 
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
