@@ -50,7 +50,7 @@ function python-migration {
     echo
     echo "A migration of your python virtual enviorment for Home Assistant will be needed."
     echo "This will take about 1 hour on a raspberry pi 3."
-    echo "When version $haversionwithrequirement is live you wil not have a choise."
+    echo "When version $haversionwithrequirement is live you will not have a choise."
     echo
     echo -n "Do you want to start this migration now? [N/y] : "
     read -r RESPONSE
