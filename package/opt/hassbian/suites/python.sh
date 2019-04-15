@@ -16,7 +16,8 @@ function python-upgrade-package {
 PYTHONVERSION=$(curl -s https://www.python.org/downloads/source/ | grep "Latest Python 3 Release" | cut -d "<" -f 3 | awk -F ' ' '{print $NF}')
 
 echo "Checking current version..."
-hapyversion$(currenthapyversion)
+currenthapyversion
+hapyversion=$"$CURRENTHAPYVERSION"
 
 if [ "$hapyversion" == "$PYTHONVERSION" ]; then
   echo "Python is already the highest stable version.."
