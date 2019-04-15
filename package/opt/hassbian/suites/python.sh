@@ -25,7 +25,7 @@ if [ "$hapyversion" == "$PYTHONVERSION" ]; then
 fi
 
 isinstalled="$(command -v python"${PYTHONVERSION:0:3}")"
-if [ -n "${isinstalled}" ]; then
+if [ -z "${isinstalled}" ]; then
   currentversion="$(python"${PYTHONVERSION:0:3}" -V)"
   if [[ "${currentversion:6}" != "$PYTHONVERSION" ]]; then
     echo "Upgrading to Python $PYTHONVERSION"
