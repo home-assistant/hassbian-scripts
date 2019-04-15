@@ -16,6 +16,7 @@ function python-migration {
   # To track if this allready have been run, we create a file to hold that "state"
   # /srv/homeassistant/hassbian/pythonmigration with HAVENV=pythonversion as the content.
 
+  force="$1"
   readonly pythonmigrationfile='/srv/homeassistant/hassbian/pythonmigration'
   readonly targetpythonversion='3.7'
   readonly haversionwithrequirement='0.98.0'
@@ -52,14 +53,16 @@ function python-migration {
     echo "This will take about 1 hour on a raspberry pi 3."
     echo "When version $haversionwithrequirement is live you will not have a choise."
     echo
-    echo -n "Do you want to start this migration now? [N/y] : "
-    read -r RESPONSE
-    if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
-      source /opt/hassbian/suites/python.sh
-      python-upgrade-package
+    if [ "$force" != "true" ]; then
+      echo -n "Do you want to start this migration now? [N/y] : "
+      read -r RESPONSE
+      if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
+        source /opt/hassbian/suites/python.sh
+        python-upgrade-package
 
-      # Quit when execution is done.
-      exit 0
+        # Quit when execution is done.
+        exit 0
+      fi
     fi
   else
     # If we get here a migration is needed.
@@ -87,7 +90,7 @@ echo "Setting correct premissions"
 chown homeassistant:homeassistant -R /srv/homeassistant
 
 # Check if migration is needed.
-python-migration
+python-migration true
 
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
