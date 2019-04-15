@@ -51,28 +51,30 @@ function get-all-suite-installers {
 
 function currenthapyversion {
 # After you call this function use "$CURRENTHAPYVERSION" to get the value
+if [ -f "srv/homeassistant/bin/activate" ]; then
 CURRENTHAPYVERSION=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
 source /srv/homeassistant/bin/activate
 python -V
 EOF
 )
-echo "$version"
+fi
 }
 
 function currenthaversion {
 # After you call this function use "$CURRENTHAVERSION" to get the value
+if [ -f "srv/homeassistant/bin/activate" ]; then
 CURRENTHAVERSION=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
 source /srv/homeassistant/bin/activate
 hass --version
 EOF
 )
+fi
 }
 
 function newestinstalledpython {
   # Assing the version number of the newest installed version of Python to $INSTALLEDPYTHON
   POTENTIAL="3.5 3.6 3.7 3.8"
   for version in $POTENTIAL; do
-    echo "command -v python"$version""
     if [[ -n "$(command -v python"$version")" ]]; then
       INSTALLEDPYTHON="$(python"$version" -V | awk -F' ' '{print $2}')"
     fi
