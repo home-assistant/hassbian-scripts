@@ -31,12 +31,12 @@ function python-migration {
 
   # Checks to see if migration is needed.
   pyversion=$(grep "HAVENV" $pythonmigrationfile | awk -F'=' '{print $2}')
-  if [[ "${pyversion:0:2}" == "$targetpythonversion" ]]; then
+  if [[ "${pyversion:0:3}" == "$targetpythonversion" ]]; then
     # Migration not needed.
     return 0
   fi
 
-  if [[ "${CURRENTHAPYVERSION:0:2}" == "$targetpythonversion" ]]; then
+  if [[ "${CURRENTHAPYVERSION:0:3}" == "$targetpythonversion" ]]; then
     # Migration not needed.
     echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
     return 0
@@ -62,6 +62,7 @@ function python-migration {
       exit 0
     fi
   else
+    # If we get here a migration is needed.
     echo "
 #
 # MIGRATION IN PROGRESS
