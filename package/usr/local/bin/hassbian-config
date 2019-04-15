@@ -50,7 +50,7 @@ function get-all-suite-installers {
 }
 
 function currenthapyversion {
-echo "Checking current version..."
+# After you call this function use "$CURRENTHAPYVERSION" to get the value
 CURRENTHAPYVERSION=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
 source /srv/homeassistant/bin/activate
 python -V
@@ -60,7 +60,7 @@ echo "$version"
 }
 
 function currenthaversion {
-echo "Checking current version..."
+# After you call this function use "$CURRENTHAVERSION" to get the value
 CURRENTHAVERSION=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
 source /srv/homeassistant/bin/activate
 hass --version
