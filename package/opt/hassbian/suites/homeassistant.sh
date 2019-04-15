@@ -19,7 +19,6 @@ function python-migration {
   force="$1"
   readonly pythonmigrationfile='/srv/homeassistant/hassbian/pythonmigration'
   readonly targetpythonversion='3.7'
-  readonly haversionwithrequirement='0.98.0'
 
   # Get the current python version HA is running under.
   currenthapyversion
@@ -47,32 +46,20 @@ function python-migration {
     return 0
   fi
 
-  # Check if migration is needed for the newest HA version.
-  newversion=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases/latest | grep tag_name | awk -F'"' '{print $4}')
-  if [[ "$newversion" < "$haversionwithrequirement" ]]; then
-    # Migration not yet needed, store the current version.
-    echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
-    echo
-    echo "A migration of your python virtual enviorment for Home Assistant will be needed."
-    echo "This will take about 1 hour on a raspberry pi 3."
-    echo "When version $haversionwithrequirement is live you will not have a choise."
-    echo
-    if [ "$force" != "true" ]; then
-      echo -n "Do you want to start this migration now? [N/y] : "
-      read -r RESPONSE
-      if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
-        # shellcheck disable=SC1091
-        source /opt/hassbian/suites/python.sh
-        python-upgrade-package
-        currenthapyversion
-        echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
-        # Quit when execution is done.
-        exit 0
-      fi
+  # We got here, a migration is needed.
+  echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
+  echo
+  echo "A migration of your python virtual enviorment for Home Assistant will be needed."
+  echo "This will take about 1 hour on a raspberry pi 3."
+  echo
+  if [ "$force" != "true" ]; then
+    echo -n "Do you want to start this migration now? [N/y] : "
+    read -r RESPONSE
+    if [ "$RESPONSE" != "y" ] || [ "$RESPONSE" != "Y" ]; then
+      return 0
     fi
-  else
-    # If we get here a migration is needed.
-    echo "
+  fi
+  echo "
 #
 # MIGRATION IN PROGRESS
 # THIS WILL TAKE A LONG TIME, IT IS IMPORTANT THAT YOU DO NOT INTERRUPT THIS
@@ -81,14 +68,14 @@ function python-migration {
 #
 # AFTER THIS MIGRATION YOUR HOME ASSISTANT INSTANCE WILL BE RUNNING UNDER PYTHON $targetpythonversion
 #"
-    sleep 20
-    # shellcheck disable=SC1091
-    source /opt/hassbian/suites/python.sh
-    python-upgrade-package
-
-    # Quit when execution is done.
-    exit 0
-  fi
+  sleep 20
+  # shellcheck disable=SC1091
+  source /opt/hassbian/suites/python.sh
+  python-upgrade-package
+  currenthapyversion
+  echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
+  # Quit when execution is done.
+  exit 0
 
 }
 
