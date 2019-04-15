@@ -47,15 +47,38 @@ function python-migration {
   if [[ "$newversion" < "$haversionwithrequirement" ]]; then
     # Migration not yet needed, store the current version.
     echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
-    return 0
+    echo
+    echo "A migration of your python virtual enviorment for Home Assistant will be needed."
+    echo "This will take about 1 hour on a raspberry pi 3."
+    echo "When version $haversionwithrequirement is live you wil not have a choise."
+    echo
+    echo -n "Do you want to start this migration now? [N/y] : "
+    read -r RESPONSE
+    if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
+      source /opt/hassbian/suites/python.sh
+      python-upgrade-package
+
+      # Quit when execution is done.
+      exit 0
+    fi
+  else
+    echo "
+#
+# MIGRATION IN PROGRESS
+# THIS WILL TAKE A LONG TIME, IT IS IMPORTANT THAT YOU DO NOT INTERRUPT THIS
+#
+#
+#
+# AFTER THIS MIGRATION YOUR HOME ASSISTANT INSTANCE WILL BE RUNNING UNDER PYTHON $targetpythonversion
+#"
+    sleep 20
+    source /opt/hassbian/suites/python.sh
+    python-upgrade-package
+
+    # Quit when execution is done.
+    exit 0
   fi
 
-  # If we get here, a migration is needed.
-  source /opt/hassbian/suites/python.sh
-  python-upgrade-package
-
-  # Quit when execution is done.
-  exit 0
 }
 
 function homeassistant-install-package {
