@@ -26,8 +26,10 @@ function python-migration {
 
   # Check if the file exist
   if [ ! -f "$pythonmigrationfile" ]; then
-    # file does not exist, let's create it.
-    echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
+    # file does not exist, let's create it (if we can).
+    if [ -n "${CURRENTHAPYVERSION}" ]; then
+      echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
+    fi
   fi
 
   # Checks to see if migration is needed.
