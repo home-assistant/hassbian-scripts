@@ -64,6 +64,16 @@ pip3 install --upgrade setuptools wheel
 pip3 install --upgrade homeassistant
 deactivate
 EOF
+
+echo "Creating symlinks for python${PYTHONVERSION:: -2}"
+ln -nsf /usr/local/bin/python"${PYTHONVERSION:: -2}" /usr/bin/python3
+ln -nsf /usr/local/bin/python"${PYTHONVERSION:: -2}"m /usr/bin/python3m
+ln -nsf /usr/local/bin/python"${PYTHONVERSION:: -2}"m-config /usr/bin/python3m-config
+ln -nsf /usr/local/bin/pip"${PYTHONVERSION:: -2}" /usr/bin/pip3
+
+echo "Clean up"
+rm /usr/bin/lsb_release
+
 mv /home/homeassistant/.homeassistant/deps /home/homeassistant/.homeassistant/deps_"$hapyversion"
 
 echo "Starting Home Assistant."
