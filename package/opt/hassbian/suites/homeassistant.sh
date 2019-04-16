@@ -12,6 +12,9 @@ function homeassistant-show-copyright-info {
 }
 
 function homeassistant-install-package {
+echo "Checking generation of local certificates "
+c_rehash
+
 echo "Setting correct premissions"
 chown homeassistant:homeassistant -R /srv/homeassistant
 
