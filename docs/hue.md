@@ -1,7 +1,7 @@
 # Hue
 
 Configures the Python executable to allow usage of low numbered port numbers
-for use with Amazon Echo, Google Home and Mycroft.ai.
+for use with Amazon Echo or Mycroft.ai.
 
 ## Installation
 
