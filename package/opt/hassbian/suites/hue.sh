@@ -1,12 +1,12 @@
 #!/bin/bash
 
 function hue-show-short-info {
-  echo "Echo/Home/Mycroft Emulated Hue install script for Hassbian."
+  echo "Echo/Mycroft Emulated Hue install script for Hassbian."
 }
 
 function hue-show-long-info {
   echo "Configures the Python executable to allow usage of low numbered"
-  echo "ports for use with Amazon Echo, Google Home and Mycroft.ai."
+  echo "ports for use with Amazon Echo or Mycroft.ai."
 }
 
 function hue-show-copyright-info {
