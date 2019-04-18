@@ -161,6 +161,16 @@ fi
 echo "Restarting Home Assistant"
 systemctl restart home-assistant@homeassistant.service
 
+echo "Waiting for Home Assistant to start"
+for i in 1 2 3 4 5
+do
+    sleep 1
+
+    if [ $(systemctl is-active home-assistant@homeassistant.service) == "active" ]; then
+        break
+    fi
+done
+
 echo "Checking the installation..."
 validation=$(pgrep -x hass)
 if [ ! -z "${validation}" ]; then
