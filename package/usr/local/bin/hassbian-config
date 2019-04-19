@@ -194,7 +194,7 @@ function developer-test-pr { # This function fetches a active PR and build a ins
     apt install -y "$INSTALLDIR"/package.deb --reinstall --allow-downgrades
 
     cd || return 1
-    rm -r "$INSTALLDIR"
+    rm -R "$INSTALLDIR"
 }
 
 function raspberry_pi_zero_check {
