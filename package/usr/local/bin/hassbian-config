@@ -50,25 +50,65 @@ function get-all-suite-installers {
 }
 
 function currenthapyversion {
-# After you call this function use "$CURRENTHAPYVERSION" to get the value
-if [ -f "srv/homeassistant/bin/activate" ]; then
-CURRENTHAPYVERSION=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
-source /srv/homeassistant/bin/activate
-python -V
+  if [ -f "/srv/homeassistant/bin/activate" ]; then
+    version=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
+    source /srv/homeassistant/bin/activate
+    python -V
 EOF
-)
-fi
+  )
+  printf "%s" "$version"
+  fi
 }
 
 function currenthaversion {
-# After you call this function use "$CURRENTHAVERSION" to get the value
-if [ -f "srv/homeassistant/bin/activate" ]; then
-CURRENTHAVERSION=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
-source /srv/homeassistant/bin/activate
-hass --version
+  if [ -f "/srv/homeassistant/bin/activate" ]; then
+    version=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
+    source /srv/homeassistant/bin/activate
+    hass --version
 EOF
-)
-fi
+    )
+  printf "%s" "$version"
+  fi
+}
+
+function hcversion {
+  printf "%s" "$(dpkg -s hassbian-scripts | grep 'Version:' | awk '{print $2}')"
+}
+
+function hcremote {
+  version=$(curl -sSL https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/DEBIAN/control | grep Version | awk -F' ' '{print $NF}')
+  printf "%s" "$version"
+}
+
+
+function systeminfo {
+  # Prints system information to the console.
+  # Usefull to call before scripts and as a standalone.
+
+  check-permission  # Must be root
+
+  echo "Generating system information..."
+  local ha=$(currenthaversion)
+  local hapy=$(currenthapyversion)
+  local hc=$(hcversion)
+  local uname=$(uname -a)
+
+  echo "
+  Home Assistant:        $ha
+  Home Assistant Python: $hapy
+  hassbian-config:       $hc
+
+  $uname
+  "
+
+  if [ "$hc" != "$(hcremote)" ]; then
+    printf "\\e[31m%s\\n" "
+    There is an update pending for 'hassbian-config'
+    You can upgrade by running this:
+      sudo hassbian-config upgrade hassbian-script
+    "
+  fi
+
 }
 
 function newestinstalledpython {
@@ -223,7 +263,7 @@ function run-suite { #This is the function the actually run install/upgrade.
 }
 
 function install-suite { #This function do checks if we can/want to install.
-  check-permission
+  systeminfo
   raspberry_pi_zero_check "$1"
   INSTALL=$(grep "$1"-install-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has install function.
   SUITESTATE=$(if [ -f "$SUITE_CONTROL_DIR/$1" ]; then grep "SCRIPTSTATE" "$SUITE_CONTROL_DIR/$1" | awk -F'=' '{print $2}'; else echo ""; fi) #Checking current suite state.
@@ -245,7 +285,7 @@ function install-suite { #This function do checks if we can/want to install.
 }
 
 function upgrade-suite { #This function do checks if we can upgrade.
-  check-permission
+  systeminfo
   UPGRADE=$(grep "$1"-upgrade-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has upgrade function.
   if [ "$UPGRADE" == "" ]; then
     printf "Upgrade script is not available...\\n\\nYou can force run the install script like this:\\nsudo hassbian-config install %s --force\\n" "$1"
@@ -256,7 +296,7 @@ function upgrade-suite { #This function do checks if we can upgrade.
 }
 
 function remove-suite { #This function do checks if we can remove.
-  check-permission
+  systeminfo
   REMOVABLE=$(grep "$1"-remove-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has remove function.
   if [ "$REMOVABLE" == "" ]; then
     printf "Remove function not avaialable for this suite.\\n"
@@ -374,6 +414,10 @@ case $COMMAND in
     ;;
   "log")
     RUN="more $LOGFILE"
+    shift # past argument
+    ;;
+  "systeminfo")
+    RUN="systeminfo"
     shift # past argument
     ;;
   "share-log")
