@@ -21,12 +21,12 @@ function python-migration {
   readonly targetpythonversion='3.7'
 
   # Get the current python version HA is running under.
-  currenthapyversion
+  CURRENTHAPYVERSION=$(currenthapyversion)
 
   # Check if the file exist
   if [ ! -f "$pythonmigrationfile" ]; then
     # file does not exist, let's create it (if we can).
-    if [ -n "${CURRENTHAPYVERSION}" ]; then
+    if [ -n "$CURRENTHAPYVERSION" ]; then
       echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
     fi
   fi
