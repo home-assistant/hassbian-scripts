@@ -1,0 +1,8 @@
+#!/bin/bash
+# Run the DuckDNS curl command to update the A record.
+
+readonly DOMAIN=%%DOMAIN%%
+readonly TOKEN=%%TOKEN%%
+
+echo "Updating DuckDNS A record."
+curl -sSL "https://www.duckdns.org/update?domains=$DOMAIN&token=$TOKEN&ip="
