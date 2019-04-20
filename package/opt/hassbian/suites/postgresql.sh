@@ -15,8 +15,12 @@ function postgresql-show-copyright-info {
 function postgresql-install-package {
 echo "Running apt-get preparation"
 apt-get update
-apt-get install -y postgresql-server-dev-9.6 postgresql-9.6
 
+if [ "$(lsb_release -cs)" == "stretch" ]; then
+  apt-get install -y postgresql-server-dev-9.6 postgresql-9.6
+else
+  apt-get install -y postgresql-server-dev-11 postgresql-11
+fi
 
 echo "Changing to homeassistant user"
 sudo -u homeassistant -H /bin/bash <<EOF
