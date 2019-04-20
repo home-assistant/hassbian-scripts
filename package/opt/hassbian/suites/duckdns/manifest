@@ -1,12 +1,12 @@
 {
-  "name": "DuckDNS"
-  "author": "Ludeeus <https://github.com/ludeeus>"
+  "name": "DuckDNS",
+  "author": "Ludeeus <https://github.com/ludeeus>",
   "short_description": "Setup for Duck DNS auto renewal, and generates SSL certificate.",
   "long_description": "This script adds an cron job to auto update you the WAN IP address for the defined domain.\\nThis script can also generate SSL certificate for https with Let’s Encrypt.",
   "requirements": {
-    "pip", [],
+    "pip": [],
     "apt": ["git"]
-  }
+  },
   "capabilities": [
     "install",
     "upgrade",
