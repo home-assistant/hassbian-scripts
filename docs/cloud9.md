@@ -28,6 +28,8 @@ Description | Command/value
 Running as: | homeassistant
 Default workspace: | /home/homeassistant/c9workspace/
 Default port: | 8181
+Default user: | `pi`
+Default password: | `raspberry`
 Start service: | `sudo systemctl start cloud9@homeassistant.service`
 Stop service: | `sudo systemctl stop cloud9@homeassistant.service`
 Restart service: | `sudo systemctl restart cloud9@homeassistant.service`

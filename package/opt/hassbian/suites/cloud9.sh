@@ -13,6 +13,29 @@ function cloud9-show-copyright-info {
 }
 
 function cloud9-install-package {
+
+if [ "$ACCEPT" == "true" ]; then
+  username=pi
+  password=raspberry
+else
+  echo
+  echo "Please take a moment to setup your the user account"
+  echo
+
+  echo -n "Username: "
+  read -r username
+  if [ ! "$username" ]; then
+    username=pi
+  fi
+
+  echo -n "Password: "
+  read -s -r password
+  echo
+  if [ ! "$password" ]; then
+    password=raspberry
+  fi
+fi
+
 node=$(which node)
 if [ -z "${node}" ]; then #Installing NodeJS if not already installed.
   printf "Downloading and installing NodeJS...\\n"
@@ -39,6 +62,9 @@ EOF
 
 echo "Copying Cloud9 service file..."
 cp /opt/hassbian/suites/files/cloud9.service /etc/systemd/system/cloud9@homeassistant.service
+
+sed -i "s,%%USERNAME%%,${username},g" /etc/systemd/system/cloud9@homeassistant.service
+sed -i "s,%%PASSWORD%%,${password},g" /etc/systemd/system/cloud9@homeassistant.service
 
 echo "Enabling Cloud9 service..."
 systemctl enable cloud9@homeassistant.service

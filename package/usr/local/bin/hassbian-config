@@ -253,7 +253,7 @@ function run-suite { #This is the function the actually run install/upgrade.
   "$2"-"$1"-package #Running the script function install/upgrade SUITE.
   RETURN=("$?") # Return value after script execution.
   if [ "$DEBUG" == "true" ]; then set +x; fi #Deactivating debug if --debug is used.
-  if [ "$RETURN" == "0" ]; then STATE="installed"; else printf "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord.\\n" && STATE="failed"; fi #Set suite state to installed if 0 is returned, failed otherwise.
+  if [ "$RETURN" == "0" ]; then STATE="installed"; else printf "\\e[0mIf you have issues with this script, please say something in the #hassbian channel on Discord.\\n" && STATE="failed"; fi #Set suite state to installed if 0 is returned, failed otherwise.
   if [ "$1" == "remove" ]; then 
     rm "$SUITE_CONTROL_DIR/$2"
   else
