@@ -25,8 +25,8 @@ echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
 echo "Installing dependencies for MS SQL"
-pip3 install --upgrade setuptools wheel
-pip3 install pymssql
+python -m pip install --upgrade setuptools wheel Cython
+python -m pip install pymssql
 
 echo "Deactivating virtualenv"
 deactivate
@@ -35,7 +35,7 @@ EOF
 echo "Checking the installation..."
 validation=$(sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'
 source /srv/homeassistant/bin/activate
-pip3 show pymssql
+python -m pip show pymssql
 EOF
 )
 if [ ! -z "${validation}" ]; then
