@@ -78,11 +78,11 @@ function python-migration {
 }
 
 function homeassistant-install-package {
-
 # Check if migration is needed.
 python-migration true
 
-newestinstalledpython
+echo "Checking generation of local certificates "
+c_rehash
 
 echo "Setting correct premissions"
 chown homeassistant:homeassistant -R /srv/homeassistant

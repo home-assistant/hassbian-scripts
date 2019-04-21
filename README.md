@@ -19,7 +19,6 @@ below for usage and instructions.
   - [Fail2ban](/docs/fail2ban.md)
   - [Hassbian](/docs/hassbian.md)
   - [Home Assistant](/docs/homeassistant.md)
-  - [Homebridge](/docs/homebridge.md)
   - [HUE](/docs/hue.md)
   - [LibCEC](/docs/libcec.md)
   - [Manager](/docs/manager.md)
