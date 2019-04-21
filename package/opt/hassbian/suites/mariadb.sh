@@ -15,7 +15,7 @@ function mariadb-show-copyright-info {
 function mariadb-install-package {
 echo "Running apt-get preparation"
 apt-get update
-apt-get install -y mariadb-server libmariadbclient-dev
+apt-get install -y mariadb-server libmariadbclient-dev default-libmysqlclient-dev
 
 echo "Changing to homeassistant user"
 sudo -u homeassistant -H /bin/bash <<EOF
