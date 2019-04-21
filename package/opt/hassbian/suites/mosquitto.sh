@@ -51,10 +51,9 @@ echo "Installing repository key"
 wget -O - http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
 
 echo "Adding repository"
-OS_VERSION=$(lsb_release -cs)
-if [ ! -f /etc/apt/sources.list.d/mosquitto-"$OS_VERSION".list ]
+if [ ! -f /etc/apt/sources.list.d/mosquitto-stretch.list ]
 then
-  curl -o /etc/apt/sources.list.d/mosquitto-"$OS_VERSION".list http://repo.mosquitto.org/debian/mosquitto-"$OS_VERSION".list
+  curl -o /etc/apt/sources.list.d/mosquitto-stretch.list http://repo.mosquitto.org/debian/mosquitto-stretch.list
 else
   echo "Already present, skipping..."
 fi
