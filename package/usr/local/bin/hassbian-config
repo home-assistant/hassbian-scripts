@@ -57,7 +57,7 @@ function currenthapyversion {
     python -V
 EOF
   )
-  printf "%s" "$version"
+  printf "%s" "${version:0:5}"
   fi
 }
 

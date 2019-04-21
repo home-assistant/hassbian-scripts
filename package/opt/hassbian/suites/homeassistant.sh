@@ -70,8 +70,7 @@ function python-migration {
   # shellcheck disable=SC1091
   source /opt/hassbian/suites/python.sh
   python-upgrade-package
-  currenthapyversion
-  echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
+  echo "HAVENV=$(currenthapyversion)" > "$pythonmigrationfile"
   # Quit when execution is done.
   exit 0
 
