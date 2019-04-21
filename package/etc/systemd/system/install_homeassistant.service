@@ -9,7 +9,7 @@ After=network.target
 [Service]
 ExecStartPre=/usr/local/bin/hassbian-config upgrade hassbian-script
 ExecStart=/usr/local/bin/hassbian-config install homeassistant --force
-TimeoutSec=1800
+TimeoutSec=3600
 
 [Install]
 WantedBy=multi-user.target
