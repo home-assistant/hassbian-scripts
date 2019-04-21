@@ -25,8 +25,11 @@ if [ "$DEV" == "true"  ]; then
     return 0
   fi
 fi
+
+OSRELEASE=$(lsb_release -cs)
+
 echo "Updating apt information..."
-echo "deb [trusted=yes] https://gitlab.com/hassbian/repository$devbranch/raw/master stretch main" | tee /etc/apt/sources.list.d/hassbian.list
+echo "deb [trusted=yes] https://gitlab.com/hassbian/repository$devbranch/raw/master $OSRELEASE main" | tee /etc/apt/sources.list.d/hassbian.list
 apt update
 
 echo "Checking installed version..."
@@ -37,7 +40,7 @@ if [ "$current_version" != "installed" ]; then
   apt clean
 
   echo "Installing newest version of hassbian-scripts..."
-  echo "deb [trusted=yes] https://gitlab.com/hassbian/repository$devbranch/raw/master stretch main" | tee /etc/apt/sources.list.d/hassbian.list
+  echo "deb [trusted=yes] https://gitlab.com/hassbian/repository$devbranch/raw/master $OSRELEASE main" | tee /etc/apt/sources.list.d/hassbian.list
   apt update
   apt install -y hassbian-scripts
 else
