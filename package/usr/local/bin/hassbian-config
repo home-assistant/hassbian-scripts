@@ -22,6 +22,7 @@ function help {
   printf "%-8s\\t%s\\n" "  log" "Displays an log of the last operation."
   printf "%-8s\\t%s\\n" "  share-log" "Generates an hastebin link of the last operation."
   printf "%-8s\\t%s\\n" "  show-installed" "Generates a list of installed suites."
+  printf "%-8s\\t%s\\n" "  systeminfo" "Generates information about the system."
   printf "\\n"
   printf "available optional [options]:\\n"
   printf "%-10s\\t%s\\n" " -Y | --accept" "Accept defaults on scripts that allows this."
