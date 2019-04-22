@@ -1,8 +1,8 @@
 {
-  "name": "Template",
-  "author": "Username <https://github.com/username>",
-  "short_description": "Short description.",
-  "long_description": "A little longer description.",
+  "name": "Zigbee2mqtt",
+  "author": "Landrash <https://github.com/landrash>",
+  "short_description": "Setup for Zigbee2mqtt bridge.",
+  "long_description": "Original concept by Landrash <https://github.com/landrash>.",
   "blocked": false,
   "blocked_releasename": "",
   "blocked_messages": ""

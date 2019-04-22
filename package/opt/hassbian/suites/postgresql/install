@@ -1,6 +1,6 @@
 #!/bin/bash
 # 
-# Installation script for Hassbian suite: DuckDNS
+# Installation script for Hassbian suite: PostgreSQL
 #
 
 function install {
