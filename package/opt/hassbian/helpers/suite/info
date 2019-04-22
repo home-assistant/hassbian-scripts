@@ -18,7 +18,7 @@ function hassbian.suite.info.print {
 
   author=$(hassbian.suite.helper.manifest "$suitename" author)
   name=$(hassbian.suite.helper.manifest "$suitename" name)
-  long_description=$(hassbian.suitehelper..manifest "$suitename" long_description)
+  long_description=$(hassbian.suite.helper.manifest "$suitename" long_description)
   isinstalled=$(hassbian.suite.info.installed "$suitename")
 
   if [ "$isinstalled" ]; then
