@@ -7,17 +7,14 @@ function install {
   local DUCKDNS_DOMAIN
   local DUCKDNS_TOKEN
   local SSL_RESPONSE
+  local certvalidation
+  local dnsvalidation
 
-  echo "
-  Please take a moment to setup autorenewal of duckdns.
-  If no choice is made the installation will exit.
-  
-  (if your domain is 'example.duckdns.org' type example)"
+  hassbian.input.info "Please take a moment to setup autorenewal of duckdns, "\
+    "if no choice is made the installation will exit."
 
-
-  echo -n "What is your DuckDNS subdomain?"
-  read -r DUCKDNS_DOMAIN
-  if [ ! "$domain" ]; then
+  DUCKDNS_DOMAIN=$(hassbian.input.text "What is your DuckDNS subdomain?")
+  if [ ! "$DUCKDNS_DOMAIN" ]; then
     exit
   fi
   if [[ $domain = *"duckdns"* ]]; then
@@ -27,19 +24,16 @@ function install {
     domain=$(echo "$domain" | cut -d/ -f3)
   fi
 
-  echo -n "What is your DuckDNS token?"
-  read -r DUCKDNS_TOKEN
+  DUCKDNS_TOKEN=$(hassbian.input.text "What is your DuckDNS token?")
   if [ ! "$token" ]; then
     exit
   fi
 
-  echo -n "Do you want to generate certificates to use SSL(https)? [N/y] : "
-  read -r SSL_RESPONSE
+  SSL_RESPONSE=$(hassbian.input.bool "Do you want to generate certificates to use SSL(https)?")
 
   echo "Changing to homeassistant user..."
   sudo -u homeassistant -H /bin/bash << EOF
   cd
-
   if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
     git clone https://github.com/lukas2511/dehydrated.git
     cd dehydrated  || exit

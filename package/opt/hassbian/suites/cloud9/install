@@ -79,8 +79,7 @@ EOF
     echo "Installation done...
     Your Cloud9 IDE is now avaiable at http://$ipaddress:8181"
   else
-    echo "Installation done..."
-    echo "Upgrade failed..."
+    echo "Installation failed..."
     return 1
   fi
   return 0

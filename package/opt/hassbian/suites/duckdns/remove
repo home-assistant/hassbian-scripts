@@ -9,7 +9,7 @@ function remove {
 
   echo "Removing cron jobs."
   rm /etc/cron.daily/dehydrated >/dev/null 2>&1
-  crontab -u homeassistant -l | grep -v 'duck.sh'  | crontab -u homeassistant -
+  rm /etc/cron.hourly/duckdns >/dev/null 2>&1
 
   echo -e "
   
