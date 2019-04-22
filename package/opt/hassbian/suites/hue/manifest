@@ -1,8 +1,8 @@
 {
-  "name": "Template",
-  "author": "Username <https://github.com/username>",
-  "short_description": "Short description.",
-  "long_description": "A little longer description.",
+  "name": "Hue",
+  "author": "Landrash <https://github.com/Landrash>",
+  "short_description": "Echo/Mycroft Emulated Hue install script for Hassbian.",
+  "long_description": "Configures the Python executable to allow usage of low numbered\\nports for use with Amazon Echo or Mycroft.ai.",
   "blocked": false,
   "blocked_releasename": "",
   "blocked_messages": ""

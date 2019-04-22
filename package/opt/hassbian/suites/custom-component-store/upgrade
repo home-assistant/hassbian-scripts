@@ -8,7 +8,7 @@ function upgrade {
   python3 -m pip install --upgrade componentstore
 
   echo "Restarting Custom component store"
-  systemctl start custom-component-store@homeassistant.service
+  systemctl restart custom-component-store@homeassistant.service
 
   validation=$(hassbian.suite.verify.service custom-component-store@homeassistant.service)
   if [ "$validation" == "0" ]; then

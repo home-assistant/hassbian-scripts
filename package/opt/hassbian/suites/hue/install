@@ -1,10 +1,28 @@
 #!/bin/bash
 # 
-# Installation script for Hassbian suite: DuckDNS
+# Installation script for Hassbian suite: Hue
 #
 
 function install {
+  echo "Setting permissions for Python..."
+  PYTHONVER=$(echo /usr/lib/*python* | awk -F/ '{print $NF}')
+  setcap 'cap_net_bind_service=+ep' /usr/bin/"$PYTHONVER"
 
+  echo "Checking the installation..."
+  validation=$(getcap /usr/bin/"$PYTHONVER" | awk -F'= ' '{print $NF}')
+  if [ ! -z "${validation}" ]; then
+    echo
+    echo -e "\\e[32mInstallation done..\\e[0m"
+    echo
+    echo "To continue have a look at https://home-assistant.io/components/emulated_hue/"
+    echo
+  else
+    echo
+    echo -e "\\e[31mInstallation failed..."
+    echo
+    return 1
+  fi
+  return 0
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

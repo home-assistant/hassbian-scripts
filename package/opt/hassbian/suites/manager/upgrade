@@ -1,10 +1,22 @@
 #!/bin/bash
 # 
-# Upgrade script for Hassbian suite: Template
+# Upgrade script for Hassbian suite: Hassbian manager
 #
 
-function remove {
-  echo "  Upgrade script does not exist for this suite."
+function upgrade {
+  echo "UpgradingHassbian manager"
+  python3 -m pip install --upgrade pyhassbian
+
+  echo "Restarting Hassbian manager"
+  systemctl restart hassbian-manager@homeassistant.service
+
+  validation=$(hassbian.suite.verify.service hassbian-manager@homeassistant.service)
+  if [ "$validation" == "0" ]; then
+    echo "Upgrade done..."
+  else
+    echo "Upgrade failed..."
+    return 1
+  fi
   return 0
 }
 
