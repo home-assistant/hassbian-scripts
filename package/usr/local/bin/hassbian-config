@@ -10,7 +10,7 @@
 readonly HASSBIAN_LOG_FILE='/tmp/hassbian.log'
 
 # Suite directory for 'hassbian-config'.
-readonly HASSBIAN_SUITE_DIR='/opt/hassbian/suites'
+readonly HASSBIAN_SUITE_DIR='/opt/hassbian/helpers/suites'
 
 # Controll directory for 'hassbian-config'.
 readonly HASSBIAN_CONTROL_DIR='/srv/homeassistant/hassbian/control'
@@ -41,29 +41,25 @@ declare HASSBIAN_RUNTIME_DEV=false
 #  Echoable messages
 #####################################
 
-readonly ECHO_HELPER_WARNING=\
-  "hassbian-config helper script. Do not run directly, use 'hassbian-config' instead."
-readonly ECHO_ACTION_ERROR=\
-  "If you have issues with this script, please say something in the #hassbian channel on Discord."
-readonly ECHO_MISSING_INSTALL=\
-  "Installation script does not exist for this suite."
-readonly ECHO_MISSING_UPGRADE=\
-  "Upgrade script does not exist for this suite."
-readonly ECHO_MISSING_REMOVE=\
-  "Removal script does not exist for this suite."
+readonly ECHO_HELPER_WARNING="hassbian-config helper script. Do not run directly, use 'hassbian-config' instead."
+readonly ECHO_ACTION_ERROR="If you have issues with this script, please say something in the #hassbian channel on Discord."
+readonly ECHO_MISSING_INSTALL="Installation script does not exist for this suite."
+readonly ECHO_MISSING_UPGRADE="Upgrade script does not exist for this suite."
+readonly ECHO_MISSING_REMOVE="Removal script does not exist for this suite."
 
 #####################################
 # Source links (alphabetical order)
 #####################################
-source /opt/hassbian/info/general
-source /opt/hassbian/info/version
-source /opt/hassbian/suite/action
-source /opt/hassbian/suite/helper
-source /opt/hassbian/suite/isntall
-source /opt/hassbian/suite/remove
-source /opt/hassbian/suite/upgrade
-source /opt/hassbian/suite/verify
-source /opt/hassbian/cli
-source /opt/hassbian/globals
-source /opt/hassbian/input
-source /opt/hassbian/log
+source /opt/hassbian/helpers/info/general
+source /opt/hassbian/helpers/info/version
+source /opt/hassbian/helpers/suite/action
+source /opt/hassbian/helpers/suite/helper
+source /opt/hassbian/helpers/suite/isntall
+source /opt/hassbian/helpers/suite/remove
+source /opt/hassbian/helpers/suite/upgrade
+source /opt/hassbian/helpers/suite/verify
+source /opt/hassbian/helpers/cli
+source /opt/hassbian/helpers/globals
+source /opt/hassbian/helpers/input
+source /opt/hassbian/helpers/developer
+source /opt/hassbian/helpers/log
