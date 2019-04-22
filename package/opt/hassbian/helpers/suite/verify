@@ -12,7 +12,6 @@ function hassbian.suite.verify.service {
   servicename="$1"
   retrunvalue=1
 
-  echo "Checking the installation..."
   for i in {1..5}; do
     if [ "$(systemctl is-active "$servicename")" == "active" ]; then
       retrunvalue=0
@@ -20,7 +19,7 @@ function hassbian.suite.verify.service {
     fi
     sleep 1s
   done
-  return "$retrunvalue"
+  printf "%s" "$retrunvalue"
 }
 
 function hassbian.suite.verify.pgrep {
@@ -32,7 +31,6 @@ function hassbian.suite.verify.pgrep {
   prosessename="$1"
   retrunvalue=1
 
-  echo "Checking the installation..."
   for i in {1..5}; do
     if [ ! -z  "$(pgrep -f "$prosessename")" ]; then
       retrunvalue=0
@@ -40,6 +38,6 @@ function hassbian.suite.verify.pgrep {
     fi
       sleep 1s
   done
-  return "$retrunvalue"
+  printf "%s" "$retrunvalue"
 }
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"
