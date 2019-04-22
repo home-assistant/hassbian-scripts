@@ -77,7 +77,7 @@ function hassbian.suite.helper.blockcheck {
     blocked_releasename=$(hassbian.suite.helper.manifest "$suitename" blocked_releasename)
     if [ "$blocked_releasename" == "ALL" ] || [ "$blocked_releasename" == "$osrelease" ]; then
       blocked_message=$(hassbian.suite.helper.manifest "$suitename" blocked_message)
-      printf "%s\\n" "$blocked_message"
+      echo -e "$blocked_message"
       exit
     fi
   fi

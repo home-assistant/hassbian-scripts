@@ -27,7 +27,7 @@ function hassbian.suite.info.print {
     installed='False'
   fi
 
-  echo "
+  echo -e "
   $name
   Installed: $installed
   Contributed to the project by $author
