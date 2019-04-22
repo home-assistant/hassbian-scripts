@@ -68,8 +68,8 @@ function python-migration {
   "
   sleep 20
   # shellcheck disable=SC1091
-  source /opt/hassbian/suites/python.sh
-  python-upgrade-package
+  source /opt/hassbian/suites/python/install
+  install
   echo "HAVENV=$(currenthapyversion)" > "$pythonmigrationfile"
   # Quit when execution is done.
   exit 0
