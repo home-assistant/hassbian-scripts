@@ -1,12 +1,9 @@
 #!bin/bash
 #  Helper script for hassbian-config.
 
-declare author
 declare suitename
 declare suitestate
 declare suiteaction
-declare name
-declare long_description
 declare retrunedvalue
 
 function hassbian.suite.action {
@@ -21,6 +18,12 @@ function hassbian.suite.action {
 
   # Verify that the suite exist.
   hassbian.suite.helper.exist "$suitename"
+
+  # Show info
+  if [ "$suiteaction" == "show" ]; then
+    hassbian.suite.info.print "$suitename"
+    exit
+  fi
 
   # Generate systeminfo
   hassbian.info.general.systeminfo
@@ -47,9 +50,6 @@ function hassbian.suite.action {
   elif [ "$suiteaction" == "remove" ]; then
     hassbian.suite.remove "$suitename" | tee "$HASSBIAN_LOG_FILE"
     retrunedvalue="$?"
-
-  elif [ "$suiteaction" == "show" ]; then
-    hassbian.suite.info.print "$suitename"
 
   else
     echo "$suiteaction is not a valid suite action."
