@@ -15,7 +15,7 @@ function install {
   else
     hassbian.input.info "Please take the time to setup your account"
     username=$(hassbian.input.text "Username:")
-    username=$(hassbian.input.password "Password:")
+    password=$(hassbian.input.text "Password:")
     if [ ! "$username" ]; then
       username=pi
     fi

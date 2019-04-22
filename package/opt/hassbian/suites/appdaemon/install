@@ -13,7 +13,7 @@ function install {
       activatesamba=$(hassbian.input.bool "Do you want to add Samba share for AppDaemon configuration?")
     fi
 
-    homeassistant_password=$(hassbian.input.password "Enter your Home Assistant API password:")
+    homeassistant_password=$(hassbian.input.text "Enter your Home Assistant API password:")
   else
     homeassistant_password=""
   fi
