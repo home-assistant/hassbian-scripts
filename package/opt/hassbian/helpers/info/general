@@ -1,0 +1,51 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+
+function hassbian.info.general.usage {
+  # Show usage in the console.
+  echo "
+  usage: hassbian-config [command] [suite] [options]  
+  run 'hassbian-config --help' to see all options"
+}
+
+
+function hassbian.info.general.help {
+  # Show this help section in the console.
+  local hassbian_config_version
+  hassbian_config_version=$(hassbian.info.version.hassbian_config.installed)
+  echo "
+  hassbian-config
+    version: $hassbian_config_version
+  
+  usage: hassbian-config [command] [suite] [options]
+  where [command] is one of:
+    install            Installs a software [suite].
+    upgrade            Upgrades software [suite].
+    remove             Remove software [suite].
+    show               To see available [suite] for install/upgrade.
+    log                Displays an log of the last operation.
+    share-log          Generates an hastebin link of the last operation.
+    show-installed     Generates a list of installed suites.
+  
+  available optional [options]:
+    -Y | --accept      Accept defaults on scripts that allows this.
+    -F | --force       Force run an script, this is useful if you need to reinstall a package.
+    -D | --debug       This will output every comand to the console.
+    -B | --beta        This will install the current beta version if implemented.
+    --dev              This will install the current development version if implemented.
+  
+  other [command] available:
+    -V | --version     Prints the version of hassbian-config
+    -H | --help        Shows this help
+  "
+}
+
+function hassbian.info.general.rootcheck {
+  # Check if the current user is root.
+  if (( EUID != 0 )); then
+    echo "Error: hassbian-config must be run as root (with sudo) for this to be possible."
+    exit 1
+  fi
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

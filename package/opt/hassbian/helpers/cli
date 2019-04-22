@@ -1,0 +1,86 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+#  The purpose of this is to provide support for commandline arguments.
+
+# shellcheck disable=SC2034
+
+declare argument
+declare suites
+declare suiteaction
+
+for argument in "$@"; do
+    if [ "$argument" == "install" ]; then
+        suiteaction="$argument"
+
+    elif [ "$argument" == "upgrade" ]; then
+        suiteaction="$argument"
+
+    elif [ "$argument" == "remove" ]; then
+        suiteaction="$argument"
+
+    elif [ "$argument" == "show" ]; then
+        suiteaction="$argument"
+
+    elif [ "$argument" == "log" ]; then
+        hassbian.log.show
+        exit
+
+    elif [ "$argument" == "share-log" ]; then
+        hassbian.log.share
+        exit
+
+    elif [ "$argument" == "show-installed" ]; then
+        hassbian.info..general.installed_suites
+        exit
+
+    elif [ "$argument" == "systeminfo" ]; then
+        hassbian.info.general.systeminfo
+        exit
+
+    ## Spesial arguments.
+    elif [ "$argument" == "--help" ] || [ "$argument" == "-H" ]; then
+        hassbian.info.general.help
+        exit
+
+    elif [ "$argument" == "--version" ] || [ "$argument" == "-V" ]; then
+        hassbian.info.version.hassbian_config.installed
+        exit
+
+    # If we got here we can assume that the argument is a suite.
+    else
+      suites+=" $argument"
+    fi
+
+    ## Flags
+    if [ "$argument" == "--accept" ] || [ "$argument" == "-Y" ]; then
+       HASSBIAN_RUNTIME_ACCEPT=true
+    fi
+
+    if [ "$argument" == "--force" ] || [ "$argument" == "-F" ]; then
+        HASSBIAN_RUNTIME_FORCE=true
+    fi
+
+    if [ "$argument" == "--debug" ] || [ "$argument" == "-D" ]; then
+        HASSBIAN_RUNTIME_BETA=true
+    fi
+
+    if [ "$argument" == "--beta" ] || [ "$argument" == "-B" ]; then
+        HASSBIAN_RUNTIME_BETA=true
+    fi
+
+    if [ "$argument" == "--dev" ]; then
+        HASSBIAN_RUNTIME_DEV=true
+    fi
+done
+
+if [ -n "$suites" ]; then
+
+  for suite in $suites; do
+    hassbian.suite.action "$suiteaction" "$suite"
+  done
+
+else
+  hassbian.info.general.usage
+fi
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

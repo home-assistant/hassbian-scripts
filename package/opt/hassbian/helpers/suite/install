@@ -1,0 +1,14 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+
+declare suitename
+
+function hassbian.suite.install {
+  # Purpose: Install a suite.
+
+  suitename="$1"
+
+
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

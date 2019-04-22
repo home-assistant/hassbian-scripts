@@ -1,0 +1,15 @@
+#!/bin/bash
+# 
+# Upgrade script for Hassbian suite: DuckDNS
+#
+
+function upgrade {
+  echo -e "
+  
+  \\e[32mNo upgrade script exist for DuckDNS..\\e[0m
+
+  "
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead."

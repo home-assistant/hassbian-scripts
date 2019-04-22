@@ -1,0 +1,9 @@
+{
+  "name": "DuckDNS",
+  "author": "Ludeeus <https://github.com/ludeeus>",
+  "short_description": "Setup for Duck DNS auto renewal, and generates SSL certificate.",
+  "long_description": "This script adds an cron job to auto update you the WAN IP address for the defined domain.\\nThis script can also generate SSL certificate for https with Let’s Encrypt.",
+  "blocked": true,
+  "blocked_releasename": "buster",
+  "blocked_messages": "Due to an upstream issue with pihole we can not install this suite at this time.\\nFor more information about this, see https://github.com/home-assistant/hassbian-scripts/issues/XXX"
+}
