@@ -1,10 +1,59 @@
 #!/bin/bash
 # 
-# Installation script for Hassbian suite: DuckDNS
+# Installation script for Hassbian suite: Custom component store
 #
 
 function install {
+  local ipaddress
+  local validation
+  local username
+  local password
 
+  if [ "$HASSBIAN_RUNTIME_ACCEPT" = true ]; then
+    username=pi
+    password=raspberry
+  else
+    hassbian.input.info "Please take the time to setup your account"
+    username=$(hassbian.input.text "Username:")
+    username=$(hassbian.input.password "Password:")
+    if [ ! "$username" ]; then
+      username=pi
+    fi
+    if [ ! "$password" ]; then
+      password=raspberry
+    fi
+  fi
+
+  echo "Installing latest version of Custom component store..."
+  python3 -m pip install componentstore
+
+  echo "Enabling Custom component store service..."
+  cp /opt/hassbian/suites/custom_component_store/files/custom-component-store@homeassistant.service /etc/systemd/system/custom-component-store@homeassistant.service
+
+  sed -i "s,%%USERNAME%%,${username},g" /etc/systemd/system/custom-component-store@homeassistant.service
+  sed -i "s,%%PASSWORD%%,${password},g" /etc/systemd/system/custom-component-store@homeassistant.service
+
+  systemctl enable custom-component-store@homeassistant.service
+  sync
+
+  echo "Starting Custom component store..."
+  systemctl start custom-component-store@homeassistant.service
+
+  echo "Starting cleanup"
+  cd || exit 1
+  rm -R /tmp/custom-component-store
+
+  validation=$(hassbian.suite.verify.service custom-component-store@homeassistant.service)
+  if [ "$validation" == "0" ]; then
+    ipaddress=$(hassbian.info.general.ipaddress)
+    echo "Installation done...
+    Custom component store installation is running at $ipaddress:8120 or if preferred http://hassbian.local:8120"
+  else
+    echo "Installation done..."
+    echo "Upgrade failed..."
+    return 1
+  fi
+  return 0
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

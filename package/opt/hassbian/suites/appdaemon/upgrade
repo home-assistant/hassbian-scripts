@@ -1,10 +1,27 @@
 #!/bin/bash
 # 
-# Upgrade script for Hassbian suite: Template
+# Upgrade script for Hassbian suite: AppDaemon
 #
 
-function remove {
-  echo "  Upgrade script does not exist for this suite."
+function upgrade {
+  local validation
+  echo "Stopping AppDaemon service..."
+  systemctl stop appdaemon@homeassistant.service
+
+  hassbian.suite.helper.install.pip appdaemon
+
+  echo "Starting AppDaemon service..."
+  systemctl start appdaemon@homeassistant.service
+
+  validation=$(hassbian.suite.verify.service appdaemon@homeassistant.service)
+  if [ "$validation" == "0" ]; then
+    echo "Upgrade done..
+    To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
+
+  else
+    echo "Upgrade failed..."
+    return 1
+  fi
   return 0
 }
 

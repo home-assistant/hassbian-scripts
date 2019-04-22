@@ -22,7 +22,7 @@ function hassbian.suite.helper.install.pip {
   python -m pip install --upgrade setuptools wheel"
 
   echo "Installing Python packages..."
-  python -m pip install "$packages"
+  python -m pip install --upgrade "$packages"
 
   echo "Deactivating virtualenv..."
   deactivate

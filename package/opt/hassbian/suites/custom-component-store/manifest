@@ -1,8 +1,8 @@
 {
-  "name": "Template",
-  "author": "Username <https://github.com/username>",
-  "short_description": "Short description.",
-  "long_description": "A little longer description.",
+  "name": "Custom component store",
+  "author": "Ludeeus <https://github.com/ludeeus>",
+  "short_description": "Custom component store script.",
+  "long_description": "Custom component store is a web UI tool that can help you manage your custom components.",
   "blocked": false,
   "blocked_releasename": "",
   "blocked_messages": ""
