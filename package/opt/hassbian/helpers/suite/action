@@ -68,7 +68,7 @@ function hassbian.suite.action {
   if [ "$HASSBIAN_RUNTIME_DEBUG" == true ]; then set -x; fi
 
   # Post action
-  if [ "$retrunedvalue" ]; then 
+  if [ "$retrunedvalue" == "0" ]; then
     suitestate="installed"
   else
     echo "$ECHO_ACTION_ERROR"
