@@ -22,6 +22,7 @@ function help {
   printf "%-8s\\t%s\\n" "  log" "Displays an log of the last operation."
   printf "%-8s\\t%s\\n" "  share-log" "Generates an hastebin link of the last operation."
   printf "%-8s\\t%s\\n" "  show-installed" "Generates a list of installed suites."
+  printf "%-8s\\t%s\\n" "  systeminfo" "Generates information about the system."
   printf "\\n"
   printf "available optional [options]:\\n"
   printf "%-10s\\t%s\\n" " -Y | --accept" "Accept defaults on scripts that allows this."
@@ -49,6 +50,77 @@ function get-all-suite-installers {
   return 0
 }
 
+function currenthapyversion {
+  if [ -f "/srv/homeassistant/bin/activate" ]; then
+    version=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
+    source /srv/homeassistant/bin/activate
+    python -V
+EOF
+  )
+  printf "%s" "${version:0:5}"
+  fi
+}
+
+function currenthaversion {
+  if [ -f "/srv/homeassistant/bin/activate" ]; then
+    version=$(sudo -u homeassistant -H /bin/bash << EOF | awk -F ' ' '{print $NF}'
+    source /srv/homeassistant/bin/activate
+    hass --version
+EOF
+    )
+  printf "%s" "$version"
+  fi
+}
+
+function hcversion {
+  printf "%s" "$(dpkg -s hassbian-scripts | grep 'Version:' | awk '{print $2}')"
+}
+
+function hcremote {
+  version=$(curl -sSL https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/DEBIAN/control | grep Version | awk -F' ' '{print $NF}')
+  printf "%s" "$version"
+}
+
+
+function systeminfo {
+  # Prints system information to the console.
+  # Usefull to call before scripts and as a standalone.
+
+  check-permission  # Must be root
+
+  echo "Generating system information..."
+  local ha=$(currenthaversion)
+  local hapy=$(currenthapyversion)
+  local hc=$(hcversion)
+  local uname=$(uname -a)
+
+  echo "
+  Home Assistant:        $ha
+  Home Assistant Python: $hapy
+  hassbian-config:       $hc
+
+  $uname
+  "
+
+  if [ "$hc" != "$(hcremote)" ]; then
+    printf "\\e[31m%s\\n" "
+    There is an update pending for 'hassbian-config'
+    You can upgrade by running this:
+      sudo hassbian-config upgrade hassbian-script
+    "
+  fi
+
+}
+
+function newestinstalledpython {
+  # Assing the version number of the newest installed version of Python to $INSTALLEDPYTHON
+  POTENTIAL="3.5 3.6 3.7"
+  for version in $POTENTIAL; do
+    if [[ -n "$(command -v python"$version")" ]]; then
+      INSTALLEDPYTHON="$(python"$version" -V | awk -F' ' '{print $2}')"
+    fi
+  done
+}
 function show-suites {
   printf "This is a list over all suites in hassbian-config\\n"
   printf "If a \\e[1msuite\\e[0m has \\e[32mgreen color\\e[0m in the name, you have already installed it.\\n"
@@ -123,7 +195,7 @@ function developer-test-pr { # This function fetches a active PR and build a ins
     apt install -y "$INSTALLDIR"/package.deb --reinstall --allow-downgrades
 
     cd || return 1
-    rm -r "$INSTALLDIR"
+    rm -R "$INSTALLDIR"
 }
 
 function raspberry_pi_zero_check {
@@ -192,7 +264,7 @@ function run-suite { #This is the function the actually run install/upgrade.
 }
 
 function install-suite { #This function do checks if we can/want to install.
-  check-permission
+  systeminfo
   raspberry_pi_zero_check "$1"
   INSTALL=$(grep "$1"-install-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has install function.
   SUITESTATE=$(if [ -f "$SUITE_CONTROL_DIR/$1" ]; then grep "SCRIPTSTATE" "$SUITE_CONTROL_DIR/$1" | awk -F'=' '{print $2}'; else echo ""; fi) #Checking current suite state.
@@ -214,7 +286,7 @@ function install-suite { #This function do checks if we can/want to install.
 }
 
 function upgrade-suite { #This function do checks if we can upgrade.
-  check-permission
+  systeminfo
   UPGRADE=$(grep "$1"-upgrade-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has upgrade function.
   if [ "$UPGRADE" == "" ]; then
     printf "Upgrade script is not available...\\n\\nYou can force run the install script like this:\\nsudo hassbian-config install %s --force\\n" "$1"
@@ -225,7 +297,7 @@ function upgrade-suite { #This function do checks if we can upgrade.
 }
 
 function remove-suite { #This function do checks if we can remove.
-  check-permission
+  systeminfo
   REMOVABLE=$(grep "$1"-remove-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has remove function.
   if [ "$REMOVABLE" == "" ]; then
     printf "Remove function not avaialable for this suite.\\n"
@@ -343,6 +415,10 @@ case $COMMAND in
     ;;
   "log")
     RUN="more $LOGFILE"
+    shift # past argument
+    ;;
+  "systeminfo")
+    RUN="systeminfo"
     shift # past argument
     ;;
   "share-log")

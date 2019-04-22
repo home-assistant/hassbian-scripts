@@ -11,7 +11,75 @@ function homeassistant-show-copyright-info {
   echo "Copyright(c) 2017 Fredrik Lindqvist <https://github.com/Landrash>."
 }
 
+function python-migration {
+  # Implemented to cope with the announced D-Day of Python 3.5
+  # To track if this allready have been run, we create a file to hold that "state"
+  # /srv/homeassistant/hassbian/pythonmigration with HAVENV=pythonversion as the content.
+
+  force="$1"
+  readonly pythonmigrationfile='/srv/homeassistant/hassbian/pythonmigration'
+  readonly targetpythonversion='3.7'
+
+  # Get the current python version HA is running under.
+  CURRENTHAPYVERSION=$(currenthapyversion)
+
+  # Check if the file exist
+  if [ ! -f "$pythonmigrationfile" ]; then
+    # file does not exist, let's create it (if we can).
+    echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
+  fi
+
+  # Checks to see if migration is needed.
+  pyversion=$(grep "HAVENV" $pythonmigrationfile | awk -F'=' '{print $2}')
+  if [[ "${pyversion:0:3}" == "$targetpythonversion" ]]; then
+    # Migration not needed.
+    return 0
+  fi
+
+  if [[ "${CURRENTHAPYVERSION:0:3}" == "$targetpythonversion" ]]; then
+    # Migration not needed.
+    if [ -n "${CURRENTHAPYVERSION}" ]; then
+      echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
+    fi
+    return 0
+  fi
+
+  # We got here, a migration is needed.
+  echo "HAVENV=$CURRENTHAPYVERSION" > "$pythonmigrationfile"
+  echo
+  echo "A migration of your python virtual enviorment for Home Assistant will be needed."
+  echo "This will take about 1 hour on a raspberry pi 3."
+  echo
+  if [ "$force" != "true" ]; then
+    echo -n "Do you want to start this migration now? [N/y] : "
+    read -r RESPONSE
+    if [ "$RESPONSE" != "y" ] || [ "$RESPONSE" != "Y" ]; then
+      return 0
+    fi
+  fi
+  echo "
+
+  MIGRATION IN PROGRESS
+  THIS WILL TAKE A LONG TIME, IT IS IMPORTANT THAT YOU DO NOT INTERRUPT THIS
+
+
+  AFTER THIS MIGRATION YOUR HOME ASSISTANT INSTANCE WILL BE RUNNING UNDER PYTHON $targetpythonversion
+
+  "
+  sleep 20
+  # shellcheck disable=SC1091
+  source /opt/hassbian/suites/python.sh
+  python-upgrade-package
+  echo "HAVENV=$(currenthapyversion)" > "$pythonmigrationfile"
+  # Quit when execution is done.
+  exit 0
+
+}
+
 function homeassistant-install-package {
+# Check if migration is needed.
+python-migration true
+
 echo "Checking generation of local certificates "
 c_rehash
 
@@ -21,18 +89,18 @@ chown homeassistant:homeassistant -R /srv/homeassistant
 echo "Changing to the homeassistant user"
 sudo -u homeassistant -H /bin/bash << EOF
 
-echo "Creating Home Assistant venv"
-python3 -m venv /srv/homeassistant
+  echo "Creating Home Assistant venv"
+  python"${INSTALLEDPYTHON::-2}" -m venv /srv/homeassistant
 
-echo "Changing to Home Assistant venv"
-source /srv/homeassistant/bin/activate
+  echo "Changing to Home Assistant venv"
+  source /srv/homeassistant/bin/activate
 
-echo "Installing latest version of Home Assistant"
-python3 -m pip install setuptools wheel
-python3 -m pip install homeassistant
+  echo "Installing latest version of Home Assistant"
+  python -m pip install setuptools wheel
+  python -m pip install homeassistant
 
-echo "Deactivating virtualenv"
-deactivate
+  echo "Deactivating virtualenv"
+  deactivate
 EOF
 
 echo "Enabling Home Assistant service"
@@ -67,6 +135,9 @@ return 0
 }
 
 function homeassistant-upgrade-package {
+# Check if migration is needed.
+python-migration
+
 if [ "$DEV" == "true"  ]; then
   echo "This script downloads Home Assistant directly from the dev branch on Github."
   echo "you can use this to be on the 'bleeding edge of the development of Home Assistant.'"
@@ -116,13 +187,13 @@ echo "Changing to Home Assistant venv"
 source /srv/homeassistant/bin/activate
 
 echo "Upgrading Home Assistant"
-python3 -m pip install --upgrade setuptools wheel
+python -m pip install --upgrade setuptools wheel
 if [ "$DEV" == "true" ]; then
-  python3 -m pip install git+https://github.com/home-assistant/home-assistant@dev
+  python -m pip install git+https://github.com/home-assistant/home-assistant@dev
 elif [ "$BETA" == "true" ]; then
-  python3 -m pip install --upgrade --pre homeassistant
+  python -m pip install --upgrade --pre homeassistant
 else
-  python3 -m pip install --upgrade homeassistant=="$newversion"
+  python -m pip install --upgrade homeassistant=="$newversion"
 fi
 
 echo "Deactivating virtualenv"
@@ -151,7 +222,7 @@ EOF
     if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
       sudo -u homeassistant -H /bin/bash << EOF
       source /srv/homeassistant/bin/activate
-      python3 -m pip install --upgrade homeassistant=="$current_version"
+      python -m pip install --upgrade homeassistant=="$current_version"
       deactivate
 EOF
     fi
