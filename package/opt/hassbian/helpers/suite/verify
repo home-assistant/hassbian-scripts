@@ -42,5 +42,4 @@ function hassbian.suite.verify.pgrep {
   done
   return "$retrunvalue"
 }
-
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"
