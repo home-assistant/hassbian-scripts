@@ -42,8 +42,10 @@ declare HASSBIAN_RUNTIME_DEV=false
 #####################################
 
 # Warn users about running helper scripts directly.
-readonly ECHO_HELPER_WARNING="hassbian-config helper script. Do not run directly, use 'hassbian-config' instead."
-readonly ECHO_ACTION_ERROR="If you have issues with this script, please say something in the #hassbian channel on Discord."
+readonly ECHO_HELPER_WARNING=\
+  "hassbian-config helper script. Do not run directly, use 'hassbian-config' instead."
+readonly ECHO_ACTION_ERROR=\
+  "If you have issues with this script, please say something in the #hassbian channel on Discord."
 
 #####################################
 # Source links (alphabetical order)
@@ -60,46 +62,3 @@ source /opt/hassbian/cli
 source /opt/hassbian/globals
 source /opt/hassbian/input
 source /opt/hassbian/log
-
-
-#############################OLD SHIT##########################################
-
-function install-suite { #This function do checks if we can/want to install.
-  INSTALL=$(grep "$1"-install-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has install function.
-  SUITESTATE=$(if [ -f "$SUITE_CONTROL_DIR/$1" ]; then grep "SCRIPTSTATE" "$SUITE_CONTROL_DIR/$1" | awk -F'=' '{print $2}'; else echo ""; fi) #Checking current suite state.
-  if [ "$FORCE" == "true" ]; then #Go straight to run-suite if --force is used.
-    run-suite install "$1" | tee "$LOGFILE" #Run if -F/-f/--force is used.
-  elif [ "$SUITESTATE" == "installed" ] || [ "$INSTALL" == "" ]; then #Try redirect to upgrade script if already installed.
-    printf "%s is already installed or install script is not available...\\n" "$1"
-    UPGRADE=$(grep "$1"-upgrade-package "$SUITE_INSTALL_DIR/$1".sh)
-    if [ "$UPGRADE" == "" ]; then
-      printf "Upgrade script is not available...\\n\\nYou can force run the install script like this:\\nsudo hassbian-config install %s --force\\n" "$1"
-      return 0
-    fi
-    printf "upgrade script for %s found, running that...\\n\\n" "$1"
-    run-suite upgrade "$1" | tee "$LOGFILE" #Redirects to upgrade script.
-  else
-    run-suite install "$1" | tee "$LOGFILE" #This is the default run, if no options is used.
-  fi
-  return 0
-}
-
-function upgrade-suite { #This function do checks if we can upgrade.
-  UPGRADE=$(grep "$1"-upgrade-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has upgrade function.
-  if [ "$UPGRADE" == "" ]; then
-    printf "Upgrade script is not available...\\n\\nYou can force run the install script like this:\\nsudo hassbian-config install %s --force\\n" "$1"
-    return 0
-  fi
-  run-suite upgrade "$1" | tee "$LOGFILE" #This is the default run.
-  return 0
-}
-
-function remove-suite { #This function do checks if we can remove.
-  REMOVABLE=$(grep "$1"-remove-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has remove function.
-  if [ "$REMOVABLE" == "" ]; then
-    printf "Remove function not avaialable for this suite.\\n"
-    return 0
-  fi
-  run-suite remove "$1" | tee "$LOGFILE" #This is the default run.
-  return 0
-}
