@@ -1,10 +1,20 @@
 #!/bin/bash
 # 
-# Upgrade script for Hassbian suite: Template
+# Upgrade script for Hassbian suite: Hassbian
 #
 
-function remove {
-  echo "  Upgrade script does not exist for this suite."
+function upgrade {
+  echo "Updating package list"
+  apt update
+
+  echo "Upgrading base operating system"
+  apt upgrade -y
+
+  echo
+  echo "Upgrade complete."
+  echo
+  echo "Note that you may need to reboot the raspberry Pi for some updates to take effect."
+  echo
   return 0
 }
 
