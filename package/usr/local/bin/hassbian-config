@@ -58,7 +58,9 @@ source /opt/hassbian/helpers/suite/install
 source /opt/hassbian/helpers/suite/remove
 source /opt/hassbian/helpers/suite/upgrade
 source /opt/hassbian/helpers/suite/verify
-source /opt/hassbian/helpers/cli
 source /opt/hassbian/helpers/input
 source /opt/hassbian/helpers/developer
 source /opt/hassbian/helpers/log
+
+# the CLI is dependant on other sources so we load that at the end.
+source /opt/hassbian/helpers/cli

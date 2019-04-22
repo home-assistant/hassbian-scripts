@@ -33,8 +33,4 @@ function hassbian.input.password {
   whiptail --title "hassbian-config" --passwordbox "$message" 0 0 3>&1 1>&2 2>&3
 }
 
-test=$(hassbian.input.bool "Do you want to generate SSL certificates?")
-echo "test result:"
-echo "$test"
-
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"
