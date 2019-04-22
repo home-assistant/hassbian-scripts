@@ -10,6 +10,7 @@ function hassbian.suite.upgrade {
   local returnvalue
 
   suitename="$1"
+
   if [ -f "$HASSBIAN_SUITE_DIR/$suitename/upgrade" ]; then
     source "$HASSBIAN_SUITE_DIR/$suitename/upgrade"
     returnvalue=$(upgrade)

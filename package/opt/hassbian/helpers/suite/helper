@@ -103,24 +103,6 @@ function hassbian.suite.helper.exist {
     echo "$suitename are missing manifest file."
     exit 1
   fi
-
-  # Check if suite install file exist.
-  if [ ! -f "$HASSBIAN_SUITE_DIR/$suitename/install" ]; then
-    echo "$suitename are missing install file."
-    exit 1
-  fi
-
-  # Check if suite upgrade file exist.
-  if [ ! -f "$HASSBIAN_SUITE_DIR/$suitename/upgrade" ]; then
-    echo "$suitename are missing upgrade file."
-    exit 1
-  fi
-
-  # Check if suite remove file exist.
-  if [ ! -f "$HASSBIAN_SUITE_DIR/$suitename/remove" ]; then
-    echo "$suitename are missing remove file."
-    exit 1
-  fi
 }
 
 function hassbian.suite.helper.pizerocheck {

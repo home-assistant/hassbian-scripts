@@ -10,6 +10,7 @@ function hassbian.suite.remove {
   local returnvalue
 
   suitename="$1"
+
   if [ -f "$HASSBIAN_SUITE_DIR/$suitename/remove" ]; then
     source "$HASSBIAN_SUITE_DIR/$suitename/remove"
     returnvalue=$(remove)
