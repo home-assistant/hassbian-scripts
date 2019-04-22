@@ -2,7 +2,6 @@
 #  Helper script for hassbian-config.
 
 declare message
-declare value
 
 function hassbian.input.bool {
   # Present a pretty GUI for your question.

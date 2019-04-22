@@ -17,15 +17,16 @@ function hassbian.log.share {
   fi
 
   if [ "$HASSBIAN_RUNTIME_ACCEPT" = false ]; then
-    echo "
+    local message="
     This will put the output from your last operation on hastebin.
     This could include sensitive information.
-    If you are unsure about what it contains, you can run 'hassbian-config log' to check."
+    If you are unsure about what it contains, you can run 'hassbian-config log' to check.
 
-    echo -n "Do you want to create an hastebin link? [N/y] : "
-    read -r  response
+    Do you want to create an hastebin link?: "
 
-    if [ "$response" != "y" ] || [ "$response" != "Y" ]; then
+    response=$(hassbian.input.bool "$message")
+
+    if [ ! "$response" ]; then
       return
     fi
 
