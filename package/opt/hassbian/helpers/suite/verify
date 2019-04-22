@@ -14,10 +14,30 @@ function hassbian.suite.verify.service {
 
   echo "Checking the installation..."
   for i in {1..5}; do
-      if [ "$(systemctl is-active "$servicename")" == "active" ]; then
-        retrunvalue=0
-        break
-      fi
+    if [ "$(systemctl is-active "$servicename")" == "active" ]; then
+      retrunvalue=0
+      break
+    fi
+    sleep 1s
+  done
+  return "$retrunvalue"
+}
+
+function hassbian.suite.verify.pgrep {
+  # Example usage: 
+  # hassbian.suite.verify.pgrep pihole
+  local prosessename
+  local retrunvalue
+
+  prosessename="$1"
+  retrunvalue=1
+
+  echo "Checking the installation..."
+  for i in {1..5}; do
+    if [ ! -z  "$(pgrep -f "$prosessename")" ]; then
+      retrunvalue=0
+      break
+    fi
       sleep 1s
   done
   return "$retrunvalue"

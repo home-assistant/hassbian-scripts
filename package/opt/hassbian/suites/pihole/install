@@ -1,10 +1,34 @@
 #!/bin/bash
 # 
-# Installation script for Hassbian suite: DuckDNS
+# Installation script for Hassbian suite: Pi-Hole
 #
 
 function install {
+  local ipaddress
 
+  echo "Downloading Pi-hole install script..."
+  mkdir /tmp/pihole || exit
+  cd /tmp/pihole || exit
+  wget -O basic-install.sh https://install.pi-hole.net
+
+  echo "Running interactive setup..."
+  cd /tmp/pihole || exit
+  chmod +x /tmp/pihole/basic-install.sh || exit
+  bash /tmp/pihole/basic-install.sh
+
+  echo "Checking the installation..."
+  validation=$(hassbian.suite.verify.pgrep pihole)
+
+  if [ "${validation}" ]; then
+    ipaddress=$(hassbian.info.general.ipaddress)
+    echo "Installation done.
+    Your Pi-Hole instance is running at $ipaddress or if preferred hassbian.local"
+  else
+    echo "Installation failed..."
+    return 1
+  fi
+
+  return 0
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

@@ -16,6 +16,13 @@ function hassbian.info.general.usage {
   run 'hassbian-config --help' to see all options"
 }
 
+function hassbian.info.general.ipaddress {
+  # Retrun the IP Address of the host.
+  local ipaddress
+  ipaddress=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
+  printf "%s" "$ipaddress"
+}
+
 function hassbian.info.general.help {
   # Show this help section in the console.
   local hassbian_config_version
