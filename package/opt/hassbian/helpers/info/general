@@ -31,7 +31,8 @@ function hassbian.info.general.help {
   hassbian-config
     version: $hassbian_config_version
   
-  usage: hassbian-config [command] [suite] [options]
+  usage: 
+    hassbian-config [command] [suite] [options]
   where [command] is one of:
     install            Installs a software [suite].
     upgrade            Upgrades software [suite].
