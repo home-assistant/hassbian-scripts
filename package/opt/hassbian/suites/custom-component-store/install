@@ -10,17 +10,17 @@ function install {
   local password
 
   if [ "$HASSBIAN_RUNTIME_ACCEPT" = true ]; then
-    username=pi
-    password=raspberry
+    username='pi'
+    password='raspberry'
   else
     hassbian.input.info "Please take the time to setup your account"
     username=$(hassbian.input.text "Username:")
     password=$(hassbian.input.text "Password:")
     if [ ! "$username" ]; then
-      username=pi
+      username='pi'
     fi
     if [ ! "$password" ]; then
-      password=raspberry
+      password='raspberry'
     fi
   fi
 

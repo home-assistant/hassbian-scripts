@@ -13,7 +13,8 @@ function hassbian.suite.upgrade {
 
   if [ -f "$HASSBIAN_SUITE_DIR/$suitename/upgrade" ]; then
     source "$HASSBIAN_SUITE_DIR/$suitename/upgrade"
-    returnvalue=$(upgrade)
+    upgrade
+    returnvalue="$?"
 
     return "$returnvalue"
   else

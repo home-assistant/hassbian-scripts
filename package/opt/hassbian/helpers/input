@@ -10,7 +10,8 @@ function hassbian.input.bool {
 
   message="$1"
 
-  whiptail --title "hassbian-config" --yesno "$message" 0 0 3>&1 1>&2 2>&3; echo $?
+  whiptail --title "hassbian-config" --yesno "$message" 0 0 3>&1 1>&2 2>&3
+  printf "%s" "$?"
 }
 
 function hassbian.input.info {
@@ -29,8 +30,8 @@ function hassbian.input.text {
   # hassbian.input.text "Define a username:"
 
   message="$1"
-
   whiptail --title "hassbian-config" --inputbox "$message" 0 0 3>&1 1>&2 2>&3
+  printf "%s" "$?"
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

@@ -13,7 +13,8 @@ function hassbian.suite.install {
 
   if [ -f "$HASSBIAN_SUITE_DIR/$suitename/install" ]; then
     source "$HASSBIAN_SUITE_DIR/$suitename/install"
-    returnvalue=$(install)
+    install
+    returnvalue="$?"
 
     return "$returnvalue"
   else

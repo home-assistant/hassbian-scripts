@@ -58,7 +58,7 @@ function hassbian.suite.action {
 
 
   # Deactivate debug
-  if [ "$HASSBIAN_RUNTIME_DEBUG" == true ]; then set -x; fi
+  if [ "$HASSBIAN_RUNTIME_DEBUG" == true ]; then set +x; fi
 
   # Post action
   if [ "$retrunedvalue" == "0" ]; then
