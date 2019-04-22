@@ -1,0 +1,40 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+
+function hassbian.developer.testpr { 
+  # This function fetches a active PR and build a installation package from that and install it on the system.
+  # This should only be used by maintainers to test PR's!
+  local INSTALLDIR
+  local PRNUMBER
+
+  # Root check
+  hassbian.info.general.rootcheck
+
+  PRNUMBER="$1"
+  INSTALLDIR="/tmp/hassbian_config_install_${PRNUMBER}"
+
+  if [[ -z "$PRNUMBER" ]]; then
+    echo "Error: Missing PR argument.
+
+    Run: hassbian-config developer-test-pr PRNUMBER"
+    exit
+  fi
+
+  git clone https://github.com/home-assistant/hassbian-scripts.git "$INSTALLDIR"
+
+  cd "$INSTALLDIR" || return 1
+
+  git fetch origin +refs/pull/"$PRNUMBER"/merge || return 1
+  git checkout FETCH_HEAD
+
+  chmod 755 -R package
+  dpkg-deb --build package/
+
+  apt install -y "$INSTALLDIR"/package.deb --reinstall --allow-downgrades
+
+  cd || return 1
+
+  rm -R "$INSTALLDIR"
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

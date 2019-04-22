@@ -1,11 +1,52 @@
 #!/bin/bash
-# The base of hassbian-config, this should only contain source links to the helper scripts.
-# shellcheck disable=SC1091
+# The base of hassbian-config, this should only contain source links to the helper scripts and global variables.
+# shellcheck disable=SC1091,SC2034
 
-# This needs to be first since it's used by other sourcelinks.
-source /opt/hassbian/globals
+#####################################
+#  Locations
+#####################################
 
+# Loggfile for 'hassbian-config' operations.
+readonly HASSBIAN_LOG_FILE='/tmp/hassbian.log'
+
+# Suite directory for 'hassbian-config'.
+readonly HASSBIAN_SUITE_DIR='/opt/hassbian/suites'
+
+# Controll directory for 'hassbian-config'.
+readonly HASSBIAN_CONTROL_DIR='/srv/homeassistant/hassbian/control'
+
+# Home Assistant venv directory.
+readonly HOME_ASSISTANT_VENV='/srv/homeassistant'
+
+#####################################
+#  Runtime flags
+#####################################
+
+# Enabled by adding the --accept flag.
+declare HASSBIAN_RUNTIME_ACCEPT=false
+
+# Enabled by adding the --debug flag.
+declare HASSBIAN_RUNTIME_DEBUG=false
+
+# Enabled by adding the --force flag.
+declare HASSBIAN_RUNTIME_FORCE=false
+
+# Enabled by adding the --force flag.
+declare HASSBIAN_RUNTIME_BETA=false
+
+# Enabled by adding the --force flag.
+declare HASSBIAN_RUNTIME_DEV=false
+
+#####################################
+#  Echoable messages
+#####################################
+
+# Warn users about running helper scripts directly.
+readonly ECHO_HELPER_WARNING="hassbian-config helper script. Do not run directly, use 'hassbian-config' instead."
+
+#####################################
 # Source links (alphabetical order)
+#####################################
 source /opt/hassbian/info/general
 source /opt/hassbian/info/version
 source /opt/hassbian/suite/action
@@ -20,18 +61,7 @@ source /opt/hassbian/input
 source /opt/hassbian/log
 
 
-function show-suite-info {
-  source $SUITE_INSTALL_DIR/"$1".sh
-  "$1"-show-short-info
-  return 0
-}
-
-function get-all-suite-installers {
-  ALLSUITES=$(find $SUITE_INSTALL_DIR/ -maxdepth 1 -type f | sort | awk -F'/' ' {print $NF}' | awk -F. '{print $1}')
-  echo "$ALLSUITES"
-  return 0
-}
-
+#############################OLD SHIT##########################################
 
 function show-suites {
   printf "This is a list over all suites in hassbian-config\\n"
@@ -67,53 +97,6 @@ function show-suites {
   printf "\\n"
   printf "To view more info about a suite type: 'hassbian-config show \\e[1msuite\\e[0m\\n"
   return 0
-}
-
-function show-suite-long-info {
-  source $SUITE_INSTALL_DIR/"$1".sh
-  "$1"-show-short-info
-  "$1"-show-long-info
-  "$1"-show-copyright-info
-  return 0
-}
-
-function developer-test-pr { # This function fetches a active PR and build a installation package from that and install it on the system.
-    # This should only be used by maintainers to test PR's!
-    check-permission
-    readonly PRNUMBER="$1"
-    readonly INSTALLDIR="/tmp/hassbian_config_install_${PRNUMBER}"
-    if [[ -z "$PRNUMBER" ]]; then
-        echo "Error: Missing PR argument."
-        echo ""
-        echo "Run: bash test_pr.sh PRNUMBER"
-        return 1
-    fi
-    git clone https://github.com/home-assistant/hassbian-scripts.git "$INSTALLDIR"
-    cd "$INSTALLDIR" || return 1
-    git fetch origin +refs/pull/"$PRNUMBER"/merge || return 1
-    git checkout FETCH_HEAD
-
-    chmod 755 -R package
-    dpkg-deb --build package/
-    apt install -y "$INSTALLDIR"/package.deb --reinstall --allow-downgrades
-
-    cd || return 1
-    rm -R "$INSTALLDIR"
-}
-
-function raspberry_pi_zero_check {
-## Start check for Raspberry Pi Zero
-if [ "$FORCE" != "true" ]; then
-  REVCODE=$(cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}' | sed 's/^ *//g' | sed 's/ *$//g')
-  if [ "$REVCODE" = "90092" ] || [ "$REVCODE" = "90093" ] || [ "$REVCODE" = "0x9000C1" ] || [ "$REVCODE" = "9000c1" ]; then
-    if [[ "$1" =~ ^(mosquitto|cloud9|zigbee2mqtt)$ ]]; then
-      echo "This suite can't be installed on Raspberry Pi Zero..."
-      exit 0
-    fi
-  fi
-fi
-## End check for Raspberry Pi Zero
-
 }
 
 
@@ -204,26 +187,6 @@ COMMAND=$1
 SUITE=$2
 
 case $COMMAND in
-  "-F"|"-f"|"--force")
-    FORCE="true"
-    shift # past argument
-    ;;
-  "-Y"|"-y"|"--accept")
-    ACCEPT="true"
-    shift # past argument
-    ;;
-  "-D"|"--debug")
-    DEBUG="true"
-    shift # past argument
-    ;;
-  "--dev")
-    DEV="true"
-    shift # past argument
-    ;;
-  "-B"|"--beta")
-    BETA="true"
-    shift # past argument
-    ;;
   "show")
     if [ "$SUITE" != "" ]; then
       if verify-suite "$SUITE"; then

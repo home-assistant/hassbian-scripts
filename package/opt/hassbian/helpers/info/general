@@ -1,13 +1,20 @@
 #!bin/bash
 #  Helper script for hassbian-config.
 
+function hassbian.info.general.rootcheck {
+  # Check if the current user is root.
+  if (( EUID != 0 )); then
+    echo "Error: hassbian-config must be run as root (with sudo) for this to be possible."
+    exit 1
+  fi
+}
+
 function hassbian.info.general.usage {
   # Show usage in the console.
   echo "
   usage: hassbian-config [command] [suite] [options]  
   run 'hassbian-config --help' to see all options"
 }
-
 
 function hassbian.info.general.help {
   # Show this help section in the console.
@@ -39,15 +46,6 @@ function hassbian.info.general.help {
     -H | --help        Shows this help
   "
 }
-
-function hassbian.info.general.rootcheck {
-  # Check if the current user is root.
-  if (( EUID != 0 )); then
-    echo "Error: hassbian-config must be run as root (with sudo) for this to be possible."
-    exit 1
-  fi
-}
-
 
 function hassbian.info.general.systeminfo {
   # Prints system information to the console.
@@ -82,4 +80,13 @@ function hassbian.info.general.systeminfo {
     "
   fi
 }
+
+function hassbian.info.general.all_suites {
+  # Return a list of all suites.
+  local allsuites
+  allsuites=$(find "$HASSBIAN_SUITE_DIR"/ -maxdepth 1 -type d | \
+    sort | awk -F'/' ' {print $NF}' | awk -F. '{print $1}')
+  echo "$allsuites"
+}
+
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

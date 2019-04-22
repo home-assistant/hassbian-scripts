@@ -24,17 +24,18 @@ function hassbian.suite.action {
   hassbian.info.general.systeminfo
 
   # Echo metadata
-  author=$(hassbian.suite.manifest author)
-  name=$(hassbian.suite.manifest name)
-  long_description=$(hassbian.suite.manifest long_description)
+  author=$(hassbian.suite.helper.manifest "$suitename" author)
+  name=$(hassbian.suite.helper.manifest "$suitename" name)
+  long_description=$(hassbian.suitehelper..manifest "$suitename" long_description)
 
   echo "
   $name
   Contributed to the project by $author
     $long_description"
 
-  # Do a check to see if the suite is blocked.
+  # Do checks to see if the suite can be run.
   hassbian.suite.helper.blockcheck "$suitename"
+  hassbian.suite.helper.pizerocheck "$suitename"
 
   if [ "$suiteaction" == "install" ]; then
     hassbian.suite.install "$suitename" | tee "$HASSBIAN_LOG_FILE"
@@ -44,6 +45,9 @@ function hassbian.suite.action {
 
   elif [ "$suiteaction" == "remove" ]; then
     hassbian.suite.remove "$suitename" | tee "$HASSBIAN_LOG_FILE"
+
+  elif [ "$suiteaction" == "show" ]; then
+    hassbian.suite.info.print "$suitename"
 
   else
     echo "$suiteaction is not a valid suite action."

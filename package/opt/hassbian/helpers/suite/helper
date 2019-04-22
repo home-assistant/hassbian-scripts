@@ -130,4 +130,23 @@ function hassbian.suite.helper.exist {
   fi
 }
 
+function hassbian.suite.helper.pizerocheck {
+  # Check for suites not able to install on a Raspberry Pi Zero.
+  local REVCODE
+
+  suitename="$1"
+
+  REVCODE=$(cat /proc/cpuinfo | grep 'Revision' | \
+    awk '{print $3}' | sed 's/^ *//g' | sed 's/ *$//g')
+  if [ "$REVCODE" = "90092" ] || \
+    [ "$REVCODE" = "90093" ] || \
+    [ "$REVCODE" = "0x9000C1" ] || \
+    [ "$REVCODE" = "9000c1" ]; then
+    if [[ "$suitename" =~ ^(mosquitto|cloud9|zigbee2mqtt)$ ]]; then
+      echo "This suite can't be installed on Raspberry Pi Zero..."
+      exit 0
+    fi
+  fi
+}
+
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"
