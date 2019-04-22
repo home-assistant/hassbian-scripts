@@ -27,6 +27,10 @@ for argument in "$@"; do
     elif [ "$argument" == "show" ]; then
         suiteaction="$argument"
 
+    elif [ "$argument" == "developer-test-pr" ]; then
+        hassbian.developer.testpr "$2"
+        exit
+
     elif [ "$argument" == "log" ]; then
         hassbian.log.show
         exit
@@ -36,7 +40,7 @@ for argument in "$@"; do
         exit
 
     elif [ "$argument" == "show-installed" ]; then
-        hassbian.info..general.installed_suites
+        hassbian.info.general.isntalled_suites
         exit
 
     elif [ "$argument" == "systeminfo" ]; then

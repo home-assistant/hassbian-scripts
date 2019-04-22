@@ -1,15 +1,19 @@
 #!bin/bash
 #  Helper script for hassbian-config.
 
+# shellcheck disable=SC1090
+
 declare suitename
 
 function hassbian.suite.upgrade {
   # Purpose: Upgrade a suite.
+  local returnvalue
 
   suitename="$1"
+  source "$HASSBIAN_SUITE_DIR/$suitename/upgrade"
+  returnvalue=$(upgrade)
 
-  return 0
-
+  return "$returnvalue"
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

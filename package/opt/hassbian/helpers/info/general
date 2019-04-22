@@ -89,4 +89,19 @@ function hassbian.info.general.all_suites {
   echo "$allsuites"
 }
 
+function hassbian.info.general.isntalled_suites {
+  # Return a list of all installed suites.
+  local allsuites
+  local installed
+
+  allsuites=$(hassbian.info.general.all_suites)
+  echo "These suites are installed:"
+  for suite in $allsuites; do
+    installed=$(hassbian.suite.info.installed "$suite")
+    if [ "$installed" ]; then
+      echo "$suite"
+    fi
+  done
+}
+
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

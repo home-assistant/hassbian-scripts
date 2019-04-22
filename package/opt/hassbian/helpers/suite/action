@@ -3,9 +3,11 @@
 
 declare author
 declare suitename
+declare suitestate
 declare suiteaction
 declare name
 declare long_description
+declare retrunedvalue
 
 function hassbian.suite.action {
   # Purpose: Check if a suite exist.
@@ -37,14 +39,21 @@ function hassbian.suite.action {
   hassbian.suite.helper.blockcheck "$suitename"
   hassbian.suite.helper.pizerocheck "$suitename"
 
+  # Activate debug
+  if [ "$HASSBIAN_RUNTIME_DEBUG" = true ]; then set -x; fi
+
+
   if [ "$suiteaction" == "install" ]; then
     hassbian.suite.install "$suitename" | tee "$HASSBIAN_LOG_FILE"
+    retrunedvalue="$?"
 
   elif [ "$suiteaction" == "upgrade" ]; then
     hassbian.suite.upgrade "$suitename" | tee "$HASSBIAN_LOG_FILE"
+    retrunedvalue="$?"
 
   elif [ "$suiteaction" == "remove" ]; then
     hassbian.suite.remove "$suitename" | tee "$HASSBIAN_LOG_FILE"
+    retrunedvalue="$?"
 
   elif [ "$suiteaction" == "show" ]; then
     hassbian.suite.info.print "$suitename"
@@ -52,6 +61,24 @@ function hassbian.suite.action {
   else
     echo "$suiteaction is not a valid suite action."
     exit 1
+  fi
+
+
+  # Deactivate debug
+  if [ "$HASSBIAN_RUNTIME_DEBUG" == true ]; then set -x; fi
+
+  # Post action
+  if [ "$retrunedvalue" ]; then 
+    suitestate="installed"
+  else
+    echo "$ECHO_ACTION_ERROR"
+    suitestate="failed"
+  fi
+
+  if [ "$suiteaction" == "remove" ]; then 
+    rm "$HASSBIAN_CONTROL_DIR/$suitename"
+  else
+    echo "SCRIPTSTATE=$suitestate" > "$HASSBIAN_CONTROL_DIR/$suitename"
   fi
 }
 

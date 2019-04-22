@@ -1,13 +1,19 @@
 #!bin/bash
 #  Helper script for hassbian-config.
 
+# shellcheck disable=SC1090
+
 declare suitename
 
 function hassbian.suite.remove {
   # Purpose: Remove a suite.
+  local returnvalue
 
   suitename="$1"
+  source "$HASSBIAN_SUITE_DIR/$suitename/remove"
+  returnvalue=$(remove)
 
+  return "$returnvalue"
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

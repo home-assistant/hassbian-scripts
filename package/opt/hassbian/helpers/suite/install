@@ -1,14 +1,19 @@
 #!bin/bash
 #  Helper script for hassbian-config.
 
+# shellcheck disable=SC1090
+
 declare suitename
 
 function hassbian.suite.install {
   # Purpose: Install a suite.
+  local returnvalue
 
   suitename="$1"
+  source "$HASSBIAN_SUITE_DIR/$suitename/install"
+  returnvalue=$(install)
 
-
+  return "$returnvalue"
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"
