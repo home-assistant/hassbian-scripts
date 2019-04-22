@@ -1,8 +1,8 @@
 {
-  "name": "Template",
-  "author": "Username <https://github.com/username>",
-  "short_description": "Short description.",
-  "long_description": "A little longer description.",
+  "name": "Mosquitto",
+  "author": "Landrash <https://github.com/Landrash>",
+  "short_description": "Mosquitto Installer for Hassbian.",
+  "long_description": "Installs the Mosquitto package for setting up a local MQTT server.",
   "blocked": false,
   "blocked_releasename": "",
   "blocked_messages": ""

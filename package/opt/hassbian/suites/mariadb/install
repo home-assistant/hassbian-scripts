@@ -1,10 +1,29 @@
 #!/bin/bash
 # 
-# Installation script for Hassbian suite: DuckDNS
+# Installation script for Hassbian suite: MariaDB
 #
 
 function install {
+  hassbian.suite.helper.install.apt mariadb-server libmariadbclient-dev default-libmysqlclient-dev
+  hassbian.suite.helper.install.pip mysqlclient
 
+  echo "Checking the installation..."
+  validation=$(which mariadb)
+  if [ ! -z "${validation}" ]; then
+    echo
+    echo -e "\\e[32mInstallation done..\\e[0m"
+    echo
+    echo "No database or database user is created during this setup and will need to be created manually."
+    echo
+    echo "To continue have a look at https://home-assistant.io/components/recorder/"
+    echo
+  else
+    echo
+    echo -e "\\e[31mInstallation failed..."
+    echo
+    return 1
+  fi
+  return 0
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

@@ -4,7 +4,34 @@
 #
 
 function install {
+  local osrelease
 
+  osrelease=$(hassbian.info.version.osreleasename)
+  if [ "$osrelease" == "stretch" ]; then
+    hassbian.suite.helper.install.apt postgresql-server-dev-9.6 postgresql-9.6
+  else
+    hassbian.suite.helper.install.apt postgresql-server-dev-11 postgresql-11
+  fi
+
+  hassbian.suite.helper.install.pip psycopg2
+
+  echo "Checking the installation..."
+  validation=$(which psql)
+  if [ ! -z "${validation}" ]; then
+    echo
+    echo -e "\\e[32mInstallation done..\\e[0m"
+    echo
+    echo "No database or database user is created during this setup and will need to be created manually."
+    echo
+    echo "To continue have a look at https://home-assistant.io/components/recorder/"
+    echo
+  else
+    echo
+    echo -e "\\e[31mInstallation failed..."
+    echo
+    return 1
+  fi
+  return 0
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"
