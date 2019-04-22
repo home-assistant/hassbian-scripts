@@ -1,0 +1,12 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+
+
+function hassbian.info.version.hassbian_config.installed {
+  # Return the installed version of hassbian-config.
+  local version
+  version=$(hassbian-config -V)
+  printf "%s" "$version"
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

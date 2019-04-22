@@ -1,7 +1,8 @@
 #!/bin/bash
-LOGFILE=/tmp/hassbian.log
-SUITE_INSTALL_DIR=/opt/hassbian/suites
-SUITE_CONTROL_DIR=/srv/homeassistant/hassbian/control
+
+source /opt/hassbian/globals
+source /opt/hassbian/cli
+source /opt/hassbian/suite
 
 function usage {
   printf "usage: hassbian-config [command] [suite] [options]\\n"

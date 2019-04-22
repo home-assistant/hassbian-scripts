@@ -1,0 +1,15 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+
+declare suitename
+
+function hassbian.suite.upgrade {
+  # Purpose: Upgrade a suite.
+
+  suitename="$1"
+
+  return 0
+
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"
