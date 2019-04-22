@@ -13,7 +13,7 @@ readonly HASSBIAN_LOG_FILE='/tmp/hassbian.log'
 readonly HASSBIAN_SUITE_DIR='/opt/hassbian/suites'
 
 # Helper scripts directory
-readonly HASSBIAN_HELPERS_DIR='"$HASSBIAN_HELPERS_DIR"'
+readonly HASSBIAN_HELPERS_DIR='/opt/hassbian/helpers'
 
 # Controll directory for 'hassbian-config'.
 readonly HASSBIAN_CONTROL_DIR='/srv/homeassistant/hassbian/control'
