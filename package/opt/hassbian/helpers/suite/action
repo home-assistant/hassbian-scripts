@@ -18,7 +18,7 @@ function hassbian.suite.action {
   hassbian.info.general.rootcheck
 
   # Verify that the suite exist.
-  hassbian.suite.exist "$suitename"
+  hassbian.suite.helper.exist "$suitename"
 
   # Generate systeminfo
   hassbian.info.general.systeminfo
@@ -32,6 +32,9 @@ function hassbian.suite.action {
   $name
   Contributed to the project by $author
     $long_description"
+
+  # Do a check to see if the suite is blocked.
+  hassbian.suite.helper.blockcheck "$suitename"
 
   if [ "$suiteaction" == "install" ]; then
     hassbian.suite.install "$suitename" | tee "$HASSBIAN_LOG_FILE"

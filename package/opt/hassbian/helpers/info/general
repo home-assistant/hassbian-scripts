@@ -48,4 +48,38 @@ function hassbian.info.general.rootcheck {
   fi
 }
 
+
+function hassbian.info.general.systeminfo {
+  # Prints system information to the console.
+  # Usefull to call before scripts and as a standalone.
+  local haversion
+  local hapyversion
+  local hcversion
+  local hcversionremote
+
+  # Root check.
+  hassbian.info.general.rootcheck
+
+  echo "Generating system information..."
+  haversion=$(hassbian.info.version.homeassistant.installed)
+  hapyversion=$(hassbian.info.version.homeassistant.python)
+  hcversion=$(hassbian.info.version.hassbian_config.installed)
+  hcversionremote=$(hassbian.info.version.hassbian_config.remote)
+
+  echo "
+  Home Assistant:        $haversion
+  Home Assistant Python: $hapyversion
+  hassbian-config:       $hcversion
+
+  $(uname -a)
+  "
+
+  if [ "$hcversion" != "$hcversionremote" ]; then
+    printf "\\e[31m%s\\n" "
+    There is an update pending for 'hassbian-config'
+    You can upgrade by running this:
+      sudo hassbian-config upgrade hassbian-script
+    "
+  fi
+}
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

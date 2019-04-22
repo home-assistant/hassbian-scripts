@@ -5,8 +5,69 @@
 function hassbian.info.version.hassbian_config.installed {
   # Return the installed version of hassbian-config.
   local version
-  version=$(hassbian-config -V)
+  version=$(dpkg -s hassbian-scripts | grep 'Version:' | awk '{print $2}')
   printf "%s" "$version"
+}
+
+function hassbian.info.version.hassbian_config.remote {
+  # Return the remote version of hassbian-config.
+  local version
+  version=$(curl -sSL https://raw.githubusercontent.com/home-assistant/hassbian-scripts/dev/package/DEBIAN/control | \
+    grep Version | awk -F' ' '{print $NF}')
+  printf "%s" "$version"
+}
+
+function hassbian.info.version.homeassistant.installed {
+  # Return the installed version of homeassistant.
+  local version
+
+  if [ -f "/srv/homeassistant/bin/activate" ]; then
+    version=$(sudo -u homeassistant -H /bin/bash << EOF | \
+      awk -F ' ' '{print $NF}'
+    source /srv/homeassistant/bin/activate
+    hass --version
+EOF
+    )
+  printf "%s" "$version"
+  fi
+}
+
+function hassbian.info.version.homeassistant.python {
+  # Return the version of python that homeassistant uses.
+  local version
+
+  if [ -f "/srv/homeassistant/bin/activate" ]; then
+    version=$(sudo -u homeassistant -H /bin/bash << EOF | \
+      awk -F ' ' '{print $NF}'
+    source /srv/homeassistant/bin/activate
+    python -V
+EOF
+  )
+  printf "%s" "${version:0:5}"
+  fi
+}
+
+function hassbian.info.version.python {
+  # Get the MAJOR.MINOR version of the newest installed python version.
+  local potentialversions
+  local isntalledversion
+
+  potentialversions="3.5 3.6 3.7"
+
+  for version in $potentialversions; do
+    if [[ -n "$(command -v python"$version")" ]]; then
+      isntalledversion="$version"
+    fi
+  done
+  printf "%s" "${version}"
+}
+
+function hassbian.info.version.osreleasename {
+  # Get name of the OS release.
+  local name
+
+  name=$(lsb_release -cs)
+  printf "%s" "${name}"
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

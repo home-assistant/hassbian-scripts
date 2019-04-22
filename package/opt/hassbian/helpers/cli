@@ -8,6 +8,12 @@ declare argument
 declare suites
 declare suiteaction
 
+# Show usage if no arguments are given.
+if [ $# -lt 1 ]; then
+  hassbian.info.general.usage
+  exit 0
+fi
+
 for argument in "$@"; do
     if [ "$argument" == "install" ]; then
         suiteaction="$argument"
