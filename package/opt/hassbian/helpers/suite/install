@@ -10,10 +10,14 @@ function hassbian.suite.install {
   local returnvalue
 
   suitename="$1"
-  source "$HASSBIAN_SUITE_DIR/$suitename/install"
-  returnvalue=$(install)
+  if [ -f "$HASSBIAN_SUITE_DIR/$suitename/install" ]; then
+    source "$HASSBIAN_SUITE_DIR/$suitename/install"
+    returnvalue=$(install)
 
-  return "$returnvalue"
+    return "$returnvalue"
+  else
+    echo "$ECHO_MISSING_INSTALL"
+  fi
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

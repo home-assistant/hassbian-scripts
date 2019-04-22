@@ -10,10 +10,14 @@ function hassbian.suite.remove {
   local returnvalue
 
   suitename="$1"
-  source "$HASSBIAN_SUITE_DIR/$suitename/remove"
-  returnvalue=$(remove)
+  if [ -f "$HASSBIAN_SUITE_DIR/$suitename/remove" ]; then
+    source "$HASSBIAN_SUITE_DIR/$suitename/remove"
+    returnvalue=$(remove)
 
-  return "$returnvalue"
+    return "$returnvalue"
+  else
+    echo "$ECHO_MISSING_REMOVE"
+  fi
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

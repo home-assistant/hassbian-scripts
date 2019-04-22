@@ -1,9 +1,0 @@
-{
-  "name": "Template",
-  "author": "Username <https://github.com/username>",
-  "short_description": "Short description.",
-  "long_description": "A little longer description.",
-  "blocked": false,
-  "blocked_releasename": "",
-  "blocked_messages": ""
-}

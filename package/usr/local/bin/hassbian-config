@@ -41,11 +41,16 @@ declare HASSBIAN_RUNTIME_DEV=false
 #  Echoable messages
 #####################################
 
-# Warn users about running helper scripts directly.
 readonly ECHO_HELPER_WARNING=\
   "hassbian-config helper script. Do not run directly, use 'hassbian-config' instead."
 readonly ECHO_ACTION_ERROR=\
   "If you have issues with this script, please say something in the #hassbian channel on Discord."
+readonly ECHO_MISSING_INSTALL=\
+  "Installation script does not exist for this suite."
+readonly ECHO_MISSING_UPGRADE=\
+  "Upgrade script does not exist for this suite."
+readonly ECHO_MISSING_REMOVE=\
+  "Removal script does not exist for this suite."
 
 #####################################
 # Source links (alphabetical order)
