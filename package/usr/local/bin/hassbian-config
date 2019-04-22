@@ -1,6 +1,6 @@
 #!/bin/bash
 # The base of hassbian-config, this should only contain source links to the helper scripts and global variables.
-# shellcheck disable=SC1091,SC2034
+# shellcheck disable=SC1090,SC1091,SC2034
 
 #####################################
 #  Locations
@@ -10,7 +10,10 @@
 readonly HASSBIAN_LOG_FILE='/tmp/hassbian.log'
 
 # Suite directory for 'hassbian-config'.
-readonly HASSBIAN_SUITE_DIR='/opt/hassbian/helpers/suites'
+readonly HASSBIAN_SUITE_DIR='/opt/hassbian/suites'
+
+# Helper scripts directory
+readonly HASSBIAN_HELPERS_DIR='"$HASSBIAN_HELPERS_DIR"'
 
 # Controll directory for 'hassbian-config'.
 readonly HASSBIAN_CONTROL_DIR='/srv/homeassistant/hassbian/control'
@@ -50,17 +53,17 @@ readonly ECHO_MISSING_REMOVE="Removal script does not exist for this suite."
 #####################################
 # Source links (alphabetical order)
 #####################################
-source /opt/hassbian/helpers/info/general
-source /opt/hassbian/helpers/info/version
-source /opt/hassbian/helpers/suite/action
-source /opt/hassbian/helpers/suite/helper
-source /opt/hassbian/helpers/suite/install
-source /opt/hassbian/helpers/suite/remove
-source /opt/hassbian/helpers/suite/upgrade
-source /opt/hassbian/helpers/suite/verify
-source /opt/hassbian/helpers/input
-source /opt/hassbian/helpers/developer
-source /opt/hassbian/helpers/log
+source "$HASSBIAN_HELPERS_DIR"/info/general
+source "$HASSBIAN_HELPERS_DIR"/info/version
+source "$HASSBIAN_HELPERS_DIR"/suite/action
+source "$HASSBIAN_HELPERS_DIR"/suite/helper
+source "$HASSBIAN_HELPERS_DIR"/suite/install
+source "$HASSBIAN_HELPERS_DIR"/suite/remove
+source "$HASSBIAN_HELPERS_DIR"/suite/upgrade
+source "$HASSBIAN_HELPERS_DIR"/suite/verify
+source "$HASSBIAN_HELPERS_DIR"/input
+source "$HASSBIAN_HELPERS_DIR"/developer
+source "$HASSBIAN_HELPERS_DIR"/log
 
 # the CLI is dependant on other sources so we load that at the end.
-source /opt/hassbian/helpers/cli
+source "$HASSBIAN_HELPERS_DIR"/cli
