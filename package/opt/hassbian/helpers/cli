@@ -53,7 +53,7 @@ for argument in "$@"; do
         exit
 
     elif [ "$argument" == "--version" ] || [ "$argument" == "-V" ]; then
-        printf "%s\\n" hassbian.info.version.hassbian_config.installed
+        printf "%s\\n" "$(hassbian.info.version.hassbian_config.installed)"
         exit
 
     # If we got here we can assume that the argument is a suite.
