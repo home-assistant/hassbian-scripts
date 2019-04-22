@@ -26,23 +26,21 @@ function hassbian.log.share {
 
     response=$(hassbian.input.bool "$message")
 
-    if [ ! "$response" ]; then
+    if [ "$response" == "1" ]; then
       return
     fi
+  fi
+  echo "Publishing logfile to hastebin..."
+  loglink=$(curl -X POST -s -d "$(cat "$HASSBIAN_LOG_FILE")" \
+    https://hastebin.com/documents | \
+    awk -F '"' '{print "https://hastebin.com/"$4}')
 
+  if [[ $loglink != *"initial"*  ]]; then
+    echo "$loglink"
   else
-    loglink=$(curl -X POST -s -d "$(cat "$HASSBIAN_LOG_FILE")" \
-      https://hastebin.com/documents | \
-      awk -F '"' '{print "https://hastebin.com/"$4}')
-    
-    if [[ $loglink != *"initial"*  ]]; then
-      echo "$loglink"
-    else
-      echo "
-      There is an issue with your network connection, or with the Hastebin API.
-      Try again later."
-    fi
-
+    echo "
+    There is an issue with your network connection, or with the Hastebin API.
+    Try again later."
   fi
 }
 
