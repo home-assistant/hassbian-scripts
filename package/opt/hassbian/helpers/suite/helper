@@ -92,41 +92,34 @@ function hassbian.suite.helper.exist {
 
   suitename="$1"
 
-  # Check if suite name is empty.
-  if [ -z "$suitename" ]; then
-    echo "Suitename cannot be empty."
-    exit 1
-  fi
-
   # Check if suite directory exist.
   if [ ! -d "$HASSBIAN_SUITE_DIR/$suitename" ]; then
     echo "$suitename does not exist."
     exit 1
-  else
+  fi
 
-    # Check if suite manifest file exist.
-    if [ ! -f "$HASSBIAN_SUITE_DIR/$suitename/manifest" ]; then
-      echo "$suitename are missing manifest file."
-      exit 1
-    fi
+  # Check if suite manifest file exist.
+  if [ ! -f "$HASSBIAN_SUITE_DIR/$suitename/manifest" ]; then
+    echo "$suitename are missing manifest file."
+    exit 1
+  fi
 
-    # Check if suite install file exist.
-    if [ ! -f "$HASSBIAN_SUITE_DIR/$suitename/install" ]; then
-      echo "$suitename are missing install file."
-      exit 1
-    fi
+  # Check if suite install file exist.
+  if [ ! -f "$HASSBIAN_SUITE_DIR/$suitename/install" ]; then
+    echo "$suitename are missing install file."
+    exit 1
+  fi
 
-    # Check if suite upgrade file exist.
-    if [ ! -f "$HASSBIAN_SUITE_DIR/$suitename/upgrade" ]; then
-      echo "$suitename are missing upgrade file."
-      exit 1
-    fi
+  # Check if suite upgrade file exist.
+  if [ ! -f "$HASSBIAN_SUITE_DIR/$suitename/upgrade" ]; then
+    echo "$suitename are missing upgrade file."
+    exit 1
+  fi
 
-    # Check if suite remove file exist.
-    if [ ! -f "$HASSBIAN_SUITE_DIR/$suitename/remove" ]; then
-      echo "$suitename are missing remove file."
-      exit 1
-    fi
+  # Check if suite remove file exist.
+  if [ ! -f "$HASSBIAN_SUITE_DIR/$suitename/remove" ]; then
+    echo "$suitename are missing remove file."
+    exit 1
   fi
 }
 
