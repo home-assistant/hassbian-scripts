@@ -153,37 +153,38 @@ function hassbian.developer.test.package {
         test=$(hassbian-config install "$suite" --accept | grep "Operation failed...")
         if [ -z "${test}" ];then
           ((pass+=1))
-          printf "\\e[32mPASS\\n"
+          printf "\\e[32mPASS(install)\\e[36m..."
         else
           ((fail+=1))
           failedtests+=("hassbian-config install $suite --accept")
-          printf "\\e[31mFAIL\\n"
+          printf "\\e[31mFAIL(install)\\e[36m..."
         fi
 
         # Upgrade test...
         test=$(hassbian-config upgrade "$suite" --accept | grep "Operation failed...")
         if [ -z "${test}" ];then
           ((pass+=1))
-          printf "\\e[32mPASS\\n"
+          printf "\\e[32mPASS(upgrade)\\e[36m..."
         else
           ((fail+=1))
           failedtests+=("hassbian-config upgrade $suite --accept")
-          printf "\\e[31mFAIL\\n"
+          printf "\\e[31mFAIL(upgrade)\\e[36m..."
         fi
 
         # Remove test...
         test=$(hassbian-config remove "$suite" --accept | grep "Operation failed...")
         if [ -z "${test}" ];then
           ((pass+=1))
-          printf "\\e[32mPASS\\n"
+          printf "\\e[32mPASS(remove)\\e[36m..."
         else
           ((fail+=1))
           failedtests+=("hassbian-config remove $suite --accept")
-          printf "\\e[31mFAIL\\n"
+          printf "\\e[31mFAIL(remove)\\e[36m..."
         fi
       else
-        printf "\\e[33mSKIP\\n"
+        printf "\\e[33mSKIP"
       fi
+      printf "\\n"
     done
     printf "\\e[0m\\n"
   fi
