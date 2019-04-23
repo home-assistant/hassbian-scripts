@@ -121,7 +121,6 @@ function hassbian.developer.test.package {
   operations+=('--version' '-V')
   operations+=('--help' '-H')
   operations+=('show-installed')
-  operations+=("show $testsuite")
   operations+=('systeminfo')
   operations+=('log')
 
