@@ -22,7 +22,7 @@ function install {
 
   echo "Creating Home Assistant venv"
   sudo -u homeassistant -H /bin/bash << EOF
-    python"$pythonversion" -m venv $HOME_ASSISTANT_VENV
+    python"${pythonversion:0:3}" -m venv $HOME_ASSISTANT_VENV
 EOF
 
   hassbian.suite.helper.install.pip homeassistant
