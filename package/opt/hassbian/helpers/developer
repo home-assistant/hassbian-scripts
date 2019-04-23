@@ -117,6 +117,10 @@ function hassbian.developer.test.package {
   operations=()
   operations+=('--version' '-V')
   operations+=('--help' '-H')
+  operations+=('show-installed')
+  operations+=('systeminfo')
+  operations+=('log')
+
   for operation in "${operations[@]}"; do
     printf "\\e[36mTesting 'hassbian-config %s'.................." "$operation"
     hassbian-config "$operation" >> /dev/null 2>&1

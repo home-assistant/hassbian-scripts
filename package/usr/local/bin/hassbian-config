@@ -43,6 +43,9 @@ declare HASSBIAN_RUNTIME_DEV=false
 # Enabled by adding '=X.X.X' at the end of the suitename.
 declare HASSBIAN_RUNTIME_TARGET_VERSION
 
+# Sute action return value
+declare HASSBIAN_RETURN_SUITE_ACTION
+
 #####################################
 #  Echoable messages
 #####################################
