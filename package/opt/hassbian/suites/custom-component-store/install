@@ -42,10 +42,10 @@ function install {
   validation=$(hassbian.suite.verify.service custom-component-store@homeassistant.service)
   if [ "$validation" == "0" ]; then
     ipaddress=$(hassbian.info.general.ipaddress)
-    echo "Installation done...
-    Custom component store installation is running at $ipaddress:8120 or if preferred http://hassbian.local:8120"
+    hassbian.suite.helper.action.success
+    echo"Custom component store installation is running at $ipaddress:8120 or if preferred http://hassbian.local:8120"
   else
-    echo "Installation failed..."
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0
