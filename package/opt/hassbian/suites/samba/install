@@ -4,50 +4,29 @@
 #
 
 function install {
+  local validation
+  local ip_address
+
   echo "Running apt-get preparation"
-  apt-get update
-  apt-get install -y samba
+  hassbian.suite.helper.install.apt samba
 
   echo "Adding homeassistant Samba user"
   smbpasswd -a homeassistant -n
 
   echo "Adding shared folder for Home Assistant configuration directory"
-  cd /etc/samba/ || exit
-  patch <<'EOF'
---- smb.conf 2017-02-02 20:29:42.383603738 +0000
-+++ smb_ha.conf 2017-02-02 20:37:12.418960977 +0000
-@@ -252,3 +252,11 @@
-# to the drivers directory for these users to have write rights in it
-;   write list = root, @lpadmin
-
-+[homeassistant]
-+path = /home/homeassistant/.homeassistant
-+writeable = yes
-+guest ok = yes
-+create mask = 0644
-+directory mask = 0755
-+force user = homeassistant
-+
-EOF
-
+  tee -a /etc/samba/smb.conf < "$HASSBIAN_SUITE_DIR"/samba/files/samba.conf
 
   echo "Restarting Samba service"
   systemctl restart smbd.service
 
-  ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
-
   echo "Checking the installation..."
-  validation=$(pgrep -x smbd)
-  if [ ! -z "${validation}" ]; then
-    echo
-    echo -e "\\e[32mInstallation done..\\e[0m"
-    echo
+  validation=$(hassbian.suite.verify.pgrep smbd)
+  if [ "$validation" == "0" ]; then
+    ip_address=$(hassbian.info.general.ipaddress)
+    hassbian.suite.helper.action.success
     echo "Configuration is now available as a Samba share at \\\\$ip_address\\homeassistant"
-    echo
   else
-    echo
-    echo -e "\\e[31mInstallation failed..."
-    echo
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0

@@ -5,16 +5,16 @@
 
 function upgrade {
   echo "Upgrading Custom component store"
-  python3 -m pip install --upgrade componentstore
+  hassbian.suite.helper.install.pip componentstore
 
   echo "Restarting Custom component store"
   systemctl restart custom-component-store@homeassistant.service
 
   validation=$(hassbian.suite.verify.service custom-component-store@homeassistant.service)
   if [ "$validation" == "0" ]; then
-    echo "Upgrade done..."
+    hassbian.suite.helper.action.success
   else
-    echo "Upgrade failed..."
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0

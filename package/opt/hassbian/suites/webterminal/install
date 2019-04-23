@@ -4,40 +4,43 @@
 #
 
 function install {
+  local certdir
+  local domain
+  local protocol
+  local usingssl
+  local validation
+  local ipaddress
+
   if [ "$ACCEPT" == "true" ]; then # True if `-y` flag is used.
     if [ -d "/etc/letsencrypt/live" ] || [ -d "/home/homeassistant/dehydrated/certs" ]; then
-      SSL="Y"
-    else
-      SSL="N"
+      usingssl="0"
     fi
   else
-    echo ""
-    echo -n "Do you use SSL (https) with Home Assistant? [N/y] : "
-    read -r SSL
-    if [ ! "$SSL" ]; then
-        SSL="N"
-    fi
+    usingssl=$(hassbian.input.bool "Do you use SSL (https) with Home Assistant?")
   fi
 
   echo "Installing packages."
-  apt-get install -y openssl shellinabox
+  hassbian.suite.helper.install.apt shellinabox
+
   echo "Changing config."
-  if [ "$SSL" == "y" ] || [ "$SSL" == "Y" ]; then
+  if [ "$usingssl" == "0" ]; then
     echo "No need to change default configuration, skipping this step..."
-    echo "Checking cert directory..."
+    echo "Checking certificate directories..."
     if [ -d "/etc/letsencrypt/live" ]; then
-      CERTDIR="/etc/letsencrypt/live/"
+      certdir="/etc/letsencrypt/live/"
     elif [ -d "/home/homeassistant/dehydrated/certs" ]; then
-      CERTDIR="/home/homeassistant/dehydrated/certs/"
+      certdir="/home/homeassistant/dehydrated/certs/"
     else
-      CERTDIR=""
+      echo "Could not find a valid cerification directory..."
+      hassbian.suite.helper.action.failed
+      return 1
     fi
     echo "Merging files and adding to correct dir..."
-    DOMAIN=$(ls "$CERTDIR")
-    cat "$CERTDIR$DOMAIN/fullchain.pem" "$CERTDIR$DOMAIN/privkey.pem" > /var/lib/shellinabox/certificate-"$DOMAIN".pem
+    domain=$(ls "$certdir")
+    cat "$certdir$domain/fullchain.pem" "$certdir$domain/privkey.pem" > /var/lib/shellinabox/certificate-"$domain".pem
     chown shellinabox:shellinabox -R /var/lib/shellinabox/
     echo "Adding crong job to copy certs..."
-    (crontab -l ; echo "5 1 1 * * bash /opt/hassbian/suites/webterminal/files/webterminalsslhelper.sh >/dev/null 2>&1")| crontab -
+    cp HASSBIAN_SUITE_DIR/webterminal/files/cron /etc/cron.daily/shellinabox
   else
     sed -i 's/--no-beep/--no-beep --disable-ssl/g' /etc/default/shellinabox
   fi
@@ -47,27 +50,21 @@ function install {
   service shellinabox stop
   service shellinabox start
 
-  ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
-
-  if [ "$SSL" == "y" ] || [ "$SSL" == "Y" ]; then
-    PROTOCOL="https"
+  if [ "$usingssl" == "0" ]; then
+    protocol="https"
   else
-    PROTOCOL="http"
+    protocol="http"
   fi
 
   echo "Checking the installation..."
-  validation=$(pgrep -f shellinaboxd)
-  if [ ! -z "${validation}" ]; then
-    echo
-    echo -e "\\e[32mInstallation done..\\e[0m"
-    echo
-    echo "You can now access the web terminal here: $PROTOCOL://$ip_address:4200"
+  validation=$(hassbian.suite.verify.pgrep shellinaboxd)
+  if [ "$validation" == "0" ]; then
+    ipaddress=$(hassbian.info.general.ipaddress)
+    hassbian.suite.helper.action.success
+    echo "You can now access the web terminal here: $protocol://$ipaddress:4200"
     echo "You can also add this to your Home-Assistant config in an 'panel_iframe'"
-    echo
   else
-    echo
-    echo -e "\\e[31mInstallation failed..."
-    echo
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0

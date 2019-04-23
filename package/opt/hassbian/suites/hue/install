@@ -4,22 +4,19 @@
 #
 
 function install {
+  local pythonlocation
+
   echo "Setting permissions for Python..."
-  PYTHONVER=$(echo /usr/lib/*python* | awk -F/ '{print $NF}')
-  setcap 'cap_net_bind_service=+ep' /usr/bin/"$PYTHONVER"
+  pythonlocation=$(hassbian.info.general.python.location)
+  setcap 'cap_net_bind_service=+ep' "$pythonlocation"
 
   echo "Checking the installation..."
-  validation=$(getcap /usr/bin/"$PYTHONVER" | awk -F'= ' '{print $NF}')
+  validation=$(getcap "$pythonlocation" | awk -F'= ' '{print $NF}')
   if [ ! -z "${validation}" ]; then
-    echo
-    echo -e "\\e[32mInstallation done..\\e[0m"
-    echo
+    hassbian.suite.helper.action.success
     echo "To continue have a look at https://home-assistant.io/components/emulated_hue/"
-    echo
   else
-    echo
-    echo -e "\\e[31mInstallation failed..."
-    echo
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0

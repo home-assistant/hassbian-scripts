@@ -17,11 +17,11 @@ function install {
   if [ ! "$DUCKDNS_DOMAIN" ]; then
     exit
   fi
-  if [[ $domain = *"duckdns"* ]]; then
-    domain=$(echo "$domain" | cut -d\. -f1)
+  if [[ $DUCKDNS_DOMAIN = *"duckdns"* ]]; then
+    DUCKDNS_DOMAIN=$(echo "$DUCKDNS_DOMAIN" | cut -d\. -f1)
   fi
-  if [[ $domain = *"//"* ]]; then
-    domain=$(echo "$domain" | cut -d/ -f3)
+  if [[ $DUCKDNS_DOMAIN = *"//"* ]]; then
+    DUCKDNS_DOMAIN=$(echo "$DUCKDNS_DOMAIN" | cut -d/ -f3)
   fi
 
   DUCKDNS_TOKEN=$(hassbian.input.text "What is your DuckDNS token?")
@@ -40,7 +40,7 @@ function install {
     echo $DUCKDNS_DOMAIN".duckdns.org" | tee domains.txt
     echo "CHALLENGETYPE='dns-01'" | tee -a config
     echo "HOOK='./hook.sh'" | tee -a config
-    cp /opt/hassbian/suites/duckdns/files/hook.sh ./hook.sh
+    cp $HASSBIAN_SUITE_DIR/duckdns/files/hook.sh ./hook.sh
     sed -i 's/myhome/'$DUCKDNS_DOMAIN'/g' ./hook.sh
     sed -i 's/your-duckdns-token/'$DUCKDNS_TOKEN'/g' ./hook.sh
     chmod 755 hook.sh
@@ -55,13 +55,13 @@ function install {
 EOF
 
   echo "Creating cron jobs..."
-  cp /opt/hassbian/suites/duckdns/files/cron/duckdns /etc/cron.hourly/duckdns
+  cp /"$HASSBIAN_SUITE_DIR"/duckdns/files/cron/duckdns /etc/cron.hourly/duckdns
   sed -i "s,%%DOMAIN%%,${DUCKDNS_DOMAIN},g" /etc/cron.hourly/duckdns
   sed -i "s,%%TOKEN%%,${DUCKDNS_TOKEN},g" /etc/cron.hourly/duckdns
   chmod +x /etc/cron.hourly/duckdns
 
-  if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
-    cp /opt/hassbian/suites/duckdns/files/cron/dehydrated /etc/cron.daily/dehydrated
+  if [ "$SSL_RESPONSE" == "0" ]; then
+    cp "$HASSBIAN_SUITE_DIR"/duckdns/files/cron/dehydrated /etc/cron.daily/dehydrated
     chmod +x /etc/cron.daily/dehydrated
   fi
 
@@ -69,33 +69,25 @@ EOF
   systemctl restart cron.service
 
   echo "Checking the installation..."
-  if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
-    certvalidation=$(find /home/homeassistant/dehydrated/certs/"$domain".duckdns.org/ -maxdepth 1 -type f | sort | grep privkey)
-  else
-    certvalidation="ok"
+  if [ "$SSL_RESPONSE" == "0" ]; then
+    certvalidation=$(find /home/homeassistant/dehydrated/certs/"$DUCKDNS_DOMAIN".duckdns.org/ -maxdepth 1 -type f | sort | grep privkey)
   fi
-  if [ ! -f /home/homeassistant/duckdns/duck.sh ]; then
-    dnsvalidation=""
-  else
+  if [ -f /home/homeassistant/duckdns/duck.sh ]; then
     dnsvalidation="ok"
   fi
 
   if [ ! -z "${certvalidation}" ] && [ ! -z "${dnsvalidation}" ]; then
-    echo
-    echo -e "\\e[32mInstallation done..\\e[0m"
-    echo
-    if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
-    echo "Remember to update your configuration.yaml to take advantage of SSL!"
-    echo "Documentation for this can be found here <https://home-assistant.io/components/http/>."
-    echo
+    hassbian.hassbian.suite.helper.action.success
+    if [ "$SSL_RESPONSE" == "0" ]; then
+      echo "Remember to update your configuration.yaml to take advantage of SSL!"
+      echo "Documentation for this can be found here <https://home-assistant.io/components/http/>."
+      echo
     fi
   else
-    echo
-    echo -e "\\e[31mInstallation failed..."
-    echo
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0
 }
 
-[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead."
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING" 

@@ -4,14 +4,15 @@
 #
 
 function install {
+  local validation
+
   echo "Checking for version of Raspberry Pi"
   RPI_BOARD_REVISION=$(grep Revision /proc/cpuinfo | cut -d: -f2 | tr -d " ")
   if [[ $RPI_BOARD_REVISION ==  "a02082" || $RPI_BOARD_REVISION == "a22082" ]]
   then
     echo "Raspberry Pi 3 Detected. Disabling Bluetooth"
     systemctl disable hciuart
-    if ! grep -q "dtoverlay=pi3-miniuart-bt" /boot/config.txt
-    then
+    if ! grep -q "dtoverlay=pi3-miniuart-bt" /boot/config.txt; then
       echo "Adding 'dtoverlay=pi3-miniuart-bt' to /boot/config.txt"
       echo "dtoverlay=pi3-miniuart-bt" >> /boot/config.txt
     fi
@@ -19,13 +20,9 @@ function install {
 
   validation=$(grep "dtoverlay=pi3-miniuart-bt" /boot/config.txt)
   if [ ! -z "${validation}" ]; then
-    echo
-    echo -e "\\e[32mInstallation done..\\e[0m"
-    echo
+    hassbian.suite.helper.action.success
   else
-    echo
-    echo -e "\\e[31mInstallation failed..."
-    echo
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0

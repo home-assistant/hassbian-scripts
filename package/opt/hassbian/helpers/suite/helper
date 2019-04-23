@@ -43,6 +43,25 @@ function hassbian.suite.helper.install.apt {
   apt install -y "$packages"
 }
 
+function hassbian.suite.helper.install.node {
+  # Purpose: Install node.
+  # Usage:
+  # hassbian.suite.helper.install.node sampleclient
+  local node
+  local nodeversion
+
+  nodeversion='11'
+  node=$(command -v npm)
+
+  if [ -z "${node}" ]; then
+    echo "Downloading and installing NodeJS..."
+    curl -sL https://deb.nodesource.com/setup_"$nodeversion".x | bash -
+    hassbian.suite.helper.install.apt nodejs
+  else
+      echo "NodeJS is installed."
+  fi
+}
+
 function hassbian.suite.helper.manifest {
   # Purpose: retrun info from the suite manifest.
   # Usage:

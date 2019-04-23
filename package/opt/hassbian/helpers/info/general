@@ -112,4 +112,12 @@ function hassbian.info.general.isntalled_suites {
   done
 }
 
+function hassbian.info.general.python.location {
+  # Return the full path of the newest python version.
+  local location
+  location=$(command -v "python$(hassbian.info.version.python)")
+
+  printf "%s" "$location"
+}
+
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

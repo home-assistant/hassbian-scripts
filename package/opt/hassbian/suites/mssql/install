@@ -12,20 +12,14 @@ function install {
   validation=$(sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'
   source /srv/homeassistant/bin/activate
   python -m pip show pymssql
-  EOF
+EOF
   )
   if [ ! -z "${validation}" ]; then
-    echo
-    echo -e "\\e[32mInstallation done..\\e[0m"
-    echo
+    hassbian.suite.helper.action.success
     echo "No database or database user is created during this setup and will need to be created manually."
-    echo
     echo "To continue have a look at https://home-assistant.io/components/recorder/"
-    echo
   else
-    echo
-    echo -e "\\e[31mInstallation failed..."
-    echo
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0

@@ -6,6 +6,8 @@
 function install {
   local mqtt_username
   local mqtt_password
+  local validation
+  local ip_address
 
   if [ "$HASSBIAN_RUNTIME_ACCEPT" = true ]; then
     mqtt_username='pi'
@@ -14,10 +16,10 @@ function install {
     hassbian.input.info "Please take a moment to setup your first MQTT user"
     mqtt_username=$(hassbian.input.text "Username:")
     mqtt_password=$(hassbian.input.text "Password:")
-    if [ ! "$username" ]; then
+    if [ "$mqtt_username" == "0" ]; then
       mqtt_username='pi'
     fi
-    if [ ! "$password" ]; then
+    if [ "$mqtt_password"  == "0" ]; then
       mqtt_password='raspberry'
     fi
   fi
@@ -43,7 +45,6 @@ function install {
     echo "Already present, skipping..."
   fi
 
-
   hassbian.suite.helper.install.apt mosquitto mosquitto-clients
 
   echo "Writing default configuration"
@@ -63,21 +64,15 @@ function install {
   echo "Restarting Mosquitto service"
   systemctl restart mosquitto.service
 
-  ip_address=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
-
   validation=$(hassbian.suite.verify.pgrep mosquitto)
   if [ "$validation" == "0" ]; then
-    echo
-    echo -e "\\e[32mInstallation done.\\e[0m"
-    echo
+    ip_address=$(hassbian.info.general.ipaddress)
+    hassbian.suite.helper.action.success
     echo "Your MQTT broker is running at $ip_address:1883 or if preferred hassbian.local:1883"
-    echo ""
+    echo
     echo "To continue have a look at https://home-assistant.io/docs/mqtt/"
-    echo
   else
-    echo
-    echo -e "\\e[31mInstallation failed..."
-    echo
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0

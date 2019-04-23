@@ -32,6 +32,27 @@ EOF
   fi
 }
 
+function hassbian.info.version.homeassistant.github {
+  # Return the latest version of homeassistant from github.
+  local version
+
+  version=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases | \
+    grep tag_name | head -1 | awk -F'"' '{print $4}')
+
+  printf "%s" "$version"
+  fi
+}
+
+function hassbian.info.version.homeassistant.pypi {
+  # Return the latest version of homeassistant from pypi.
+  local version
+
+  version=$(curl -s https://api.github.com/repos/home-assistant/home-assistant/releases/latest | \
+      grep tag_name | awk -F'"' '{print $4}')
+
+  printf "%s" "$version"
+}
+
 function hassbian.info.version.homeassistant.python {
   # Return the version of python that homeassistant uses.
   local version

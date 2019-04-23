@@ -20,9 +20,9 @@ EOF
 
   validation=$(hassbian.suite.verify.service cloud9@homeassistant.service)
   if [ "$validation" == "0" ]; then
-    echo "Upgrade done..."
+    hassbian.suite.helper.action.success
   else
-    echo "Upgrade failed..."
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0

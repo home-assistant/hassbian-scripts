@@ -40,6 +40,9 @@ declare HASSBIAN_RUNTIME_BETA=false
 # Enabled by adding the --force flag.
 declare HASSBIAN_RUNTIME_DEV=false
 
+# Enabled by adding '=X.X.X' at the end of the suitename.
+declare HASSBIAN_RUNTIME_TARGET_VERSION
+
 #####################################
 #  Echoable messages
 #####################################

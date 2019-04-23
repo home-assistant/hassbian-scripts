@@ -8,7 +8,6 @@ function install {
   local validation
   local username
   local password
-  local node
 
   if [ "$HASSBIAN_RUNTIME_ACCEPT" = true ]; then
     username=pi
@@ -17,21 +16,16 @@ function install {
     hassbian.input.info "Please take the time to setup your account"
     username=$(hassbian.input.text "Username:")
     password=$(hassbian.input.text "Password:")
-    if [ ! "$username" ]; then
+    if [ "$username" == "0" ]; then
       username=pi
     fi
-    if [ ! "$password" ]; then
+    if [ "$password" == "0" ]; then
       password=raspberry
     fi
   fi
 
   #Installing NodeJS if not already installed.
-  node=$(which node)
-  if [ -z "${node}" ]; then
-    printf "Downloading and installing NodeJS...\\n"
-    curl -sL https://deb.nodesource.com/setup_11.x | bash -
-    apt install -y nodejs
-  fi
+  hassbian.suite.helper.install.node
 
   echo "Creating installation directory..."
   mkdir /opt/c9sdk
@@ -51,7 +45,7 @@ function install {
 EOF
 
   echo "Copying Cloud9 service file..."
-  cp /opt/hassbian/suites/cloud9/files/cloud9.service /etc/systemd/system/cloud9@homeassistant.service
+  cp "$HASSBIAN_SUITE_DIR"/cloud9/files/cloud9.service /etc/systemd/system/cloud9@homeassistant.service
 
   sed -i "s,%%USERNAME%%,${username},g" /etc/systemd/system/cloud9@homeassistant.service
   sed -i "s,%%PASSWORD%%,${password},g" /etc/systemd/system/cloud9@homeassistant.service
@@ -76,10 +70,10 @@ EOF
   validation=$(hassbian.suite.verify.service cloud9@homeassistant.service)
   if [ "$validation" == "0" ]; then
     ipaddress=$(hassbian.info.general.ipaddress)
-    echo "Installation done...
-    Your Cloud9 IDE is now avaiable at http://$ipaddress:8181"
+    hassbian.suite.helper.action.success
+    echo "Your Cloud9 IDE is now avaiable at http://$ipaddress:8181"
   else
-    echo "Installation failed..."
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0

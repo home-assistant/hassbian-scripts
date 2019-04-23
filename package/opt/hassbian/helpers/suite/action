@@ -1,7 +1,7 @@
 #!bin/bash
 #  Helper script for hassbian-config.
 
-# shellcheck disable=SC1090
+# shellcheck disable=SC1090,SC2034
 
 declare suitename
 declare suitestate
@@ -11,6 +11,12 @@ declare returnvalue
 function hassbian.suite.action {
   suiteaction="$1"
   suitename="$2"
+
+  # Split suitename if needed.
+  if [[ "$suitename" = *"="* ]]; then
+    suitename=$(echo "$suitename" | awk -F'=' '{print $1}')
+    HASSBIAN_RUNTIME_TARGET_VERSION=$(echo "$suitename" | awk -F'=' '{print $2}')
+  fi
 
   # Root check.
   hassbian.info.general.rootcheck
@@ -59,6 +65,7 @@ function hassbian.suite.action.execute {
   # We need this extra function to keep logging and be able to use the return value.
   suiteaction="$1"
   suitename="$2"
+
   if [ -f "$HASSBIAN_SUITE_DIR/$suitename/$suiteaction" ]; then
     source "$HASSBIAN_SUITE_DIR/$suitename/$suiteaction"
     "$suiteaction"

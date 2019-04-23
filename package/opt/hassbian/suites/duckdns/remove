@@ -11,12 +11,8 @@ function remove {
   rm /etc/cron.daily/dehydrated >/dev/null 2>&1
   rm /etc/cron.hourly/duckdns >/dev/null 2>&1
 
-  echo -e "
-  
-  \\e[32mRemoval done..\\e[0m
-
-  "
+  hassbian.suite.helper.action.success
   return 0
 }
 
-[[ "$_" == "$0" ]] && echo "hassbian-config helper script; do not run directly, use hassbian-config instead."
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

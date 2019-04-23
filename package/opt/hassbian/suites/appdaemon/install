@@ -12,14 +12,13 @@ function install {
     if [ -f "/usr/sbin/samba" ]; then
       activatesamba=$(hassbian.input.bool "Do you want to add Samba share for AppDaemon configuration?")
     fi
-
     homeassistant_password=$(hassbian.input.text "Enter your Home Assistant API password:")
   else
     homeassistant_password=""
   fi
 
   echo "Checking python version to use..."
-  python_version=$(echo /usr/local/lib/*python* | awk -F/ '{print $NF}')
+  python_version=$(hassbian.info.version.python)
   echo "Using python$python_version..."
 
   echo "Creating directory for AppDaemon Venv"
@@ -43,7 +42,7 @@ function install {
     python -m pip install appdaemon
 
     echo "Copying AppDaemon config file"
-    cp /opt/hassbian/suites/appdaemon/files/appdaemon.conf /home/homeassistant/appdaemon/appdaemon.yaml
+    cp $HASSBIAN_SUITE_DIR/appdaemon/files/appdaemon.conf /home/homeassistant/appdaemon/appdaemon.yaml
     if [ ! -z "${HOMEASSISTANT_PASSWORD}" ]; then
         sed -i 's/#ha_key:/ha_key: $HOMEASSISTANT_PASSWORD/g' /home/homeassistant/appdaemon/appdaemon.yaml
     fi
@@ -53,7 +52,7 @@ function install {
 EOF
 
   echo "Copying AppDaemon service file"
-  cp /opt/hassbian/suites/appdaemon/files/appdaemon.service /etc/systemd/system/appdaemon@homeassistant.service
+  cp "$HASSBIAN_SUITE_DIR"/appdaemon/files/appdaemon.service /etc/systemd/system/appdaemon@homeassistant.service
 
   echo "Enabling AppDaemon service"
   systemctl enable appdaemon@homeassistant.service
@@ -62,30 +61,24 @@ EOF
   echo "Starting AppDaemon service"
   systemctl start appdaemon@homeassistant.service
 
-  if [ "$SAMBA" == "y" ] || [ "$SAMBA" == "Y" ]; then
+  if [ "$activatesamba" == "0" ]; then
     echo "Adding configuration to Samba..."
-    echo "[appdaemon]" | tee -a /etc/samba/smb.conf
-    echo "path = /home/homeassistant/appdaemon" | tee -a /etc/samba/smb.conf
-    echo "writeable = yes" | tee -a /etc/samba/smb.conf
-    echo "guest ok = yes" | tee -a /etc/samba/smb.conf
-    echo "create mask = 0644" | tee -a /etc/samba/smb.conf
-    echo "directory mask = 0755" | tee -a /etc/samba/smb.conf
-    echo "force user = homeassistant" | tee -a /etc/samba/smb.conf
-    echo "" | tee -a /etc/samba/smb.conf
+    tee -a /etc/samba/smb.conf < "$HASSBIAN_SUITE_DIR"/appdaemon/files/samba.conf
+
     echo "Restarting Samba service"
     systemctl restart smbd.service
   fi
 
   validation=$(hassbian.suite.verify.service appdaemon@homeassistant.service)
   if [ "$validation" == "0" ]; then
-    echo "Installation done...
+    hassbian.suite.helper.action.success
 
-    You will find the AppDaemon configuration files in:
+    echo "You will find the AppDaemon configuration files in:
     /home/homeassistant/appdaemon
 
     To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
   else
-    echo "Installation failed..."
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0

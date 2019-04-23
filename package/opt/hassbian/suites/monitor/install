@@ -4,7 +4,9 @@
 #
 
 function install {
-  echo -n "Installing Mosquitto package: "
+  local validation
+
+  echo "Installing Mosquitto package: "
 
   echo "Checking the installation..."
   validation=$(pgrep -f mosquitto)
@@ -28,22 +30,16 @@ function install {
   bash /opt/monitor/monitor.sh
 
   echo "Checking the installation..."
-  if [ ! -f /opt/monitor/monitor.sh ]; then
-    validation=""
-  else
+  if [ -f /opt/monitor/monitor.sh ]; then
     validation="ok"
   fi
 
   if [ ! -z "${validation}" ]; then
-    echo
-    echo -e "\\e[32mInstallation done..\\e[0m"
-    echo -e "Update of mqtt_preferences is required found at /opt/monitor/mqtt_prefences"
-    echo -e "Some further configuration is required and details can be found here https://github.com/andrewjfreyer/monitor#getting-started "
-    echo
+    hassbian.suite.helper.action.success
+    echo "Update of mqtt_preferences is required found at /opt/monitor/mqtt_prefences"
+    echo "Some further configuration is required and details can be found here https://github.com/andrewjfreyer/monitor#getting-started "
   else
-    echo
-    echo -e "\\e[31mInstallation failed..."
-    echo
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0

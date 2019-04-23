@@ -5,6 +5,7 @@
 
 function install {
   local ipaddress
+  local validation
 
   echo "Downloading Pi-hole install script..."
   mkdir /tmp/pihole || exit
@@ -21,10 +22,10 @@ function install {
 
   if [ "${validation}" ]; then
     ipaddress=$(hassbian.info.general.ipaddress)
-    echo "Installation done.
-    Your Pi-Hole instance is running at $ipaddress or if preferred hassbian.local"
+    hassbian.suite.helper.action.success
+    echo "Your Pi-Hole instance is running at $ipaddress or if preferred hassbian.local"
   else
-    echo "Installation failed..."
+    hassbian.suite.helper.action.failed
     return 1
   fi
 

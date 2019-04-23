@@ -10,11 +10,8 @@ function upgrade {
   echo "Upgrading base operating system"
   apt upgrade -y
 
-  echo
-  echo "Upgrade complete."
-  echo
+  hassbian.suite.helper.action.success
   echo "Note that you may need to reboot the raspberry Pi for some updates to take effect."
-  echo
   return 0
 }
 

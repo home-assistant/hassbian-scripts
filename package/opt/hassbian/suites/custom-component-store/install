@@ -16,19 +16,19 @@ function install {
     hassbian.input.info "Please take the time to setup your account"
     username=$(hassbian.input.text "Username:")
     password=$(hassbian.input.text "Password:")
-    if [ ! "$username" ]; then
+    if [ "$username" == "0" ]; then
       username='pi'
     fi
-    if [ ! "$password" ]; then
+    if [ "$password" == "0" ]; then
       password='raspberry'
     fi
   fi
 
   echo "Installing latest version of Custom component store..."
-  python3 -m pip install componentstore
+  hassbian.suite.helper.install.pip componentstore
 
   echo "Enabling Custom component store service..."
-  cp /opt/hassbian/suites/custom-component-store/files/custom-component-store@homeassistant.service /etc/systemd/system/custom-component-store@homeassistant.service
+  cp "$HASSBIAN_SUITE_DIR"/custom-component-store/files/custom-component-store@homeassistant.service /etc/systemd/system/custom-component-store@homeassistant.service
 
   sed -i "s,%%USERNAME%%,${username},g" /etc/systemd/system/custom-component-store@homeassistant.service
   sed -i "s,%%PASSWORD%%,${password},g" /etc/systemd/system/custom-component-store@homeassistant.service

@@ -4,13 +4,9 @@
 #
 
 function install {
-  echo -n "Installing dependencies : "
-  node=$(which npm)
-  if [ -z "${node}" ]; then #Installing NodeJS if not already installed.
-    printf "Downloading and installing NodeJS...\\n"
-    curl -sL https://deb.nodesource.com/setup_10.x | bash -
-    apt install -y nodejs
-  fi
+  local validation
+
+  hassbian.suite.helper.install.node
 
   echo "Cloning Zigbee2mqtt git repository"
   git clone https://github.com/Koenkk/zigbee2mqtt.git /opt/zigbee2mqtt
@@ -21,42 +17,21 @@ function install {
   su pi -c "npm install"
 
   echo "Creating service file zigbee2mqtt.service"
-  service_path="/etc/systemd/system/zigbee2mqtt.service"
+  cp "$HASSBIAN_SUITE_DIR"/zigbee2mqtt/files/zigbee2mqtt.service /etc/systemd/system/zigbee2mqtt.service
 
-  echo "[Unit]
-Description=zigbee2mqtt
-After=network.target
-
-[Service]
-ExecStart=/usr/bin/npm start
-WorkingDirectory=/opt/zigbee2mqtt
-StandardOutput=inherit
-StandardError=inherit
-Restart=always
-User=pi
-
-[Install]
-WantedBy=multi-user.target" > $service_path
 
   echo "Checking the installation..."
-  if [ ! -f /opt/zigbee2mqtt/data/configuration.yaml ]; then
-    validation=""
-  else
+  if [ -f /opt/zigbee2mqtt/data/configuration.yaml ]; then
     validation="ok"
   fi
 
   if [ ! -z "${validation}" ]; then
-    echo
-    echo -e "\\e[32mInstallation done..\\e[0m"
-    echo -e "Update of configuration.yaml is required found at /opt/zigbee2mqtt/data/"
-    echo -e "Some further configuration is required and details can be found here https://github.com/Koenkk/zigbee2mqtt/wiki/Running-the-bridge "
-    echo
-    echo -e "Service can be started after configuration but running sudo systemctl start zigbee2mqtt"
-    echo
+    hassbian.suite.helper.action.success
+    echo "Update of configuration.yaml is required found at /opt/zigbee2mqtt/data/"
+    echo "Some further configuration is required and details can be found here https://github.com/Koenkk/zigbee2mqtt/wiki/Running-the-bridge "
+    echo "Service can be started after configuration but running sudo systemctl start zigbee2mqtt"
   else
-    echo
-    echo -e "\\e[31mInstallation failed..."
-    echo
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0

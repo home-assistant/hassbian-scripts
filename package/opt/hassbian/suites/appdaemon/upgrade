@@ -5,6 +5,7 @@
 
 function upgrade {
   local validation
+
   echo "Stopping AppDaemon service..."
   systemctl stop appdaemon@homeassistant.service
 
@@ -15,11 +16,11 @@ function upgrade {
 
   validation=$(hassbian.suite.verify.service appdaemon@homeassistant.service)
   if [ "$validation" == "0" ]; then
-    echo "Upgrade done..
-    To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
+    hassbian.suite.helper.action.success
+    echo "To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
 
   else
-    echo "Upgrade failed..."
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0

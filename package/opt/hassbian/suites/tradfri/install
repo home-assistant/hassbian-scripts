@@ -4,23 +4,10 @@
 #
 
 function install {
-  echo "Running apt-get preparation"
-  apt-get update
-  apt-get install -y dh-autoreconf
+  local validation
 
-  echo "Changing to homeassistant user"
-  sudo -u homeassistant -H /bin/bash <<EOF
-
-  echo "Activating Home Assistant venv"
-  source /srv/homeassistant/bin/activate
-
-  echo "Installing dependencies for Tradfri."
-  python3 -m pip install --upgrade pip setuptools wheel
-  python3 -m pip install cython
-
-  echo "Deactivating virtualenv"
-  deactivate
-EOF
+  hassbian.suite.helper.install.aptdh-autoreconf
+  hassbian.suite.helper.install.pip Cython
 
   echo "Checking the installation..."
   validation=$(sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'
@@ -29,16 +16,11 @@ EOF
 EOF
   )
   if [ ! -z "${validation}" ]; then
-    echo
-    echo -e "\\e[32mInstallation done..\\e[0m"
-    echo
+    hassbian.suite.helper.action.success
     echo "To continue have a look at https://home-assistant.io/components/tradfri/"
     echo "It's recommended that you restart your Tradfri Gateway before continuing."
-    echo
   else
-    echo
-    echo -e "\\e[31mInstallation failed..."
-    echo
+    hassbian.suite.helper.action.failed
     return 1
   fi
   return 0
