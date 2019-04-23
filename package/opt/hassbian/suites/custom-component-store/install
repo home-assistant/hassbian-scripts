@@ -43,7 +43,7 @@ function install {
   if [ "$validation" == "0" ]; then
     ipaddress=$(hassbian.info.general.ipaddress)
     hassbian.suite.helper.action.success
-    echo"Custom component store installation is running at $ipaddress:8120 or if preferred http://hassbian.local:8120"
+    echo "Custom component store installation is running at $ipaddress:8120 or if preferred http://hassbian.local:8120"
   else
     hassbian.suite.helper.action.failed
     return 1
