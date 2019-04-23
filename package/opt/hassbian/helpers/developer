@@ -106,6 +106,7 @@ function hassbian.developer.test.package {
       printf "\\e[31mFAIL\\n"
     fi
   done
+  printf "\\e[0m\\n"
 
   echo "
   ------------------------------------------
@@ -113,10 +114,11 @@ function hassbian.developer.test.package {
   ------------------------------------------
   "
   operations=()
-  operations+=('hassbian-config --version' 'hassbian-config -V')
+  operations+=('--version' '-V')
+  operations+=('--help' '-H')
   for operation in "${operations[@]}"; do
-    printf "\\e[36mTesting '%s'.................." "$operation"
-    "$operation" >> /dev/null 2>&1
+    printf "\\e[36mTesting hassbian-config '%s'.................." "$operation"
+    hassbian-config "$operation" >> /dev/null 2>&1
     returncode="$?"
     if [ "$returncode" == "0" ];then
       ((pass+=1))
@@ -132,5 +134,12 @@ function hassbian.developer.test.package {
   Total passed:......$pass
   Total failed:......$fail
   "
+
+  # Exit the test
+  if [ "$fail" == "0" ];then
+    exit 0
+  else
+    exit 1
+  fi
 }
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

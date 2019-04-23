@@ -114,13 +114,13 @@ function hassbian.suite.helper.exist {
   # Check if suite directory exist.
   if [ ! -d "$HASSBIAN_SUITE_DIR/$suitename" ]; then
     echo "$suitename does not exist."
-    return 1
+    exit 1
   fi
 
   # Check if suite manifest file exist.
   if [ ! -f "$HASSBIAN_SUITE_DIR/$suitename/manifest" ]; then
     echo "$suitename are missing manifest file."
-    return 1
+    exit 1
   fi
 }
 

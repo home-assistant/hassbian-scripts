@@ -46,6 +46,7 @@ function hassbian.suite.action {
   # Run the suite action.
   if [[ "$suiteaction" =~ ^(install|upgrade|remove)$ ]]; then
     hassbian.suite.action.execute "$suiteaction" "$suitename" 2>&1 | tee "$HASSBIAN_LOG_FILE"
+    returnvalue="$?"
   else
     echo "$suiteaction is not a valid suite action."
     return 1
@@ -53,6 +54,7 @@ function hassbian.suite.action {
 
   # Deactivate debug
   if [ "$HASSBIAN_RUNTIME_DEBUG" == true ]; then set +x; fi
+  exit "$returnvalue"
 }
 
 function hassbian.suite.action.execute {

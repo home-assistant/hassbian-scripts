@@ -21,7 +21,7 @@ function hassbian.suite.info.print {
   long_description=$(hassbian.suite.helper.manifest "$suitename" long_description)
   isinstalled=$(hassbian.suite.info.installed "$suitename")
 
-  if [ "$isinstalled" ]; then
+  if [ "$isinstalled" == "0" ]; then
     installed='True'
   else
     installed='False'

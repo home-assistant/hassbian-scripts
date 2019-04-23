@@ -15,7 +15,24 @@ if [ $# -lt 1 ]; then
 fi
 
 for argument in "$@"; do
-    if [ "$argument" == "install" ]; then
+    ## Flags
+    if [ "$argument" == "--accept" ] || [ "$argument" == "-Y" ]; then
+       HASSBIAN_RUNTIME_ACCEPT=true
+
+    elif [ "$argument" == "--force" ] || [ "$argument" == "-F" ]; then
+        HASSBIAN_RUNTIME_FORCE=true
+
+    elif [ "$argument" == "--debug" ] || [ "$argument" == "-D" ]; then
+        HASSBIAN_RUNTIME_DEBUG=true
+
+    elif [ "$argument" == "--beta" ] || [ "$argument" == "-B" ]; then
+        HASSBIAN_RUNTIME_BETA=true
+
+    elif [ "$argument" == "--dev" ]; then
+        HASSBIAN_RUNTIME_DEV=true
+
+    # Actions
+    elif [ "$argument" == "install" ]; then
         suiteaction="$argument"
 
     elif [ "$argument" == "upgrade" ]; then
@@ -63,27 +80,6 @@ for argument in "$@"; do
     # If we got here we can assume that the argument is a suite.
     else
       suites+=" $argument"
-    fi
-
-    ## Flags
-    if [ "$argument" == "--accept" ] || [ "$argument" == "-Y" ]; then
-       HASSBIAN_RUNTIME_ACCEPT=true
-    fi
-
-    if [ "$argument" == "--force" ] || [ "$argument" == "-F" ]; then
-        HASSBIAN_RUNTIME_FORCE=true
-    fi
-
-    if [ "$argument" == "--debug" ] || [ "$argument" == "-D" ]; then
-        HASSBIAN_RUNTIME_DEBUG=true
-    fi
-
-    if [ "$argument" == "--beta" ] || [ "$argument" == "-B" ]; then
-        HASSBIAN_RUNTIME_BETA=true
-    fi
-
-    if [ "$argument" == "--dev" ]; then
-        HASSBIAN_RUNTIME_DEV=true
     fi
 done
 
