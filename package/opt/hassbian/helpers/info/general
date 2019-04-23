@@ -5,7 +5,7 @@ function hassbian.info.general.rootcheck {
   # Check if the current user is root.
   if (( EUID != 0 )); then
     echo "Error: hassbian-config must be run as root (with sudo) for this to be possible."
-    exit 1
+    return 1
   fi
 }
 

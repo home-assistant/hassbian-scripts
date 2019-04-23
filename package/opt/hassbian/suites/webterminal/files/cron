@@ -9,7 +9,7 @@ elif [ -d "/home/homeassistant/dehydrated/certs" ]; then
   certdir="/home/homeassistant/dehydrated/certs/"
 else
   echo "Could not find a valid cerification directory..."
-  exit 1
+  return 1
 fi
 domain=$(ls "$certdir")
 cat "$certdir$domain/fullchain.pem" "$certdir$domain/privkey.pem" > /var/lib/shellinabox/certificate-"$domain".pem

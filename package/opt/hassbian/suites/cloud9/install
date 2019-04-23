@@ -63,7 +63,7 @@ EOF
     echo "Installing npm"
     apt install -y npm
 
-    cd /opt/c9sdk || exit 1
+    cd /opt/c9sdk || return 1
     npm install
   fi
 

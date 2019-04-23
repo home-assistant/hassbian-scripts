@@ -57,20 +57,18 @@ function hassbian.developer.test.package {
     if [[ "$function" = *"."* ]]; then
       printf "\\e[36mTesting '%s'..............." "$function"
 
-      # Exclude functions from tests:
-      if [[ "$function" =~ ^(\
-        hassbian.developer.test.package|\
-        hassbian.developer.test.pr|\
-        hassbian.input.bool|\
-        hassbian.input.info|\
-        hassbian.input.text|\
-        hassbian.log.share|\
-        hassbian.suite.action.execute|\
-        hassbian.suite.action|\
-        hassbian.suite.helper.exist|\
-        hassbian.suite.helper.install.node|\
-        hassbian.suite.info.installed\
-        )$ ]]; then
+      # Exclude functions from test:
+      if [ "$function" == "hassbian.developer.test.package" ] || \
+        [ "$function" == "hassbian.developer.test.pr" ] || \
+        [ "$function" == "hassbian.input.bool" ] || \
+        [ "$function" == "hassbian.input.info" ] || \
+        [ "$function" == "hassbian.input.text" ] || \
+        [ "$function" == "hassbian.log.share" ] || \
+        [ "$function" == "hassbian.suite.action.execute" ] || \
+        [ "$function" == "hassbian.suite.action" ] || \
+        [ "$function" == "hassbian.suite.helper.exist" ] || \
+        [ "$function" == "hassbian.suite.helper.install.node" ] || \
+        [ "$function" == "hassbian.suite.info.installed" ]; then
         ((skip+=1))
         printf "\\e[33mSKIP\\n"
 
@@ -109,6 +107,26 @@ function hassbian.developer.test.package {
     fi
   done
 
+  echo "
+  ------------------------------------------
+  TESTING HASSBIAN-CONFIG CLI OPERATIONS
+  ------------------------------------------
+  "
+  operations=()
+  operations+=('hassbian-config --version' 'hassbian-config -V')
+  for operation in "${operations[@]}"; do
+    printf "\\e[36mTesting '%s'.................." "$operation"
+    "$operation" >> /dev/null 2>&1
+    returncode="$?"
+    if [ "$returncode" == "0" ];then
+      ((pass+=1))
+      printf "\\e[32mPASS\\n"
+    else
+      ((fail+=1))
+      printf "\\e[31mFAIL\\n"
+    fi
+  done
+  printf "\\e[0m\\n"
 
   echo "
   Total passed:......$pass

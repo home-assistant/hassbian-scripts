@@ -53,12 +53,6 @@ function hassbian.suite.action {
 
   # Deactivate debug
   if [ "$HASSBIAN_RUNTIME_DEBUG" == true ]; then set +x; fi
-
-  if [ "$suiteaction" == "remove" ]; then 
-    rm "$HASSBIAN_CONTROL_DIR/$suitename"
-  else
-    echo "SCRIPTSTATE=$suitestate" > "$HASSBIAN_CONTROL_DIR/$suitename"
-  fi
 }
 
 function hassbian.suite.action.execute {
@@ -81,5 +75,13 @@ function hassbian.suite.action.execute {
     echo "$ECHO_ACTION_ERROR"
     suitestate="failed"
   fi
+
+  if [ "$suiteaction" == "remove" ]; then 
+    rm "$HASSBIAN_CONTROL_DIR/$suitename"
+  else
+    echo "SCRIPTSTATE=$suitestate" > "$HASSBIAN_CONTROL_DIR/$suitename"
+  fi
+
+  return "$returnvalue"
 }
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"
