@@ -70,7 +70,7 @@ function hassbian.suite.action.execute {
   fi
 
   # Post action
-  if [ "$HASSBIAN_RETURN_SUITE_ACTION" == "0" ]; then
+  if [ "$HASSBIAN_RETURN_SUITE_ACTION" == 0 ]; then
     suitestate="installed"
   else
     echo "$ECHO_ACTION_ERROR"

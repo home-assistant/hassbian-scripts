@@ -44,7 +44,7 @@ declare HASSBIAN_RUNTIME_DEV=false
 declare HASSBIAN_RUNTIME_TARGET_VERSION
 
 # Sute action return value
-declare HASSBIAN_RETURN_SUITE_ACTION
+declare -i HASSBIAN_RETURN_SUITE_ACTION
 
 #####################################
 #  Echoable messages
