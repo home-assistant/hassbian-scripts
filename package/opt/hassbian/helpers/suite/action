@@ -1,6 +1,8 @@
 #!bin/bash
 #  Helper script for hassbian-config.
 
+# shellcheck disable=SC1090
+
 declare suitename
 declare suitestate
 declare suiteaction
@@ -38,24 +40,21 @@ function hassbian.suite.action {
   # Activate debug
   if [ "$HASSBIAN_RUNTIME_DEBUG" = true ]; then set -x; fi
 
+  # Run the suite action.
+  if [[ "$suiteaction" =~ ^(install|upgrade|remove)$ ]]; then
+    if [ -f "$HASSBIAN_SUITE_DIR/$suitename/$suiteaction" ]; then
+      source "$HASSBIAN_SUITE_DIR/$suitename/$suiteaction"
+      "$suiteaction" | tee "$HASSBIAN_LOG_FILE"
+      returnvalue="$?"
 
-  if [ "$suiteaction" == "install" ]; then
-    hassbian.suite.install "$suitename" | tee "$HASSBIAN_LOG_FILE"
-    retrunedvalue="$?"
-
-  elif [ "$suiteaction" == "upgrade" ]; then
-    hassbian.suite.upgrade "$suitename" | tee "$HASSBIAN_LOG_FILE"
-    retrunedvalue="$?"
-
-  elif [ "$suiteaction" == "remove" ]; then
-    hassbian.suite.remove "$suitename" | tee "$HASSBIAN_LOG_FILE"
-    retrunedvalue="$?"
-
+      return "$returnvalue"
+    else
+      echo "$suiteaction script does not exist for this suite."
+    fi
   else
     echo "$suiteaction is not a valid suite action."
     exit 1
   fi
-
 
   # Deactivate debug
   if [ "$HASSBIAN_RUNTIME_DEBUG" == true ]; then set +x; fi
