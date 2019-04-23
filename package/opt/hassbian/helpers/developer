@@ -48,6 +48,7 @@ function hassbian.developer.test.package {
   local returncode
   local testsuite=template
   local test
+  local unattended
 
   echo "
   ------------------------------------------
@@ -98,8 +99,6 @@ function hassbian.developer.test.package {
   operations=('install' 'upgrade' 'remove')
   for cmd in "${operations[@]}"; do
     printf "\\e[36mTesting 'hassbian-config %s %s'............." "$cmd" "$testsuite"
-    hassbian-config "$cmd" "$testsuite" >> /dev/null 2>&1
-    returncode="$?"
     test=$(hassbian-config "$cmd" "$testsuite" | grep "Operation failed...")
     if [ -z "${test}" ];then
       ((pass+=1))
@@ -138,6 +137,58 @@ function hassbian.developer.test.package {
     fi
   done
   printf "\\e[0m\\n"
+
+  if [ "$HASSBIAN_RUNTIME_CI" == "true" ];then
+    # Only try this if running in a CI env.
+    echo "
+    ------------------------------------------
+    TESTING HASSBIAN-CONFIG SUITES
+    ------------------------------------------
+    "
+    for suite in $(hassbian.info.general.all_suites); do
+      printf "\\e[36mTesting Suite: '%s'.................." "$suite"
+      unattended=$(hassbian.suite.helper.manifest "$suite" unattended)
+      if [ "$unattended" == "true" ];then
+        # Install test...
+        test=$(hassbian-config install "$suite" --accept | grep "Operation failed...")
+        if [ -z "${test}" ];then
+          ((pass+=1))
+          printf "\\e[32mPASS\\n"
+        else
+          ((fail+=1))
+          failedtests+=("hassbian-config install $suite --accept")
+          printf "\\e[31mFAIL\\n"
+        fi
+
+        # Upgrade test...
+        test=$(hassbian-config upgrade "$suite" --accept | grep "Operation failed...")
+        if [ -z "${test}" ];then
+          ((pass+=1))
+          printf "\\e[32mPASS\\n"
+        else
+          ((fail+=1))
+          failedtests+=("hassbian-config upgrade $suite --accept")
+          printf "\\e[31mFAIL\\n"
+        fi
+
+        # Remove test...
+        test=$(hassbian-config remove "$suite" --accept | grep "Operation failed...")
+        if [ -z "${test}" ];then
+          ((pass+=1))
+          printf "\\e[32mPASS\\n"
+        else
+          ((fail+=1))
+          failedtests+=("hassbian-config remove $suite --accept")
+          printf "\\e[31mFAIL\\n"
+        fi
+      else
+        printf "\\e[33mSKIP\\n"
+      fi
+    done
+    printf "\\e[0m\\n"
+  fi
+
+
 
  # Testing is done.
   echo "

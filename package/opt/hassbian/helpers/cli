@@ -31,6 +31,9 @@ for argument in "$@"; do
     elif [ "$argument" == "--dev" ]; then
         HASSBIAN_RUNTIME_DEV=true
 
+    elif [ "$argument" == "--ci" ]; then
+        HASSBIAN_RUNTIME_CI=true
+
     # Actions
     elif [ "$argument" == "install" ]; then
         suiteaction="$argument"
