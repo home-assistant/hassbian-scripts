@@ -10,7 +10,7 @@ function hassbian.suite.helper.install.pip {
   # Usage:
   # hassbian.suite.helper.install.pip sampleclient
   # hassbian.suite.helper.install.pip sampleclient someotherpackage
-  packages="$1"
+  packages=$@
 
   echo "Changing to homeassistant user..."
   sudo -u homeassistant -H /bin/bash << EOF
@@ -22,7 +22,7 @@ function hassbian.suite.helper.install.pip {
   python -m pip install --upgrade setuptools wheel
 
   echo "Installing Python packages..."
-  python -m pip install --upgrade "$packages"
+  python -m pip install --upgrade $packages
 
   echo "Deactivating virtualenv..."
   deactivate
@@ -34,13 +34,13 @@ function hassbian.suite.helper.install.apt {
   # Usage:
   # hassbian.suite.helper.install.apt sampleclient
   # hassbian.suite.helper.install.apt sampleclient someotherpackage
-  packages="$1"
+  packages=$@
 
   echo "Updating apt..."
   apt update
 
   echo "Installing packages..."
-  apt install -y "$packages"
+  apt install -y $packages
 }
 
 function hassbian.suite.helper.install.node {
