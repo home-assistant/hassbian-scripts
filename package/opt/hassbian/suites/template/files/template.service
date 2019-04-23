@@ -1,0 +1,16 @@
+#
+# Service file for systems with systemd to run custom-component-store as the homeassistant user.
+#
+
+[Unit]
+Description=custom-component-store for %i
+After=network.target
+
+[Service]
+Type=simple
+User=%i
+ExecStart=sleep 3600
+SendSIGKILL=no
+
+[Install]
+WantedBy=multi-user.target

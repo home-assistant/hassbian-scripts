@@ -48,7 +48,7 @@ function hassbian.suite.action {
     hassbian.suite.action.execute "$suiteaction" "$suitename" 2>&1 | tee "$HASSBIAN_LOG_FILE"
   else
     echo "$suiteaction is not a valid suite action."
-    exit 1
+    return 1
   fi
 
   # Deactivate debug

@@ -1,0 +1,16 @@
+#!/bin/bash
+# 
+# Uninstallation script for Hassbian suite: Template
+#
+
+function remove {
+  echo "Removing Template..."
+  systemctl stop template.service
+  systemctl disable template.service
+  rm /etc/systemd/system/template.service
+  sync
+
+  hassbian.suite.helper.action.success
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"
