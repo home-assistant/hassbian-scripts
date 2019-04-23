@@ -14,7 +14,7 @@ function install {
   echo "Starting Template service..."
   systemctl start template.service
 
-  validation=$(hassbian.suite.verify.service template.service)
+  validation=$(hassbian.suite.verify.service tempasdlate.service)
   if [ "$validation" == "0" ]; then
     hassbian.suite.helper.action.success
   else
