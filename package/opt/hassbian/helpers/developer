@@ -40,10 +40,11 @@ function hassbian.developer.test.pr {
 function hassbian.developer.test.package {
   # Run a test on all functions.
   # This should only be used by maintainers!
-  local pass=0
-  local fail=0
-  local skip=0
+  local -i pass
+  local -i fail
+  local -i skip
   local function
+  local -a operations
   local returncode
   local testsuite=template
 
@@ -117,7 +118,7 @@ function hassbian.developer.test.package {
   operations+=('--version' '-V')
   operations+=('--help' '-H')
   for operation in "${operations[@]}"; do
-    printf "\\e[36mTesting hassbian-config '%s'.................." "$operation"
+    printf "\\e[36mTesting 'hassbian-config %s'.................." "$operation"
     hassbian-config "$operation" >> /dev/null 2>&1
     returncode="$?"
     if [ "$returncode" == "0" ];then
@@ -130,6 +131,7 @@ function hassbian.developer.test.package {
   done
   printf "\\e[0m\\n"
 
+ # Testing is done.
   echo "
   Total passed:......$pass
   Total failed:......$fail

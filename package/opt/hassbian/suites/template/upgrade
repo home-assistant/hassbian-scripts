@@ -5,7 +5,6 @@
 
 function upgrade {
   echo "Upgrading Suite Template..."
-  sleep 5
 
   echo "Restarting Template service..."
   systemctl restart custom-component-store@homeassistant.service

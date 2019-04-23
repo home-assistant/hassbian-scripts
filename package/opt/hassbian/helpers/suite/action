@@ -6,7 +6,7 @@
 declare suitename
 declare suitestate
 declare suiteaction
-declare returnvalue
+declare -g returnvalue
 
 function hassbian.suite.action {
   suiteaction="$1"
@@ -54,6 +54,7 @@ function hassbian.suite.action {
 
   # Deactivate debug
   if [ "$HASSBIAN_RUNTIME_DEBUG" == true ]; then set +x; fi
+
   exit "$returnvalue"
 }
 
