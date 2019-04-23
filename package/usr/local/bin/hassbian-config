@@ -34,10 +34,10 @@ declare HASSBIAN_RUNTIME_DEBUG=false
 # Enabled by adding the --force flag.
 declare HASSBIAN_RUNTIME_FORCE=false
 
-# Enabled by adding the --force flag.
+# Enabled by adding the --beta flag.
 declare HASSBIAN_RUNTIME_BETA=false
 
-# Enabled by adding the --force flag.
+# Enabled by adding the --dev flag.
 declare HASSBIAN_RUNTIME_DEV=false
 
 # Enabled by adding the --ci flag.

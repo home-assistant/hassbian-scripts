@@ -7,6 +7,7 @@
 declare argument
 declare suites
 declare suiteaction
+declare runfunction
 
 # Show usage if no arguments are given.
 if [ $# -lt 1 ]; then
@@ -48,33 +49,26 @@ for argument in "$@"; do
         suiteaction="$argument"
 
     elif [ "$argument" == "developer-test-pr" ]; then
-        hassbian.developer.test.pr "$2"
-        exit 0
+        runfunction=hassbian.developer.test.pr "$2"
 
     elif [ "$argument" == "developer-test-package" ]; then
-        hassbian.developer.test.package "$2"
-        exit 0
+        runfunction=hassbian.developer.test.package
 
     elif [ "$argument" == "log" ]; then
-        hassbian.log.show
-        exit 0
+        runfunction=hassbian.log.show
 
     elif [ "$argument" == "share-log" ]; then
-        hassbian.log.share
-        exit 0
+        runfunction=hassbian.log.share
 
     elif [ "$argument" == "show-installed" ]; then
-        hassbian.info.general.isntalled_suites
-        exit 0
+        runfunction=hassbian.info.general.isntalled_suites
 
     elif [ "$argument" == "systeminfo" ]; then
-        hassbian.info.general.systeminfo
-        exit 0
+        runfunction=hassbian.info.general.systeminfo
 
     ## Spesial arguments.
     elif [ "$argument" == "--help" ] || [ "$argument" == "-H" ]; then
-        hassbian.info.general.help
-        exit 0
+        runfunction=hassbian.info.general.help
 
     elif [ "$argument" == "--version" ] || [ "$argument" == "-V" ]; then
         printf "%s\\n" "$(hassbian.info.version.hassbian_config.installed)"
@@ -85,6 +79,11 @@ for argument in "$@"; do
       suites+=" $argument"
     fi
 done
+
+if [ -n "$runfunction" ]; then
+    "$runfunction"
+    exit 0
+fi
 
 if [ -n "$suites" ]; then
 
