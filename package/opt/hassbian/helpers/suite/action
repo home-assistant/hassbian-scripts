@@ -53,6 +53,7 @@ function hassbian.suite.action.execute {
   # We need this extra function to keep logging and be able to use the return value.
   suiteaction="$1"
   suitename="$2"
+  returnvalue=0
 
   # Activate debug
   if [ "$HASSBIAN_RUNTIME_DEBUG" = true ]; then set -x; fi
