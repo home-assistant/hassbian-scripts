@@ -11,7 +11,6 @@ function hassbian.suite.info.print {
   local author
   local name
   local long_description
-  local isinstalled
   local installed
 
   suitename="$1"
@@ -19,13 +18,8 @@ function hassbian.suite.info.print {
   author=$(hassbian.suite.helper.manifest "$suitename" author)
   name=$(hassbian.suite.helper.manifest "$suitename" name)
   long_description=$(hassbian.suite.helper.manifest "$suitename" long_description)
-  isinstalled=$(hassbian.suite.info.installed "$suitename")
+  installed=$(hassbian.suite.info.installed "$suitename")
 
-  if [ "$isinstalled" == "0" ]; then
-    installed='True'
-  else
-    installed='False'
-  fi
 
   echo -e "
 Suite:     $name
@@ -36,24 +30,24 @@ $long_description
 }
 
 function hassbian.suite.info.installed {
-  # Return 0 if installed, else 1.
+  # Return true if installed, else false.
   # Usage example:
   # hassbian.suite.info.installed [suite]
   # hassbian.suite.info.installed duckdns
-  local isinstalled
+  local installed
   local suitestate
 
   suitename="$1"
-  isinstalled=1
+  installed='false'
 
   if [ -f "$HASSBIAN_CONTROL_DIR"/"$suitename" ]; then
     suitestate=$(grep "SCRIPTSTATE" "$HASSBIAN_CONTROL_DIR"/"$suitename" | \
       awk -F'=' '{print $2}')
-      if [ "$suitestate" == "isntalled" ]; then
-        isinstalled=0
+      if [ "$suitestate" == "installed" ]; then
+        installed='true'
       fi
   fi
-  return "$isinstalled"
+  printf "%s" "$installed"
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"
