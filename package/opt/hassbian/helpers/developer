@@ -59,7 +59,8 @@ function hassbian.developer.test.functions {
         [[ "$function" = *".developer."* ]] || \
         [[ "$function" = *".action."* ]] || \
         [[ "$function" = *".input."* ]] || \
-        [[ "$function" = *".node."* ]]; then
+        [[ "$function" = *".log.share"* ]] || \
+        [[ "$function" = *".node"* ]]; then
         skip+=1
         printf "\\e[33mSKIP\\n"
       else
