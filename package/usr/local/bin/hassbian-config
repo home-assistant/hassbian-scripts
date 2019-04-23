@@ -55,9 +55,6 @@ source "$HASSBIAN_HELPERS_DIR"/info/version
 source "$HASSBIAN_HELPERS_DIR"/suite/action
 source "$HASSBIAN_HELPERS_DIR"/suite/helper
 source "$HASSBIAN_HELPERS_DIR"/suite/info
-source "$HASSBIAN_HELPERS_DIR"/suite/install
-source "$HASSBIAN_HELPERS_DIR"/suite/remove
-source "$HASSBIAN_HELPERS_DIR"/suite/upgrade
 source "$HASSBIAN_HELPERS_DIR"/suite/verify
 source "$HASSBIAN_HELPERS_DIR"/developer
 source "$HASSBIAN_HELPERS_DIR"/input
