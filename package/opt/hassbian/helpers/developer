@@ -153,6 +153,7 @@ function hassbian.developer.test.package {
     for test in "${failedtests[@]}"; do
       printf "\\e[31m  %s\\n" "$test"
     done
+    printf "\\e[0m\\n"
     exit 1
   fi
 }
