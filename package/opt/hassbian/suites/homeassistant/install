@@ -18,11 +18,11 @@ function install {
   echo "Setting correct premissions"
   chown homeassistant:homeassistant -R "$HOME_ASSISTANT_VENV"
 
-  pythonversion=$(hassbian.info.version.homeassistant.python)
+  pythonversion=$(hassbian.info.version.python)
 
   echo "Creating Home Assistant venv"
   sudo -u homeassistant -H /bin/bash << EOF
-    python"${pythonversion:0:3}" -m venv $HOME_ASSISTANT_VENV
+    python"$pythonversion" -m venv $HOME_ASSISTANT_VENV
 EOF
 
   hassbian.suite.helper.install.pip homeassistant

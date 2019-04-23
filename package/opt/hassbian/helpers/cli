@@ -28,7 +28,7 @@ for argument in "$@"; do
         suiteaction="$argument"
 
     elif [ "$argument" == "developer-test-pr" ]; then
-        hassbian.developer.testpr "$2"
+        hassbian.developer.pr "$2"
         exit
 
     elif [ "$argument" == "log" ]; then

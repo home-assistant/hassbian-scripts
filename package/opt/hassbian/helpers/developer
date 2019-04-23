@@ -1,7 +1,7 @@
 #!bin/bash
 #  Helper script for hassbian-config.
 
-function hassbian.developer.testpr { 
+function hassbian.developer.pr { 
   # This function fetches a active PR and build a installation package from that and install it on the system.
   # This should only be used by maintainers to test PR's!
   local INSTALLDIR
@@ -35,6 +35,17 @@ function hassbian.developer.testpr {
   cd || return 1
 
   rm -R "$INSTALLDIR"
+}
+
+function hassbian.developer.test.functions { 
+  # Run a test on all functions.
+  # This should only be used by maintainers to test PR's!
+  declare pass=0
+  declare fail=0
+  local functions
+
+  # Get all functions
+
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"
