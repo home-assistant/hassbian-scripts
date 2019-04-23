@@ -5,7 +5,7 @@
 
 function install {
   echo "Installing Suite Template..."
-  hassbian.suite.helper.install.pip componentstore
+  sleep 5
 
   echo "Enabling Template service..."
   cp "$HASSBIAN_SUITE_DIR"/template/files/template.service /etc/systemd/system/template.service
