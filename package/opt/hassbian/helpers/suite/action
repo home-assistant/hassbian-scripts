@@ -82,6 +82,6 @@ function hassbian.suite.action.execute {
   # Deactivate debug
   if [ "$HASSBIAN_RUNTIME_DEBUG" == true ]; then set +x; fi
 
-  exit "$returnvalue"
+  return "$returnvalue"
 }
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"s

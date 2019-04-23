@@ -48,6 +48,7 @@ function hassbian.developer.test.package {
   local -a failedtests
   local returncode
   local testsuite=template
+  local test
 
   echo "
   ------------------------------------------
@@ -76,7 +77,7 @@ function hassbian.developer.test.package {
 
       # Run tests:
       else
-        #"$function" >> /dev/null 2>&1
+        "$function" >> /dev/null 2>&1
         returncode="$?"
         if [ "$returncode" == "0" ];then
           ((pass+=1))
@@ -96,12 +97,13 @@ function hassbian.developer.test.package {
   TESTING HASSBIAN-CONFIG SUITE OPERATIONS
   ------------------------------------------
   "
-  operations=('show' 'install' 'upgrade' 'remove')
+  operations=('install' 'upgrade' 'remove')
   for cmd in "${operations[@]}"; do
     printf "\\e[36mTesting 'hassbian-config %s %s'............." "$cmd" "$testsuite"
-    hassbian-config "$cmd" "$testsuite" #>> /dev/null 2>&1
+    hassbian-config "$cmd" "$testsuite" >> /dev/null 2>&1
     returncode="$?"
-    if [ "$returncode" == "0" ];then
+    test=$(hassbian-config "$cmd" "$testsuite" | grep "Operation failed...")
+    if [ -z "${test}" ];then
       ((pass+=1))
       printf "\\e[32mPASS\\n"
     else
@@ -126,7 +128,7 @@ function hassbian.developer.test.package {
 
   for operation in "${operations[@]}"; do
     printf "\\e[36mTesting 'hassbian-config %s'.................." "$operation"
-    #hassbian-config "$operation" >> /dev/null 2>&1
+    hassbian-config "$operation" >> /dev/null 2>&1
     returncode="$?"
     if [ "$returncode" == "0" ];then
       ((pass+=1))
