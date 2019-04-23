@@ -31,6 +31,10 @@ for argument in "$@"; do
         hassbian.developer.test.pr "$2"
         exit
 
+    elif [ "$argument" == "developer-test-functions" ]; then
+        hassbian.developer.test.functions "$2"
+        exit
+
     elif [ "$argument" == "log" ]; then
         hassbian.log.show
         exit
