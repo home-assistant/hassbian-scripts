@@ -126,7 +126,7 @@ function hassbian.suite.helper.pizerocheck {
 
 function hassbian.suite.helper.action.success {
   # Print message to the console on success action.
-  printf "\\n\\e[32mOperation complete...\\e[0m\\n\\n"
+  printf "\\n\\e[32mOperation completed...\\e[0m\\n\\n"
 }
 
 function hassbian.suite.helper.action.failed {
