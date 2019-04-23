@@ -48,14 +48,6 @@ function hassbian.suite.action {
   # Deactivate debug
   if [ "$HASSBIAN_RUNTIME_DEBUG" == true ]; then set +x; fi
 
-  # Post action
-  if [ "$returnvalue" == "0" ]; then
-    suitestate="installed"
-  else
-    echo "$ECHO_ACTION_ERROR"
-    suitestate="failed"
-  fi
-
   if [ "$suiteaction" == "remove" ]; then 
     rm "$HASSBIAN_CONTROL_DIR/$suitename"
   else
@@ -73,6 +65,14 @@ function hassbian.suite.action.execute {
     returnvalue="$?"
   else
     echo "$suiteaction script does not exist for this suite."
+  fi
+
+  # Post action
+  if [ "$returnvalue" == "0" ]; then
+    suitestate="installed"
+  else
+    echo "$ECHO_ACTION_ERROR"
+    suitestate="failed"
   fi
 }
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"
