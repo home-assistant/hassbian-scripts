@@ -175,11 +175,11 @@ function hassbian.developer.test.package {
         test=$(hassbian-config remove "$suite" --accept | grep "Operation failed...")
         if [ -z "${test}" ];then
           ((pass+=1))
-          printf "\\e[32mPASS(remove)\\e[36m..."
+          printf "\\e[32mPASS(remove)\\e[36m"
         else
           ((fail+=1))
           failedtests+=("hassbian-config remove $suite --accept")
-          printf "\\e[31mFAIL(remove)\\e[36m..."
+          printf "\\e[31mFAIL(remove)\\e[36m"
         fi
       else
         printf "\\e[33mSKIP"
