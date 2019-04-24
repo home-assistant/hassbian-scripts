@@ -65,6 +65,7 @@ source "$HASSBIAN_HELPERS_DIR"/suite/verify
 source "$HASSBIAN_HELPERS_DIR"/developer
 source "$HASSBIAN_HELPERS_DIR"/input
 source "$HASSBIAN_HELPERS_DIR"/log
+source "$HASSBIAN_HELPERS_DIR"/workaround
 
 # the CLI is dependant on other sources so we load that at the end.
 source "$HASSBIAN_HELPERS_DIR"/cli
