@@ -10,7 +10,7 @@ function hassbian.suite.helper.install.pip {
   # Usage:
   # hassbian.suite.helper.install.pip sampleclient
   # hassbian.suite.helper.install.pip sampleclient someotherpackage
-  local timeoutvalue=120s
+  local logcheck
   packages=$@
 
   echo "Changing to homeassistant user..."
@@ -26,6 +26,8 @@ function hassbian.suite.helper.install.pip {
 
   echo "Installing Python packages..."
   python -m pip install --upgrade $packages
+
+  hassbian.workaround.check $packages
 
   echo "Deactivating virtualenv..."
   deactivate

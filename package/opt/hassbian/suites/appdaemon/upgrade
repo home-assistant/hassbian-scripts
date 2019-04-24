@@ -9,7 +9,20 @@ function upgrade {
   echo "Stopping AppDaemon service..."
   systemctl stop appdaemon@homeassistant.service
 
-  hassbian.suite.helper.install.pip appdaemon
+  echo "Changing to the homeassistant user..."
+  sudo -u homeassistant -H /bin/bash << EOF
+    echo "Changing to AppDaemon venv..."
+    source /srv/appdaemon/bin/activate
+
+    echo "Installing latest version of AppDaemon..."
+    python -m pip install --upgrade setuptools wheel
+    python -m pip install --upgrade appdaemon
+
+    hassbian.workaround.check appdaemon
+
+    echo "Deactivating virtualenv..."
+    deactivate
+EOF
 
   echo "Starting AppDaemon service..."
   systemctl start appdaemon@homeassistant.service

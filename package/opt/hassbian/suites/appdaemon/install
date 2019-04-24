@@ -25,29 +25,31 @@ function install {
   mkdir /srv/appdaemon
   chown -R homeassistant:homeassistant /srv/appdaemon
 
-  echo "Changing to the homeassistant user"
+  echo "Changing to the homeassistant user..."
   sudo -u homeassistant -H /bin/bash << EOF
-    echo "Creating AppDaemon venv"
+    echo "Creating AppDaemon venv..."
     python"$python_version" -m venv /srv/appdaemon
 
-    echo "Changing to AppDaemon venv"
+    echo "Changing to AppDaemon venv..."
     source /srv/appdaemon/bin/activate
 
-    echo "Creating directory for AppDaemon configuration file"
+    echo "Creating directory for AppDaemon configuration file..."
     mkdir /home/homeassistant/appdaemon
     mkdir /home/homeassistant/appdaemon/apps
 
-    echo "Installing latest version of AppDaemon"
+    echo "Installing latest version of AppDaemon..."
     python -m pip install setuptools wheel
     python -m pip install appdaemon
 
-    echo "Copying AppDaemon config file"
+    hassbian.workaround.check appdaemon
+
+    echo "Copying AppDaemon config file..."
     cp $HASSBIAN_SUITE_DIR/appdaemon/files/appdaemon.conf /home/homeassistant/appdaemon/appdaemon.yaml
     if [ ! -z "${HOMEASSISTANT_PASSWORD}" ]; then
         sed -i 's/#ha_key:/ha_key: $HOMEASSISTANT_PASSWORD/g' /home/homeassistant/appdaemon/appdaemon.yaml
     fi
 
-    echo "Deactivating virtualenv"
+    echo "Deactivating virtualenv..."
     deactivate
 EOF
 
