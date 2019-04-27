@@ -1,0 +1,18 @@
+#!/bin/bash
+# 
+# Uninstallation script for Hassbian suite: DuckDNS
+#
+
+function remove {
+  echo "Removing certificates if installed."
+  rm -R /home/homeassistant/dehydrated >/dev/null 2>&1
+
+  echo "Removing cron jobs."
+  rm /etc/cron.daily/dehydrated >/dev/null 2>&1
+  rm /etc/cron.hourly/duckdns >/dev/null 2>&1
+
+  hassbian.suite.helper.action.success
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

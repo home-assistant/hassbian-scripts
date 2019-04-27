@@ -1,0 +1,15 @@
+#
+# Template service file for Hassbian suites.
+#
+
+[Unit]
+Description=Template description
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=sleep 3600
+SendSIGKILL=no
+
+[Install]
+WantedBy=multi-user.target

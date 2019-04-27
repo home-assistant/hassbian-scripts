@@ -1,0 +1,9 @@
+{
+  "name": "Web Terminal",
+  "author": "Ludeeus <https://github.com/ludeeus>",
+  "short_description": "Installs an webservice terminal.",
+  "long_description": "Installs an webservice terminal to control your installation",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

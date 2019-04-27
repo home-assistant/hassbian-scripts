@@ -1,0 +1,48 @@
+#!/bin/bash
+# 
+# Installation script for Hassbian suite: Monitor
+#
+
+function install {
+  local validation
+
+  echo "Installing Mosquitto package: "
+
+  echo "Checking the installation..."
+  validation=$(pgrep -f mosquitto)
+  if [ ! -z "${validation}" ]; then
+    echo "Existing Mosquitto install detected. Skipping install of Mosquitto."
+  else
+    echo "Installing Mosquitto"
+    hassbian-config install mosquitto --accept
+  fi
+
+  echo "Creating Monitor folder..."
+  mkdir /opt/monitor || exit
+  cd /opt || exit
+
+  echo "Cloning Monitor git repository"
+  git clone git://github.com/andrewjfreyer/monitor
+
+  echo "Running interactive setup"
+  cd /opt/monitor || exit
+  chmod +x /opt/monitor/monitor.sh || exit
+  bash /opt/monitor/monitor.sh
+
+  echo "Checking the installation..."
+  if [ -f /opt/monitor/monitor.sh ]; then
+    validation="ok"
+  fi
+
+  if [ ! -z "${validation}" ]; then
+    hassbian.suite.helper.action.success
+    echo "Update of mqtt_preferences is required found at /opt/monitor/mqtt_prefences"
+    echo "Some further configuration is required and details can be found here https://github.com/andrewjfreyer/monitor#getting-started "
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

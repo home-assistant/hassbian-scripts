@@ -1,0 +1,9 @@
+{
+  "name": "fail2ban",
+  "author": "Landrash <https://github.com/landrash>",
+  "short_description": "Setup for fail2ban service.",
+  "long_description": "This script installs the fail2ban service.\\nSome further configuration is required after installation.",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

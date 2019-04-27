@@ -1,0 +1,162 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+
+declare packages
+declare suitename
+declare manifestkey
+
+function hassbian.suite.helper.install.pip {
+  # Purpose: Install python packages in the homeassistant venv.
+  # Usage:
+  # hassbian.suite.helper.install.pip sampleclient
+  # hassbian.suite.helper.install.pip sampleclient someotherpackage
+  local logcheck
+  packages=$@
+
+  echo "Changing to homeassistant user..."
+  sudo -u homeassistant -H /bin/bash << EOF
+
+  echo "Changing to Home Assistant venv..."
+  source /srv/homeassistant/bin/activate
+
+  echo "Updating Python dependencies..."
+  python -m pip install --upgrade pip --no-cache-dir
+  python -m pip install --upgrade setuptools --no-cache-dir
+  python -m pip install --upgrade wheel --no-cache-dir
+
+  echo "Installing Python packages..."
+  python -m pip install --upgrade $packages
+
+  source "$HASSBIAN_HELPERS_DIR"/workaround
+  hassbian.workaround.check $packages
+
+  echo "Deactivating virtualenv..."
+  deactivate
+EOF
+}
+
+function hassbian.suite.helper.install.apt {
+  # Purpose: Install apt packages.
+  # Usage:
+  # hassbian.suite.helper.install.apt sampleclient
+  # hassbian.suite.helper.install.apt sampleclient someotherpackage
+  packages=$@
+
+  echo "Updating apt..."
+  apt update
+
+  echo "Installing packages..."
+  apt install -y $packages
+}
+
+function hassbian.suite.helper.install.node {
+  # Purpose: Install node.
+  # Usage:
+  # hassbian.suite.helper.install.node sampleclient
+  local node
+  local nodeversion
+
+  nodeversion='11'
+  node=$(command -v npm)
+
+  if [ -z "${node}" ]; then
+    echo "Downloading and installing NodeJS..."
+    curl -sL https://deb.nodesource.com/setup_"$nodeversion".x | bash -
+    hassbian.suite.helper.install.apt nodejs
+  else
+      echo "NodeJS is installed."
+  fi
+}
+
+function hassbian.suite.helper.manifest {
+  # Purpose: retrun info from the suite manifest.
+  # Usage:
+  # hassbian.suite.helper.manifest [suite] [key]
+  # hassbian.suite.helper.manifest duckdns author
+  local manifestvalue
+
+  suitename="$1"
+  manifestkey="$2"
+
+  manifestvalue=$(jq ."$manifestkey" -r "$HASSBIAN_SUITE_DIR"/"$suitename"/manifest)
+  printf "%s" "$manifestvalue"
+}
+
+function hassbian.suite.helper.blockcheck {
+  # Check the manifest if the suite is blocked.
+  # If blocked, print the message and exit.
+  # Usage:
+  # hassbian.suite.helper.blockcheck [suite]
+  # hassbian.suite.helper.blockcheck duckdns
+  local blocked
+  local blocked_releasename
+  local blocked_message
+  local osrelease
+
+  suitename="$1"
+
+  blocked=$(hassbian.suite.helper.manifest "$suitename" blocked)
+
+  if [ "$blocked" = true ]; then
+    osrelease=$(hassbian.info.version.osreleasename)
+    blocked_releasename=$(hassbian.suite.helper.manifest "$suitename" blocked_releasename)
+    if [ "$blocked_releasename" == "ALL" ] || [ "$blocked_releasename" == "$osrelease" ]; then
+      blocked_message=$(hassbian.suite.helper.manifest "$suitename" blocked_message)
+      echo -e "$blocked_message"
+      exit
+    fi
+  fi
+}
+
+
+function hassbian.suite.helper.exist {
+  # Purpose: Check if a suite exist.
+  # Usage:
+  # hassbian.suite.helper.exist [suite]
+  # hassbian.suite.helper.exist duckdns
+
+  suitename="$1"
+
+  # Check if suite directory exist.
+  if [ ! -d "$HASSBIAN_SUITE_DIR/$suitename" ]; then
+    echo "$suitename does not exist."
+    exit 1
+  fi
+
+  # Check if suite manifest file exist.
+  if [ ! -f "$HASSBIAN_SUITE_DIR/$suitename/manifest" ]; then
+    echo "$suitename are missing manifest file."
+    exit 1
+  fi
+}
+
+function hassbian.suite.helper.pizerocheck {
+  # Check for suites not able to install on a Raspberry Pi Zero.
+  local REVCODE
+
+  suitename="$1"
+
+  REVCODE=$(cat /proc/cpuinfo | grep 'Revision' | \
+    awk '{print $3}' | sed 's/^ *//g' | sed 's/ *$//g')
+  if [ "$REVCODE" = "90092" ] || \
+    [ "$REVCODE" = "90093" ] || \
+    [ "$REVCODE" = "0x9000C1" ] || \
+    [ "$REVCODE" = "9000c1" ]; then
+    if [[ "$suitename" =~ ^(mosquitto|cloud9|zigbee2mqtt)$ ]]; then
+      echo "This suite can't be installed on Raspberry Pi Zero..."
+      return 0
+    fi
+  fi
+}
+
+function hassbian.suite.helper.action.success {
+  # Print message to the console on success action.
+  printf "\\n\\e[32mOperation completed...\\e[0m\\n\\n"
+}
+
+function hassbian.suite.helper.action.failed {
+  # Print message to the console on failed action.
+  printf "\\n\\e[31mOperation failed...\\e[0m\\n\\n"
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

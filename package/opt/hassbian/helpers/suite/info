@@ -1,0 +1,53 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+
+declare suitename
+
+function hassbian.suite.info.print {
+  # Show information about a suite.
+  # Usage example:
+  # hassbian.suite.info.print [suite]
+  # hassbian.suite.info.print duckdns
+  local author
+  local name
+  local long_description
+  local installed
+
+  suitename="$1"
+
+  author=$(hassbian.suite.helper.manifest "$suitename" author)
+  name=$(hassbian.suite.helper.manifest "$suitename" name)
+  long_description=$(hassbian.suite.helper.manifest "$suitename" long_description)
+  installed=$(hassbian.suite.info.installed "$suitename")
+
+
+  echo -e "
+Suite:     $name
+Installed: $installed
+Contributed to the project by $author
+$long_description
+"
+}
+
+function hassbian.suite.info.installed {
+  # Return true if installed, else false.
+  # Usage example:
+  # hassbian.suite.info.installed [suite]
+  # hassbian.suite.info.installed duckdns
+  local installed
+  local suitestate
+
+  suitename="$1"
+  installed='false'
+
+  if [ -f "$HASSBIAN_CONTROL_DIR"/"$suitename" ]; then
+    suitestate=$(grep "SCRIPTSTATE" "$HASSBIAN_CONTROL_DIR"/"$suitename" | \
+      awk -F'=' '{print $2}')
+      if [ "$suitestate" == "installed" ]; then
+        installed='true'
+      fi
+  fi
+  printf "%s" "$installed"
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

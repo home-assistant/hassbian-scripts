@@ -1,0 +1,9 @@
+{
+  "name": "libcec",
+  "author": "Landrash <https://github.com/Landrash>",
+  "short_description": "libcec install script for Hassbian.",
+  "long_description": "Installs the libcec package for controlling CEC devices from this Pi.",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

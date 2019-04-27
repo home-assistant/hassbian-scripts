@@ -1,0 +1,31 @@
+#!/bin/bash
+# 
+# Upgrade script for Hassbian suite: Cloud9 IDE
+#
+
+function upgrade {
+  local validation
+
+  echo "Stopping Cloud9 service..."
+  systemctl stop cloud9@homeassistant.service
+
+  sudo -u homeassistant -H /bin/bash << EOF
+    enho "Downloading and installing newest version of Cloud9 SDK..."
+    git clone git://github.com/c9/core.git /opt/c9sdk
+    bash /opt/c9sdk/scripts/install-sdk.sh
+EOF
+
+  echo "Starting Cloud9 service..."
+  systemctl start cloud9@homeassistant.service
+
+  validation=$(hassbian.suite.verify.service cloud9@homeassistant.service)
+  if [ "$validation" == "0" ]; then
+    hassbian.suite.helper.action.success
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

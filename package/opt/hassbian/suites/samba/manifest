@@ -1,0 +1,9 @@
+{
+  "name": "Samba",
+  "author": "Landrash <https://github.com/Landrash>",
+  "short_description": "Samba install script for Hassbian.",
+  "long_description": "Installs the samba package for sharing the Hassbian configuration files, over the network.",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

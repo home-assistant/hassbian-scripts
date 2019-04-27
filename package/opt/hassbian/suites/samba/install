@@ -1,0 +1,35 @@
+#!/bin/bash
+# 
+# Installation script for Hassbian suite: Samba
+#
+
+function install {
+  local validation
+  local ip_address
+
+  echo "Running apt-get preparation"
+  hassbian.suite.helper.install.apt samba
+
+  echo "Adding homeassistant Samba user"
+  smbpasswd -a homeassistant -n
+
+  echo "Adding shared folder for Home Assistant configuration directory"
+  tee -a /etc/samba/smb.conf < "$HASSBIAN_SUITE_DIR"/samba/files/samba.conf
+
+  echo "Restarting Samba service"
+  systemctl restart smbd.service
+
+  echo "Checking the installation..."
+  validation=$(hassbian.suite.verify.pgrep smbd)
+  if [ "$validation" == "0" ]; then
+    ip_address=$(hassbian.info.general.ipaddress)
+    hassbian.suite.helper.action.success
+    echo "Configuration is now available as a Samba share at \\\\$ip_address\\homeassistant"
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

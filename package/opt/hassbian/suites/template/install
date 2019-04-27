@@ -1,0 +1,27 @@
+#!/bin/bash
+# 
+# Installation script for Hassbian suite: Template
+#
+
+function install {
+  echo "Installing Suite Template..."
+
+  echo "Enabling Template service..."
+  cp "$HASSBIAN_SUITE_DIR"/template/files/template.service /etc/systemd/system/template.service
+  systemctl enable template.service
+  sync
+
+  echo "Starting Template service..."
+  systemctl start template.service
+
+  validation=$(hassbian.suite.verify.service template.service)
+  if [ "$validation" == "0" ]; then
+    hassbian.suite.helper.action.success
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

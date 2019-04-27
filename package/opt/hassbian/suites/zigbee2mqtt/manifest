@@ -1,0 +1,9 @@
+{
+  "name": "Zigbee2mqtt",
+  "author": "Landrash <https://github.com/landrash>",
+  "short_description": "Setup for Zigbee2mqtt bridge.",
+  "long_description": "Original concept by Landrash <https://github.com/landrash>.",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

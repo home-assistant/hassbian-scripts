@@ -1,0 +1,9 @@
+{
+  "name": "AppDaemon",
+  "author": "Username <https://github.com/username>",
+  "short_description": "AppDaemon install script for Hassbian.",
+  "long_description": "Installs AppDaemon in a separate Venv onto this system.",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Hassbian scripts",
+  "author": "Ludeeus <https://github.com/ludeeus>",
+  "short_description": "Hassbian-script upgrade script for Hassbian.",
+  "long_description": "Hassbian-script upgrade script for Hassbian",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

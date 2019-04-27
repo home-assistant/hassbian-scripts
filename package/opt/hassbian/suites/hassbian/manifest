@@ -1,0 +1,10 @@
+{
+  "name": "Hassbian",
+  "author": "Ludeeus <https://github.com/Ludeeus>",
+  "short_description": "Upgrade the base OS installation on this system.",
+  "long_description": "Upgrade the base OS installation on this system.",
+  "unattended": true,
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

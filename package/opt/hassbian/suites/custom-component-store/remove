@@ -1,0 +1,18 @@
+#!/bin/bash
+# 
+# Uninstallation script for Hassbian suite: Custom component store
+#
+
+function remove {
+  echo "Removing Custom component store..."
+  systemctl stop custom-component-store@homeassistant.service
+  systemctl disable custom-component-store@homeassistant.service
+  rm /etc/systemd/system/custom-component-store@homeassistant.service
+  sync
+
+  python3 -m pip uninstall --yes componentstore
+
+  hassbian.suite.helper.action.success
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

@@ -1,0 +1,31 @@
+#!/bin/bash
+# 
+# Installation script for Hassbian suite: RaZberry
+#
+
+function install {
+  local validation
+
+  echo "Checking for version of Raspberry Pi"
+  RPI_BOARD_REVISION=$(grep Revision /proc/cpuinfo | cut -d: -f2 | tr -d " ")
+  if [[ $RPI_BOARD_REVISION ==  "a02082" || $RPI_BOARD_REVISION == "a22082" ]]
+  then
+    echo "Raspberry Pi 3 Detected. Disabling Bluetooth"
+    systemctl disable hciuart
+    if ! grep -q "dtoverlay=pi3-miniuart-bt" /boot/config.txt; then
+      echo "Adding 'dtoverlay=pi3-miniuart-bt' to /boot/config.txt"
+      echo "dtoverlay=pi3-miniuart-bt" >> /boot/config.txt
+    fi
+  fi
+
+  validation=$(grep "dtoverlay=pi3-miniuart-bt" /boot/config.txt)
+  if [ ! -z "${validation}" ]; then
+    hassbian.suite.helper.action.success
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

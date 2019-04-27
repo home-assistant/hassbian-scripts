@@ -1,0 +1,9 @@
+{
+  "name": "Cloud9 IDE",
+  "author": "Ludeeus <https://github.com/ludeeus>",
+  "short_description": "Cloud9 script for Hassbian.",
+  "long_description": "Cloud9 SDK is an webservice IDE that makes it easy to manage your configuration files.",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}
