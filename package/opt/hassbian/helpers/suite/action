@@ -45,13 +45,14 @@ function hassbian.suite.action {
     # check if suiteaction is 'installed' and that the suite is not allready installed.
     if [ "$suiteaction" == "install" ]; then
       installed=$(hassbian.suite.info.installed "$suitename")
-      if [ "$installed" == "true" ]; then
+      if [ "$installed" == "true" ]  && [ "$HASSBIAN_RUNTIME_FORCE" = false ]; then
         echo "Suite $suitename, is allready installed."
         echo "You can force a reinstallation by running:"
         echo "sudo hassbian-config install $suitename --force"
 
         # Check if upgrade is available.
         if [ -f "$HASSBIAN_SUITE_DIR/$suitename/upgrade" ]; then
+          printf "\\n\\n"
           echo "Or run the upgrdade script by running:"
           echo "sudo hassbian-config upgrade $suitename"
         fi
