@@ -27,6 +27,7 @@ function hassbian.suite.helper.install.pip {
   echo "Installing Python packages..."
   python -m pip install --upgrade $packages
 
+  source "$HASSBIAN_HELPERS_DIR"/workaround
   hassbian.workaround.check $packages
 
   echo "Deactivating virtualenv..."
