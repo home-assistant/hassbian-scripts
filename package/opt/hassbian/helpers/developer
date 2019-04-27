@@ -71,7 +71,8 @@ function hassbian.developer.test.package {
         [ "$function" == "hassbian.suite.action" ] || \
         [ "$function" == "hassbian.suite.helper.exist" ] || \
         [ "$function" == "hassbian.suite.helper.install.node" ] || \
-        [ "$function" == "hassbian.suite.info.installed" ]; then
+        [ "$function" == "hassbian.suite.info.installed" ] || \
+        [ "$function" == "hassbian.workaround.pip.typeerror" ]; then
         printf "\\e[33mSKIP\\n"
 
       # Run tests:
