@@ -8,12 +8,13 @@ function install {
   local validation
   local pythonversion
 
+  # Needs to be run for SSL Certificates to function
+  echo "Checking generation of local certificates "
+  c_rehash
+    
   # Check if migration is needed.
   source "$HASSBIAN_SUITE_DIR/homeassistant/python-migration"
   python-migration true # 'true' forces the migration to run.
-
-  echo "Checking generation of local certificates "
-  c_rehash
 
   echo "Setting correct premissions"
   chown homeassistant:homeassistant -R "$HOME_ASSISTANT_VENV"
