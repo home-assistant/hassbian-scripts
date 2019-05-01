@@ -7,7 +7,7 @@
 #####################################
 
 # Loggfile for 'hassbian-config' operations.
-readonly HASSBIAN_LOG_FILE='/tmp/hassbian.log'
+declare HASSBIAN_LOG_FILE='/tmp/hassbian.log'
 
 # Suite directory for 'hassbian-config'.
 readonly HASSBIAN_SUITE_DIR='/opt/hassbian/suites'
