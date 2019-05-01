@@ -5,7 +5,7 @@
 # shellcheck disable=SC2086,SC2124
 
 # Loggfile for 'hassbian-config' operations.
-readonly HASSBIAN_LOG_FILE='/tmp/hassbian.log'
+HASSBIAN_LOG_FILE='/tmp/hassbian.log'
 
 function hassbian.workaround.check {
   # Check the logfile for known issues.
