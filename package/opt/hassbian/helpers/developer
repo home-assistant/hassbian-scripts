@@ -59,9 +59,8 @@ function hassbian.developer.test.package {
     ------------------------------------------
     "
     printf "\\e[36mTesting Suite: 'homeassistant'.................."
-    #test=$(hassbian-config install homeassistant --accept --ci)
-    hassbian-config install homeassistant --accept --ci
-    if [ -z "$(echo $test | grep 'Operation failed...')" ];then
+    test=$(hassbian-config install homeassistant --accept --ci)
+    if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
       ((pass+=1))
       printf "\\e[32mPASS(install)\\e[36m..."
     else
@@ -167,7 +166,7 @@ function hassbian.developer.test.package {
           printf "\\e[33mSKIP(install)\\e[36m..."
         else
           test=$(hassbian-config install "$suite" --accept --ci)
-          if [ -z "$(echo $test | grep 'Operation failed...')" ];then
+          if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
             ((pass+=1))
             printf "\\e[32mPASS(install)\\e[36m..."
           else
@@ -180,7 +179,7 @@ function hassbian.developer.test.package {
 
         # Upgrade test...
         test=$(hassbian-config upgrade "$suite" --accept --ci)
-        if [ -z "$(echo $test | grep 'Operation failed...')" ];then
+        if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(upgrade)\\e[36m..."
         else
@@ -192,7 +191,7 @@ function hassbian.developer.test.package {
 
         # Remove test...
         test=$(hassbian-config remove "$suite" --accept --ci)
-        if [ -z "$(echo $test | grep 'Operation failed...')" ];then
+        if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(remove)\\e[36m"
         else
