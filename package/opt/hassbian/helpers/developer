@@ -50,6 +50,32 @@ function hassbian.developer.test.package {
   local test
   local unattended
 
+  if [ "$HASSBIAN_RUNTIME_CI" == "true" ];then
+    # Only try this if running in a CI env.
+  echo "
+  ------------------------------------------
+  TESTING HOMEASSISTANT INSTALLATION
+  ------------------------------------------
+  "
+    printf "\\e[36mTesting Suite: 'homeassistant'.................."
+    unattended=$(hassbian.suite.helper.manifest homeassistant unattended)
+    if [ "$unattended" == "true" ];then
+      # Install test...
+      test=$(hassbian-config install homeassistant --accept)
+      if [ -z "$(echo $test | grep 'Operation failed...')" ];then
+        ((pass+=1))
+        printf "\\e[32mPASS(install)\\e[36m..."
+      else
+        ((fail+=1))
+        failedtests+=("hassbian-config install homeassistant --accept")
+        printf "\\e[31mFAIL(install)\\e[36m..."
+        printf "%s\\n" "$test"
+      fi
+      printf "\\e[33mSKIP"
+    fi
+    printf "\\e[0m\\n"
+  fi
+
   echo "
   ------------------------------------------
   TESTING HASSBIAN-CONFIG FUNCTIONS
@@ -140,15 +166,19 @@ function hassbian.developer.test.package {
       unattended=$(hassbian.suite.helper.manifest "$suite" unattended)
       if [ "$unattended" == "true" ];then
         # Install test...
-        test=$(hassbian-config install "$suite" --accept)
-        if [ -z "$(echo $test | grep 'Operation failed...')" ];then
-          ((pass+=1))
-          printf "\\e[32mPASS(install)\\e[36m..."
-        else
-          ((fail+=1))
-          failedtests+=("hassbian-config install $suite --accept")
-          printf "\\e[31mFAIL(install)\\e[36m..."
-          printf "%s\\n" "$test"
+        if [ "$suite" == "homeassistant" ]; then
+          printf "\\e[33mSKIP(install)\\e[36m..."
+          else
+          test=$(hassbian-config install "$suite" --accept)
+          if [ -z "$(echo $test | grep 'Operation failed...')" ];then
+            ((pass+=1))
+            printf "\\e[32mPASS(install)\\e[36m..."
+          else
+            ((fail+=1))
+            failedtests+=("hassbian-config install $suite --accept")
+            printf "\\e[31mFAIL(install)\\e[36m..."
+            printf "%s\\n" "$test"
+          fi
         fi
 
         # Upgrade test...
@@ -181,8 +211,6 @@ function hassbian.developer.test.package {
     done
     printf "\\e[0m\\n"
   fi
-
-
 
  # Testing is done.
   echo "
