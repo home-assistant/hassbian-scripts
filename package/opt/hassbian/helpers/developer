@@ -96,27 +96,6 @@ function hassbian.developer.test.package {
 
   echo "
   ------------------------------------------
-  TESTING HASSBIAN-CONFIG SUITE OPERATIONS
-  ------------------------------------------
-  "
-  operations=('install' 'upgrade' 'remove')
-  for cmd in "${operations[@]}"; do
-    printf "\\e[36mTesting 'hassbian-config %s %s'............." "$cmd" "$testsuite"
-    test=$(hassbian-config "$cmd" "$testsuite" | grep "Operation failed...")
-    if [ -z "${test}" ];then
-      ((pass+=1))
-      printf "\\e[32mPASS\\n"
-    else
-      ((fail+=1))
-      failedtests+=("hassbian-config $cmd $testsuite")
-      printf "\\e[31mFAIL\\n"
-      printf "%s\\n" "$test"
-    fi
-  done
-  printf "\\e[0m\\n"
-
-  echo "
-  ------------------------------------------
   TESTING HASSBIAN-CONFIG CLI OPERATIONS
   ------------------------------------------
   "
