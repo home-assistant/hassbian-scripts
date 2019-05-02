@@ -53,19 +53,22 @@ function hassbian.developer.test.package {
 
   if [ "$HASSBIAN_RUNTIME_CI" = true ];then
     # Only try this if running in a CI env.
+
+    HASSBIAN_RUNTIME_ACCEPT=true
+
     echo "
     ------------------------------------------
     TESTING HOMEASSISTANT INSTALLATION
     ------------------------------------------
     "
     printf "\\e[36mTesting Suite: 'homeassistant'.................."
-    test=$(hassbian-config install homeassistant --accept --ci)
+    test=$(hassbian.suite.action install homeassistant)
     if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
       ((pass+=1))
       printf "\\e[32mPASS"
     else
       ((fail+=1))
-      failedtests+=("hassbian-config install homeassistant --accept --ci")
+      failedtests+=("hassbian.suite.action install homeassistant")
       printf "\\e[31mFAIL"
       printf "\n%s\\n" "$test"
     fi
