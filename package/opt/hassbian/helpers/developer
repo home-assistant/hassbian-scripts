@@ -50,7 +50,7 @@ function hassbian.developer.test.package {
   local test
   local unattended
 
-  if [ "$HASSBIAN_RUNTIME_CI" == "true" ];then
+  if [ "$HASSBIAN_RUNTIME_CI" = true ];then
     # Only try this if running in a CI env.
     echo "
     ------------------------------------------
@@ -150,7 +150,7 @@ function hassbian.developer.test.package {
   done
   printf "\\e[0m\\n"
 
-  if [ "$HASSBIAN_RUNTIME_CI" == "true" ];then
+  if [ "$HASSBIAN_RUNTIME_CI" = true ];then
     # Only try this if running in a CI env.
     echo "
     ------------------------------------------

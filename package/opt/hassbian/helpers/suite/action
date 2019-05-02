@@ -100,7 +100,7 @@ function hassbian.suite.action.execute {
   fi
 
   # Deactivate debug
-  if [ "$HASSBIAN_RUNTIME_DEBUG" == true ]; then set +x; fi
+  if [ "$HASSBIAN_RUNTIME_DEBUG" = true ]; then set +x; fi
 
   return "$returnvalue"
 }
