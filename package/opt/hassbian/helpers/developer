@@ -49,31 +49,24 @@ function hassbian.developer.test.package {
   local testsuite=template
   local test
   local unattended
-  local cirun
-
-echo "$(hassbian.info.version.python)"
-which python
-which python3
-python3 -V
 
 
   if [ "$HASSBIAN_RUNTIME_CI" = true ];then
     # Only try this if running in a CI env.
-    cirun="--ci"
     echo "
     ------------------------------------------
     TESTING HOMEASSISTANT INSTALLATION
     ------------------------------------------
     "
     printf "\\e[36mTesting Suite: 'homeassistant'.................."
-    #test=$(hassbian-config install homeassistant --accept "$cirun")
-    hassbian-config install homeassistant --accept "$cirun"
+    #test=$(hassbian-config install homeassistant --accept --ci)
+    hassbian-config install homeassistant --accept --ci
     if [ -z "$(echo $test | grep 'Operation failed...')" ];then
       ((pass+=1))
       printf "\\e[32mPASS(install)\\e[36m..."
     else
       ((fail+=1))
-      failedtests+=("hassbian-config install homeassistant --accept $cirun")
+      failedtests+=("hassbian-config install homeassistant --accept --ci")
       printf "\\e[31mFAIL(install)\\e[36m..."
       printf "%s\\n" "$test"
     fi
@@ -172,39 +165,39 @@ python3 -V
         # Install test...
         if [ "$suite" == "homeassistant" ]; then
           printf "\\e[33mSKIP(install)\\e[36m..."
-          else
-          test=$(hassbian-config install "$suite" --accept "$cirun")
+        else
+          test=$(hassbian-config install "$suite" --accept --ci)
           if [ -z "$(echo $test | grep 'Operation failed...')" ];then
             ((pass+=1))
             printf "\\e[32mPASS(install)\\e[36m..."
           else
             ((fail+=1))
-            failedtests+=("hassbian-config install $suite --accept $cirun")
+            failedtests+=("hassbian-config install $suite --accept --ci")
             printf "\\e[31mFAIL(install)\\e[36m..."
             printf "%s\\n" "$test"
           fi
         fi
 
         # Upgrade test...
-        test=$(hassbian-config upgrade "$suite" --accept "$cirun")
+        test=$(hassbian-config upgrade "$suite" --accept --ci)
         if [ -z "$(echo $test | grep 'Operation failed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(upgrade)\\e[36m..."
         else
           ((fail+=1))
-          failedtests+=("hassbian-config upgrade $suite --accept $cirun")
+          failedtests+=("hassbian-config upgrade $suite --accept --ci")
           printf "\\e[31mFAIL(upgrade)\\e[36m..."
           printf "%s\\n" "$test"
         fi
 
         # Remove test...
-        test=$(hassbian-config remove "$suite" --accept "$cirun")
+        test=$(hassbian-config remove "$suite" --accept --ci)
         if [ -z "$(echo $test | grep 'Operation failed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(remove)\\e[36m"
         else
           ((fail+=1))
-          failedtests+=("hassbian-config remove $suite --accept $cirun")
+          failedtests+=("hassbian-config remove $suite --accept --ci")
           printf "\\e[31mFAIL(remove)\\e[36m"
           printf "%s\\n" "$test"
         fi
