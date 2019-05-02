@@ -161,7 +161,7 @@ function hassbian.developer.test.package {
         if [ "$suite" == "homeassistant" ]; then
           printf "\\e[33mSKIP(install)\\e[36m..."
         else
-          test=$(hassbian-config install "$suite" --accept --ci)
+          test=$(hassbian-config install $suite --accept --ci)
           if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
             ((pass+=1))
             printf "\\e[32mPASS(install)\\e[36m..."
@@ -174,7 +174,7 @@ function hassbian.developer.test.package {
         fi
 
         # Upgrade test...
-        test=$(hassbian-config upgrade "$suite" --accept --ci)
+        test=$(hassbian-config upgrade $suite --accept --ci)
         if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(upgrade)\\e[36m..."
@@ -186,7 +186,7 @@ function hassbian.developer.test.package {
         fi
 
         # Remove test...
-        test=$(hassbian-config remove "$suite" --accept --ci)
+        test=$(hassbian-config remove $suite --accept --ci)
         if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(remove)\\e[36m"
