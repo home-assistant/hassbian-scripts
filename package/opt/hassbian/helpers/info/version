@@ -76,11 +76,10 @@ function hassbian.info.version.python {
 
   for version in $potentialversions; do
     if [[ -n "$(command -v python"$version")" ]]; then
-      echo "$(command -v python"$version")"
       isntalledversion="$version"
     fi
   done
-  printf "%s" "${version}"
+  printf "%s" "${isntalledversion}"
 }
 
 function hassbian.info.version.osreleasename {
