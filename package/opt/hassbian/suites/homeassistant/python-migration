@@ -64,7 +64,7 @@ function python-migration {
   "
   sleep 20  # To give the user the option to panic and abort thr progress.
   source "$HASSBIAN_SUITE_DIR/python/upgrade"
-  install
+  upgrade
   echo "HAVENV=$currenthapyversion" > "$pythonmigrationfile"
   exit
 }
