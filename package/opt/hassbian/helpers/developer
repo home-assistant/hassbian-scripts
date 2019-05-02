@@ -164,39 +164,38 @@ function hassbian.developer.test.package {
         if [ "$suite" == "homeassistant" ]; then
           printf "\\e[33mSKIP(install)\\e[36m..."
         else
-          test=$(hassbian-config install $suite --accept --ci)
+          test=$(hassbian.suite.action install "$suite")
           if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
             ((pass+=1))
             printf "\\e[32mPASS(install)\\e[36m..."
           else
             ((fail+=1))
-            failedtests+=("hassbian-config install $suite --accept --ci")
+            failedtests+=("hassbian.suite.action install $suite")
             printf "\\e[31mFAIL(install)\\e[36m..."
             printf "\\n%s\\n" "$test"
           fi
         fi
 
         # Upgrade test...
-        test=$(hassbian-config upgrade $suite --accept --ci)
+        test=$(hassbian.suite.action upgrade "$suite")
         if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(upgrade)\\e[36m..."
         else
           ((fail+=1))
-          failedtests+=("hassbian-config upgrade $suite --accept --ci")
+          failedtests+=("hassbian.suite.action upgrade $suite")
           printf "\\e[31mFAIL(upgrade)\\e[36m..."
           printf "\\n%s\\n" "$test"
         fi
 
         # Remove test...
-        hassbian-config remove $suite --accept --ci
-        #test=$(hassbian-config remove $suite --accept --ci)
+        test=$(hassbian.suite.action remove "$suite")
         if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(remove)\\e[36m"
         else
           ((fail+=1))
-          failedtests+=("hassbian-config remove $suite --accept --ci")
+          failedtests+=("hassbian.suite.action remove $suite")
           printf "\\e[31mFAIL(remove)\\e[36m"
           printf "\\n%s\\n" "$test"
         fi
