@@ -72,6 +72,7 @@ function hassbian.developer.test.package {
         [ "$function" == "hassbian.suite.helper.install.pip" ] || \
         [ "$function" == "hassbian.suite.helper.exist" ] || \
         [ "$function" == "hassbian.suite.helper.install.node" ] || \
+        [ "$function" == "hassbian.suite.helper.blockcheck" ] || \
         [ "$function" == "hassbian.suite.info.installed" ] || \
         [ "$function" == "hassbian.workaround.pip.typeerror" ]; then
         printf "\\e[33mSKIP\\n"

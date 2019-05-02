@@ -20,7 +20,11 @@ function hassbian.info.general.ipaddress {
   # Retrun the IP Address of the host.
   local ipaddress
   ipaddress=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
-  printf "%s" "$ipaddress"
+  if [ "$?" == "0" ];then
+    printf "%s" "$ipaddress"
+  else
+    return 1
+  fi
 }
 
 function hassbian.info.general.help {
