@@ -12,7 +12,7 @@ function upgrade {
   remotepyversion=$(curl -s https://www.python.org/downloads/source/ | \
     grep "Latest Python 3 Release" | cut -d "<" -f 3 | awk -F ' ' '{print $NF}')
 
-  echo "Checking current pythin version..."
+  echo "Checking current python version..."
   hapyversion=$(hassbian.info.version.homeassistant.python)
 
   if [ "$hapyversion" == "$remotepyversion" ]; then

@@ -50,6 +50,7 @@ function hassbian.developer.test.package {
   local test
   local unattended
 
+echo "CI:$HASSBIAN_RUNTIME_CI"
   if [ "$HASSBIAN_RUNTIME_CI" = true ];then
     # Only try this if running in a CI env.
     echo "
