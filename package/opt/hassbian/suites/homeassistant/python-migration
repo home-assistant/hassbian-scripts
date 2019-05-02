@@ -19,6 +19,11 @@ function python-migration {
 
   force="$1"
 
+  # Skip migration check if CI env
+  if [ "$HASSBIAN_RUNTIME_CI" == "true" ];then
+    return 0
+  fi
+
   # Get the current python version HA is running under.
   currenthapyversion=$(hassbian.info.version.homeassistant.python)
 
