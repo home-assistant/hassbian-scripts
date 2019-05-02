@@ -83,6 +83,7 @@ function hassbian.suite.action.execute {
     returnvalue="$?"
   else
     echo "$suiteaction script does not exist for this suite."
+    hassbian.suite.helper.action.success
   fi
 
   # Post action
