@@ -60,8 +60,8 @@ function hassbian.developer.test.package {
     ------------------------------------------
     "
     printf "\\e[36mTesting Suite: 'homeassistant'.................."
-    #test=$(hassbian-config install homeassistant --accept $cirun)
-    hassbian-config install homeassistant --accept $cirun
+    #test=$(hassbian-config install homeassistant --accept "$cirun")
+    hassbian-config install homeassistant --accept "$cirun"
     if [ -z "$(echo $test | grep 'Operation failed...')" ];then
       ((pass+=1))
       printf "\\e[32mPASS(install)\\e[36m..."
@@ -167,7 +167,7 @@ function hassbian.developer.test.package {
         if [ "$suite" == "homeassistant" ]; then
           printf "\\e[33mSKIP(install)\\e[36m..."
           else
-          test=$(hassbian-config install "$suite" --accept $cirun)
+          test=$(hassbian-config install "$suite" --accept "$cirun")
           if [ -z "$(echo $test | grep 'Operation failed...')" ];then
             ((pass+=1))
             printf "\\e[32mPASS(install)\\e[36m..."
@@ -180,7 +180,7 @@ function hassbian.developer.test.package {
         fi
 
         # Upgrade test...
-        test=$(hassbian-config upgrade "$suite" --accept $cirun)
+        test=$(hassbian-config upgrade "$suite" --accept "$cirun")
         if [ -z "$(echo $test | grep 'Operation failed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(upgrade)\\e[36m..."
@@ -192,7 +192,7 @@ function hassbian.developer.test.package {
         fi
 
         # Remove test...
-        test=$(hassbian-config remove "$suite" --accept $cirun)
+        test=$(hassbian-config remove "$suite" --accept "$cirun")
         if [ -z "$(echo $test | grep 'Operation failed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(remove)\\e[36m"
