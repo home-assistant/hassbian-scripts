@@ -13,7 +13,7 @@ function hassbian.suite.verify.service {
   retrunvalue=1
 
   if [ "$HASSBIAN_RUNTIME_CI" = true ];then
-    return 0
+    printf "0"
   fi
 
   for i in {1..5}; do
@@ -36,7 +36,7 @@ function hassbian.suite.verify.pgrep {
   retrunvalue=1
 
   if [ "$HASSBIAN_RUNTIME_CI" = true ];then
-    return 0
+    printf "0"
   fi
 
   for i in {1..5}; do
