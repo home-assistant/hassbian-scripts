@@ -11,7 +11,7 @@ function hassbian.suite.verify.service {
 
   servicename="$1"
   retrunvalue=1
-
+  echo "CI: $HASSBIAN_RUNTIME_CI"
   if [ "$HASSBIAN_RUNTIME_CI" = true ];then
     printf "0"
     return
