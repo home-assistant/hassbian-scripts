@@ -58,8 +58,8 @@ function hassbian.developer.test.package {
     ------------------------------------------
     "
     printf "\\e[36mTesting Suite: 'homeassistant'.................."
-    #test=$(hassbian-config install homeassistant --accept)
-    hassbian-config install homeassistant --accept
+    #test=$(hassbian-config install homeassistant --accept --ci)
+    hassbian-config install homeassistant --accept --ci
     if [ -z "$(echo $test | grep 'Operation failed...')" ];then
       ((pass+=1))
       printf "\\e[32mPASS(install)\\e[36m..."
