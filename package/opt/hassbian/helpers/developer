@@ -136,7 +136,7 @@ function hassbian.developer.test.package {
       if [ "$unattended" == "true" ];then
         # Install test...
         test=$(hassbian-config install "$suite" --accept)
-        if [ -z "${test | grep 'Operation failed...'}" ];then
+        if [ -z "$($test | grep 'Operation failed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(install)\\e[36m..."
         else
@@ -148,7 +148,7 @@ function hassbian.developer.test.package {
 
         # Upgrade test...
         test=$(hassbian-config upgrade "$suite" --accept)
-        if [ -z "${test | grep 'Operation failed...'}" ];then
+        if [ -z "$($test | grep 'Operation failed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(upgrade)\\e[36m..."
         else
@@ -160,7 +160,7 @@ function hassbian.developer.test.package {
 
         # Remove test...
         test=$(hassbian-config remove "$suite" --accept)
-        if [ -z "${test | grep 'Operation failed...'}" ];then
+        if [ -z "$($test | grep 'Operation failed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(remove)\\e[36m"
         else
