@@ -9,8 +9,8 @@ function python-migration {
   # Implemented to cope with the announced D-Day of Python 3.5
   # To track if this allready have been run, we create a file to hold that "state"
   # /srv/homeassistant/hassbian/pythonmigration with HAVENV=pythonversion as the content.
-  readonly pythonmigrationfile="$HOME_ASSISTANT_VENV/hassbian/pythonmigration"
-  readonly targetpythonversion="3.7"
+  local pythonmigrationfile="$HOME_ASSISTANT_VENV/hassbian/pythonmigration"
+  local targetpythonversion="3.7"
   local force
   local pyversion
   local currenthapyversion
@@ -63,7 +63,7 @@ function python-migration {
 
   "
   sleep 20  # To give the user the option to panic and abort thr progress.
-  source "$HASSBIAN_SUITE_DIR/python/install"
+  source "$HASSBIAN_SUITE_DIR/python/upgrade"
   install
   echo "HAVENV=$currenthapyversion" > "$pythonmigrationfile"
   exit
