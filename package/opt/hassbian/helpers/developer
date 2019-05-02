@@ -67,19 +67,24 @@ function hassbian.developer.test.package {
         [ "$function" == "hassbian.input.info" ] || \
         [ "$function" == "hassbian.input.text" ] || \
         [ "$function" == "hassbian.log.share" ] || \
+        [ "$function" == "hassbian.log.show" ] || \
         [ "$function" == "hassbian.suite.action.execute" ] || \
         [ "$function" == "hassbian.suite.action" ] || \
-        [ "$function" == "hassbian.suite.helper.install.pip" ] || \
+        [ "$function" == "hassbian.suite.helper.blockcheck" ] || \
         [ "$function" == "hassbian.suite.helper.exist" ] || \
         [ "$function" == "hassbian.suite.helper.install.node" ] || \
-        [ "$function" == "hassbian.suite.helper.blockcheck" ] || \
+        [ "$function" == "hassbian.suite.helper.install.pip" ] || \
+        [ "$function" == "hassbian.suite.helper.manifest" ] || \
         [ "$function" == "hassbian.suite.info.installed" ] || \
+        [ "$function" == "hassbian.suite.info.print" ] || \
+        [ "$function" == "hassbian.suite.verify.service" ] || \
+        [ "$function" == "hassbian.workaround.check" ] || \
         [ "$function" == "hassbian.workaround.pip.typeerror" ]; then
         printf "\\e[33mSKIP\\n"
 
       # Run tests:
       else
-        test=$("$function")
+        test=$("$function" >> /dev/null 2>&1)
         returncode="$?"
         if [ "$returncode" == "0" ];then
           ((pass+=1))
@@ -136,7 +141,7 @@ function hassbian.developer.test.package {
       if [ "$unattended" == "true" ];then
         # Install test...
         test=$(hassbian-config install "$suite" --accept)
-        if [ -z "$($test | grep 'Operation failed...')" ];then
+        if [ -z "$(echo $test | grep 'Operation failed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(install)\\e[36m..."
         else
@@ -148,7 +153,7 @@ function hassbian.developer.test.package {
 
         # Upgrade test...
         test=$(hassbian-config upgrade "$suite" --accept)
-        if [ -z "$($test | grep 'Operation failed...')" ];then
+        if [ -z "$(echo $test | grep 'Operation failed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(upgrade)\\e[36m..."
         else
@@ -160,7 +165,7 @@ function hassbian.developer.test.package {
 
         # Remove test...
         test=$(hassbian-config remove "$suite" --accept)
-        if [ -z "$($test | grep 'Operation failed...')" ];then
+        if [ -z "$(echo $test | grep 'Operation failed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(remove)\\e[36m"
         else
