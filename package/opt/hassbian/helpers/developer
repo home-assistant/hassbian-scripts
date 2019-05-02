@@ -186,7 +186,8 @@ function hassbian.developer.test.package {
         fi
 
         # Remove test...
-        test=$(hassbian-config remove $suite --accept --ci)
+        hassbian-config remove $suite --accept --ci
+        #test=$(hassbian-config remove $suite --accept --ci)
         if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
           ((pass+=1))
           printf "\\e[32mPASS(remove)\\e[36m"
