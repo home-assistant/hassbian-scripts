@@ -51,6 +51,10 @@ function hassbian.developer.test.package {
   local unattended
   local cirun
 
+echo "$(hassbian.info.version.python)"
+which python
+which python3
+
   if [ "$HASSBIAN_RUNTIME_CI" = true ];then
     # Only try this if running in a CI env.
     cirun="--ci"
