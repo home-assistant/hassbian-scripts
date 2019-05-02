@@ -50,7 +50,6 @@ function hassbian.developer.test.package {
   local test
   local unattended
 
-echo "CI:$HASSBIAN_RUNTIME_CI"
   if [ "$HASSBIAN_RUNTIME_CI" = true ];then
     # Only try this if running in a CI env.
     echo "
@@ -66,7 +65,7 @@ echo "CI:$HASSBIAN_RUNTIME_CI"
       printf "\\e[32mPASS(install)\\e[36m..."
     else
       ((fail+=1))
-      failedtests+=("hassbian-config install homeassistant --accept")
+      failedtests+=("hassbian-config install homeassistant --accept --ci")
       printf "\\e[31mFAIL(install)\\e[36m..."
       printf "%s\\n" "$test"
     fi

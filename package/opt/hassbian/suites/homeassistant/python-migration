@@ -20,7 +20,6 @@ function python-migration {
   force="$1"
 
   # Skip migration check if CI env
-  echo "CI:$HASSBIAN_RUNTIME_CI"
   if [ "$HASSBIAN_RUNTIME_CI" = true ];then
     echo "HASSBIAN_RUNTIME_CI enabled, skipping check..."
     return 0
