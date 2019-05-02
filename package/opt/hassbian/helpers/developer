@@ -62,12 +62,12 @@ function hassbian.developer.test.package {
     test=$(hassbian-config install homeassistant --accept --ci)
     if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
       ((pass+=1))
-      printf "\\e[32mPASS(install)\\e[36m..."
+      printf "\\e[32mPASS"
     else
       ((fail+=1))
       failedtests+=("hassbian-config install homeassistant --accept --ci")
-      printf "\\e[31mFAIL(install)\\e[36m..."
-      printf "%s\\n" "$test"
+      printf "\\e[31mFAIL"
+      printf "\n%s\\n" "$test"
     fi
     printf "\\e[0m\\n"
   fi
@@ -89,18 +89,14 @@ function hassbian.developer.test.package {
         [ "$function" == "hassbian.input.info" ] || \
         [ "$function" == "hassbian.input.text" ] || \
         [ "$function" == "hassbian.log.share" ] || \
-        [ "$function" == "hassbian.log.show" ] || \
         [ "$function" == "hassbian.suite.action.execute" ] || \
         [ "$function" == "hassbian.suite.action" ] || \
         [ "$function" == "hassbian.suite.helper.blockcheck" ] || \
         [ "$function" == "hassbian.suite.helper.exist" ] || \
         [ "$function" == "hassbian.suite.helper.install.node" ] || \
-        [ "$function" == "hassbian.suite.helper.install.pip" ] || \
         [ "$function" == "hassbian.suite.helper.manifest" ] || \
         [ "$function" == "hassbian.suite.info.installed" ] || \
         [ "$function" == "hassbian.suite.info.print" ] || \
-        [ "$function" == "hassbian.suite.verify.service" ] || \
-        [ "$function" == "hassbian.workaround.check" ] || \
         [ "$function" == "hassbian.workaround.pip.typeerror" ]; then
         printf "\\e[33mSKIP\\n"
 
@@ -173,7 +169,7 @@ function hassbian.developer.test.package {
             ((fail+=1))
             failedtests+=("hassbian-config install $suite --accept --ci")
             printf "\\e[31mFAIL(install)\\e[36m..."
-            printf "%s\\n" "$test"
+            printf "\\n%s\\n" "$test"
           fi
         fi
 
@@ -186,7 +182,7 @@ function hassbian.developer.test.package {
           ((fail+=1))
           failedtests+=("hassbian-config upgrade $suite --accept --ci")
           printf "\\e[31mFAIL(upgrade)\\e[36m..."
-          printf "%s\\n" "$test"
+          printf "\\n%s\\n" "$test"
         fi
 
         # Remove test...
@@ -198,7 +194,7 @@ function hassbian.developer.test.package {
           ((fail+=1))
           failedtests+=("hassbian-config remove $suite --accept --ci")
           printf "\\e[31mFAIL(remove)\\e[36m"
-          printf "%s\\n" "$test"
+          printf "\\n%s\\n" "$test"
         fi
       else
         printf "\\e[33mSKIP"
