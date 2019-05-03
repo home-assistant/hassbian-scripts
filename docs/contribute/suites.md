@@ -105,7 +105,7 @@ All suites must validate that the suite action completed. This validation should
 
 # User inputs
 
-If your script require user inputs, they should be at the top of the function. And if possible have an option to use --accept (-Y) flag, to set default values and omit the input. Example:
+If your script require user inputs, they should be at the top of the function. And if possible have an option to use `--accept` (`-Y`) flag, to set default values and omit the input. Example:
 
 ```bash
   if [ "$HASSBIAN_RUNTIME_ACCEPT" = true ]; then
