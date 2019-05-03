@@ -12,6 +12,11 @@ function hassbian.suite.verify.service {
   servicename="$1"
   retrunvalue=1
 
+  if [ "$HASSBIAN_RUNTIME_CI" = true ];then
+    printf "0"
+    return
+  fi
+
   for i in {1..5}; do
     if [ "$(systemctl is-active "$servicename")" == "active" ]; then
       retrunvalue=0
@@ -30,6 +35,11 @@ function hassbian.suite.verify.pgrep {
 
   prosessename="$1"
   retrunvalue=1
+
+  if [ "$HASSBIAN_RUNTIME_CI" = true ];then
+    printf "0"
+    return
+  fi
 
   for i in {1..5}; do
     if [ ! -z  "$(pgrep -f "$prosessename")" ]; then

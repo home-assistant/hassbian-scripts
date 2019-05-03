@@ -79,7 +79,7 @@ function hassbian.info.version.python {
       isntalledversion="$version"
     fi
   done
-  printf "%s" "${version}"
+  printf "%s" "${isntalledversion}"
 }
 
 function hassbian.info.version.osreleasename {
@@ -87,7 +87,11 @@ function hassbian.info.version.osreleasename {
   local name
 
   name=$(lsb_release -cs)
-  printf "%s" "${name}"
+  if [ "$?" == "0" ];then
+    printf "%s" "${name}"
+  else
+    return 1
+  fi
 }
 
 [[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

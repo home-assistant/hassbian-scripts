@@ -4,6 +4,9 @@
 function hassbian.log.show {
   # Show the logfile in the console.
   more "$HASSBIAN_LOG_FILE"
+  if [ "$?" != "0" ];then
+    return 1
+  fi
 }
 
 
