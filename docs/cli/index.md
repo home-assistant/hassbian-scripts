@@ -6,6 +6,6 @@ _Scripts used in the Hassbian image._
 
 ***
 
-[CLI](/cli/cli) | [HELPER FUNCTIONS](/cli/helpers)
+[CLI()](/cli/cli) | [HELPER FUNCTIONS](/cli/helpers)
 
 ***
