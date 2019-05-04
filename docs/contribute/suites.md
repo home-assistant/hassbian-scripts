@@ -60,15 +60,15 @@ The name of the suite.
 
 ## Key: author
 
-Your GitHuub username and link you yout GitHub user profile.
+Your GitHuub username and link you your GitHub user profile.
 
 ## Key: short_description
 
-A sort description of what your suite does.
+A short description of what the suite does.
 
 ## Key: long_description
 
-A longer description of what it does.
+A longer description of what the suite does.
 
 ## Key: unattended
 
