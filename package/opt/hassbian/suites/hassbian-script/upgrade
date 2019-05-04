@@ -1,5 +1,5 @@
 #!/bin/bash
-# 
+#
 # Upgrade script for Hassbian suite: Hassbian scripts
 #
 
@@ -13,7 +13,7 @@ function upgrade {
     infomsg="This script downloads new scripts directly from the dev branch on Github.
     you can use this to be on the 'bleeding edge of the development of Hassbian.'
     This is not recommended for daily use.
-    
+
     Are you really sure you want to continue?"
     response=$(hassbian.input.bool "$infomsg")
     if [ "$response" == "0" ]; then
@@ -27,19 +27,16 @@ function upgrade {
   fi
 
   osrelease=$(hassbian.info.version.osreleasename)
-
-  echo "Updating apt information..."
-  cat "$HASSBIAN_SUITE_DIR"/hassbian-script/files/"$branch" > /etc/apt/sources.list.d/hassbian.list
-  sed -i "s,%%OSRELEASE%%,${osrelease},g" /etc/apt/sources.list.d/hassbian.list
-  apt update
+  if [ ! -f /etc/apt/sources.list.d/hassbian.list ]; then
+    echo "Updating apt information..."
+    cat "$HASSBIAN_SUITE_DIR"/hassbian-script/files/"$branch" > /etc/apt/sources.list.d/hassbian.list
+    sed -i "s,%%OSRELEASE%%,${osrelease},g" /etc/apt/sources.list.d/hassbian.list
+    apt update
+  fi
 
   echo "Checking installed version..."
   current_version=$(apt list hassbian-scripts | tail -1 | awk -F'[' '{print $NF}' |  awk -F']' '{print $1}')
   if [ "$current_version" != "installed" ]; then
-    echo "Removing old version of hassbian-scripts..."
-    apt purge -y hassbian-scripts
-    apt clean
-
     echo "Installing newest version of hassbian-scripts..."
     cat "$HASSBIAN_SUITE_DIR"/hassbian-script/files/"$branch" > /etc/apt/sources.list.d/hassbian.list
     sed -i "s,%%OSRELEASE%%,${osrelease},g" /etc/apt/sources.list.d/hassbian.list
