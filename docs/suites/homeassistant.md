@@ -1,3 +1,11 @@
+_Scripts used in the Hassbian image._
+
+***
+
+[HOME](/) | [**SUITES**](/suites) | [HASSBIAN-CONFIG (CLI)](/cli) | [CONTRIBUTE](/contribute)
+
+***
+
 # Home Assistant
 
 This is a copy of the installation script run during first

@@ -1,3 +1,11 @@
+_Scripts used in the Hassbian image._
+
+***
+
+[HOME](/) | [**SUITES**](/suites) | [HASSBIAN-CONFIG (CLI)](/cli) | [CONTRIBUTE](/contribute)
+
+***
+
 # Zigbee2mqtt
 
 This script installs the [Zigbee2mqtt bridge][zigbee2mqtt].

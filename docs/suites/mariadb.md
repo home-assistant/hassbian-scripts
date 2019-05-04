@@ -1,13 +1,21 @@
-# PostgreSQL
+_Scripts used in the Hassbian image._
 
-This script installs PostgreSQL and its dependencies for use with the
+***
+
+[HOME](/) | [**SUITES**](/suites) | [HASSBIAN-CONFIG (CLI)](/cli) | [CONTRIBUTE](/contribute)
+
+***
+
+# MariaDB
+
+This script installs MariaDB and its dependencies for use with the
 [recorder][recorder] component in Home Assistant. No database or database user
 is created during this setup and will need to be created manually.
 
 ## Installation
 
 ```bash
-sudo hassbian-config install postgresql
+sudo hassbian-config install mariadb
 ```
 
 ## Upgrade
@@ -20,16 +28,13 @@ If so, add a PR here when you are done:
 
 Example of how to create the database:
 
-```bash
-sudo -s -u postgres
-createuser homeassistant
-createdb -O homeassistant homeassistant
-```
-
-Example configuration
-```yaml
-recorder:
-  db_url: postgresql://@/homeassistant #Connects to Postgresql via Unix socket, allowed by default
+```sql
+sudo mysql -u root -p
+CREATE DATABASE homeassistant;
+CREATE USER 'homeassistantuser' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON homeassistant.* TO 'homeassistantuser';
+FLUSH PRIVILEGES;
+exit
 ```
 
 ***

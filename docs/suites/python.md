@@ -1,3 +1,11 @@
+_Scripts used in the Hassbian image._
+
+***
+
+[HOME](/) | [**SUITES**](/suites) | [HASSBIAN-CONFIG (CLI)](/cli) | [CONTRIBUTE](/contribute)
+
+***
+
 # Pyhton
 
 This script will upgrade Python and Home Assistant to the latest stable version.\

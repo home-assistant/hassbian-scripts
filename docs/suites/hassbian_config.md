@@ -1,3 +1,11 @@
+_Scripts used in the Hassbian image._
+
+***
+
+[HOME](/) | [**SUITES**](/suites) | [HASSBIAN-CONFIG (CLI)](/cli) | [CONTRIBUTE](/contribute)
+
+***
+
 # hassbian-config
 
 This command is a package handler for the Hassbian scripts.

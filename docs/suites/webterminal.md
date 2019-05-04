@@ -1,3 +1,11 @@
+_Scripts used in the Hassbian image._
+
+***
+
+[HOME](/) | [**SUITES**](/suites) | [HASSBIAN-CONFIG (CLI)](/cli) | [CONTRIBUTE](/contribute)
+
+***
+
 # Webterminal
 
 This script installs a web terminal called 'shellinabox' to your system that
