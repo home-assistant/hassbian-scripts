@@ -13,10 +13,10 @@ The process is straight-forward.
 
 ## Pull Requests for new scripts.
 All new scripts must meet the following criteria to be considered to be reviewed:
-- Stickler-Ci should report no errors. (this is an automated review process based on [shellcheck](https://github.com/koalaman/shellcheck)
+- Stickler-Ci should report no errors. (this is an automated review process based on [shellcheck](https://github.com/koalaman/shellcheck))
 - The Script must be tested with success locally, see [testing your code](#testing-your-code) for tips on how to test.
 - Every script should have a validation at the end, see [validation](#validation) for tips.
-- You **must** add [documentation](#documentation) to the /docs for the script.
+- You **must** add [documentation](#documentation) to the `/docs` for the script.
 
 ### PR Naming
 Create a good name for your PR, this will be used in the changelog.
@@ -38,8 +38,7 @@ A good description of what the PR does, will certanly help during the review pro
 ### Comments
 Your PR will most likely get comments during the review process, this is _not_ to criticise your work.
 But feedback on how your PR can better match our "standards", you should have a look at existing scripts in the [repo](https://github.com/home-assistant/hassbian-scripts/tree/dev/package/opt/hassbian/suites).
-If some comments are unclear to you, use the thread under that comment to get clarification, or drop a line in the #devs_hassbian channel over at [Discord](https://discord.gg/c5DvZ4e). We want to help you help us getting Hassbian-scripts better.
+If some comments are unclear to you, use the thread under that comment to get clarification, or drop a line in the **#devs_hassbian** channel over at [Discord](https://discord.gg/c5DvZ4e). We want to help you help us getting Hassbian-scripts better.
 
 ### More info
-
-For more information about contributions in the different sections of the project have a look at the [contribution documentation](https://home-assistant.github.io/hassbian-scripts/contribute)
+For more information about contributions in the different sections of the project have a look at the [contribution documentation](https://home-assistant.github.io/hassbian-scripts/contribute).
