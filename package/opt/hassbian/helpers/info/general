@@ -18,10 +18,12 @@ function hassbian.info.general.usage {
 
 function hassbian.info.general.ipaddress {
   # Retrun the IP Address of the host.
-  local ipaddress
-  ipaddress=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
+  local ipaddressv4
+  ipaddressv4=$(ifconfig | grep "inet.*broadcast" | awk '{print $2}')
+  ipaddressv6=$(ifconfig | grep "inet6.*scope.*link" | awk '{print $2}')
   if [ "$?" == "0" ];then
-    printf "%s" "$ipaddress"
+    printf "%s" "$ipaddressv4"
+    printf "%s" "$ipaddressv6"
   else
     return 1
   fi
