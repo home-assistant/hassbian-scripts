@@ -64,7 +64,7 @@ Run the included test suite.
 
 ## hassbian.developer.test.pr
 
-Install a spesific PR for testing.
+Install a specific PR for testing.
 
 ## hassbian.info.general.all_suites
 
@@ -80,7 +80,7 @@ Get the local IP address.
 
 ## hassbian.info.general.isntalled_suites
 
-Check is a suite is installed.
+Check if a suite is installed.
 
 ## hassbian.info.general.python.location
 
@@ -156,7 +156,7 @@ hassbian.input.text "What is your name?"
 
 ## hassbian.log.share
 
-Put the logfile on hastebin and print the url to it.
+Put the logfile on hastebin and print the url.
 
 ## hassbian.log.show
 
@@ -216,7 +216,7 @@ hassbian.suite.helper.manifest suitename manifest_key
 
 ## hassbian.suite.helper.pizerocheck
 
-Check if pizero and if teh suite can be run.
+Check if pizero and if the suite can be run.
 
 ## hassbian.suite.info.installed
 
