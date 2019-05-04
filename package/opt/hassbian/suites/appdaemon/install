@@ -41,6 +41,7 @@ function install {
     python -m pip install setuptools wheel
     python -m pip install appdaemon
 
+    source "$HASSBIAN_HELPERS_DIR"/workaround
     hassbian.workaround.check appdaemon
 
     echo "Copying AppDaemon config file..."
