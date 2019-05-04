@@ -12,7 +12,7 @@ _Scripts used in the Hassbian image._
 
 When adding new functions you should place that function in a logical place. Familiarize yourself with the current structure and choose a name and location that make sense.
 
-A function should contain the folowing:
+A function should contain the following:
 
 - The function name
 - A comment inside the function that describe what it does.
