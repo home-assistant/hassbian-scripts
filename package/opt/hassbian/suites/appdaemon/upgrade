@@ -18,6 +18,7 @@ function upgrade {
     python -m pip install --upgrade setuptools wheel
     python -m pip install --upgrade appdaemon
 
+    source "$HASSBIAN_HELPERS_DIR"/workaround
     hassbian.workaround.check appdaemon
 
     echo "Deactivating virtualenv..."
