@@ -6,7 +6,7 @@
 function install {
   local validation
 
-  hassbian.suite.helper.install.aptdh-autoreconf
+  hassbian.suite.helper.install.apt dh-autoreconf
   hassbian.suite.helper.install.pip Cython
 
   echo "Checking the installation..."
