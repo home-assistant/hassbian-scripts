@@ -49,10 +49,12 @@ function upgrade {
   fi
 
   # Check if we need an update.
-  if [[ "$newversion" == "$(hassbian.info.version.homeassistant.installed)" ]]; then 
-    echo "You already have version: $newversion"
-    hassbian.suite.helper.action.success
-    exit
+  if [ "$HASSBIAN_RUNTIME_BETA" = false  ] && [ "$HASSBIAN_RUNTIME_DEV" = false  ]; then
+    if [[ "$newversion" == "$(hassbian.info.version.homeassistant.installed)" ]]; then 
+      echo "You already have version: $newversion"
+      hassbian.suite.helper.action.success
+      exit
+    fi
   fi
 
   echo "Setting correct premissions"
