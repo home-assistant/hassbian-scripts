@@ -58,10 +58,13 @@ function upgrade {
   mv "$HOME_ASSISTANT_VENV" "$HOME_ASSISTANT_VENV_$hapyversion"
 
   echo "Creating new virutal environment using Python $remotepyversion..."
+  mkdir "$HOME_ASSISTANT_VENV"
   python"${remotepyversion:: -2}" -m venv "$HOME_ASSISTANT_VENV"
 
   echo "Copying hassbian from the old venv to the new..."
-  cp "$HOME_ASSISTANT_VENV"_"$hapyversion"/hassbian "$HOME_ASSISTANT_VENV"/hassbian
+  cp "$HOME_ASSISTANT_VENV"_"$hapyversion"/hassbian "$HOME_ASSISTANT_VENV"/hassbian || \
+    mkdir "$HOME_ASSISTANT_VENV"/hassbian \
+    mkdir "$HOME_ASSISTANT_VENV"/hassbian/control
 
   echo "Setting premissions..."
   chown homeassistant:homeassistant -R "$HOME_ASSISTANT_VENV"
