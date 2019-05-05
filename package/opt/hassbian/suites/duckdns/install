@@ -25,7 +25,7 @@ function install {
   fi
 
   DUCKDNS_TOKEN=$(hassbian.input.text "What is your DuckDNS token?")
-  if [ ! "$token" ]; then
+  if [ ! "$DUCKDNS_TOKEN" ]; then
     exit
   fi
 
