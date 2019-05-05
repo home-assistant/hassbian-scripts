@@ -85,7 +85,7 @@ function hassbian.info.general.systeminfo {
   "
 
   if [ "$hcversion" != "$hcversionremote" ]; then
-    printf "\\e[31m%s\\n" "
+    printf "\\e[31m%s\\n\\e[0m" "
     There is an update pending for 'hassbian-config'
     You can upgrade by running this:
       sudo hassbian-config upgrade hassbian-script
