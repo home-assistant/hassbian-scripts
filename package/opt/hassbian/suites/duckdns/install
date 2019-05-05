@@ -34,7 +34,7 @@ function install {
   echo "Changing to homeassistant user..."
   sudo -u homeassistant -H /bin/bash << EOF
   cd
-  if [ "$SSL_RESPONSE" == "y" ] || [ "$SSL_RESPONSE" == "Y" ]; then
+  if [ "$SSL_RESPONSE" == "0" ]; then
     git clone https://github.com/lukas2511/dehydrated.git
     cd dehydrated  || exit
     echo $DUCKDNS_DOMAIN".duckdns.org" | tee domains.txt
@@ -71,12 +71,11 @@ EOF
   echo "Checking the installation..."
   if [ "$SSL_RESPONSE" == "0" ]; then
     certvalidation=$(find /home/homeassistant/dehydrated/certs/"$DUCKDNS_DOMAIN".duckdns.org/ -maxdepth 1 -type f | sort | grep privkey)
-  fi
-  if [ -f /home/homeassistant/duckdns/duck.sh ]; then
-    dnsvalidation="ok"
+  else
+    certvalidation="The Force will be with you. Always."
   fi
 
-  if [ ! -z "${certvalidation}" ] && [ ! -z "${dnsvalidation}" ]; then
+  if [ ! -z "${certvalidation}" ]; then
     hassbian.hassbian.suite.helper.action.success
     if [ "$SSL_RESPONSE" == "0" ]; then
       echo "Remember to update your configuration.yaml to take advantage of SSL!"
