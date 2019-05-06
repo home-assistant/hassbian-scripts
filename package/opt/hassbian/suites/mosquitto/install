@@ -34,15 +34,18 @@ function install {
   mkdir -p /var/lib/mosquitto
   chown mosquitto:mosquitto /var/lib/mosquitto
 
-  echo "Installing repository key"
-  wget -O - http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
+  echo "Installing mosquitto"
+  if [ "$(hassbian.info.version.osreleasename)" != "buster"  ]; then
+    echo "Installing repository key"
+    wget -O - http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
 
-  echo "Adding repository"
-  if [ ! -f /etc/apt/sources.list.d/mosquitto-stretch.list ]
-  then
-    curl -o /etc/apt/sources.list.d/mosquitto-stretch.list http://repo.mosquitto.org/debian/mosquitto-stretch.list
-  else
-    echo "Already present, skipping..."
+    echo "Adding repository"
+    if [ ! -f /etc/apt/sources.list.d/mosquitto-stretch.list ]
+    then
+      curl -o /etc/apt/sources.list.d/mosquitto-stretch.list http://repo.mosquitto.org/debian/mosquitto-stretch.list
+    else
+      echo "Already present, skipping..."
+    fi
   fi
 
   hassbian.suite.helper.install.apt mosquitto mosquitto-clients
