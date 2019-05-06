@@ -9,7 +9,7 @@ After=network.target
 [Service]
 Type=simple
 User=%i
-ExecStart=/usr/local/bin/pyhassbian --username %%USERNAME%% --password %%PASSWORD%%
+ExecStart=/srv/homeassistant/bin/pyhassbian --username %%USERNAME%% --password %%PASSWORD%%
 SendSIGKILL=no
 
 [Install]
