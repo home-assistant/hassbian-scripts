@@ -57,7 +57,7 @@ function upgrade {
     fi
   fi
 
-  echo "Setting correct premissions"
+  echo "Setting correct permissions"
   chown homeassistant:homeassistant -R /srv/homeassistant
 
   echo "Upgrading Home Assistant"

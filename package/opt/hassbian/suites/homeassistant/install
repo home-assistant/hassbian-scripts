@@ -18,7 +18,7 @@ function install {
     python-migration true # 'true' forces the migration to run.
   fi
 
-  echo "Setting correct premissions"
+  echo "Setting correct permissions"
   chown homeassistant:homeassistant -R "$HOME_ASSISTANT_VENV"
 
   pythonversion=$(hassbian.info.version.python)
