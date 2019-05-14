@@ -1,0 +1,9 @@
+{
+  "name": "Python",
+  "author": "Ludeeus <https://github.com/ludeeus>",
+  "short_description": "Upgrades python3 and virtual environment to the newest stable version.",
+  "long_description": "Upgrades python3 and virtual environment to the newest stable version.",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

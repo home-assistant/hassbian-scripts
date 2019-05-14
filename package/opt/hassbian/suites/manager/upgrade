@@ -1,0 +1,23 @@
+#!/bin/bash
+# 
+# Upgrade script for Hassbian suite: Hassbian manager
+#
+
+function upgrade {
+  echo "UpgradingHassbian manager"
+  hassbian.suite.helper.install.pip pyhassbian
+
+  echo "Restarting Hassbian manager"
+  systemctl restart hassbian-manager@homeassistant.service
+
+  validation=$(hassbian.suite.verify.service hassbian-manager@homeassistant.service)
+  if [ "$validation" == "0" ]; then
+    hassbian.suite.helper.action.success
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

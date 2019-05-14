@@ -1,0 +1,84 @@
+#!/bin/bash
+# 
+# Installation script for Hassbian suite: Mosquitto
+#
+
+function install {
+  local mqtt_username
+  local mqtt_password
+  local validation
+  local ip_address
+
+  if [ "$HASSBIAN_RUNTIME_ACCEPT" = true ]; then
+    mqtt_username='pi'
+    mqtt_password='raspberry'
+  else
+    hassbian.input.info "Please take a moment to setup your first MQTT user"
+    mqtt_username=$(hassbian.input.text "Username:")
+    mqtt_password=$(hassbian.input.text "Password:")
+    if [ "$mqtt_username" == "0" ]; then
+      mqtt_username='pi'
+    fi
+    if [ "$mqtt_password"  == "0" ]; then
+      mqtt_password='raspberry'
+    fi
+  fi
+  echo "Adding mosquitto user"
+  adduser mosquitto --system --group
+
+  echo "Creating pid file"
+  touch /var/run/mosquitto.pid
+  chown mosquitto:mosquitto /var/run/mosquitto.pid
+
+  echo "Creating data directory"
+  mkdir -p /var/lib/mosquitto
+  chown mosquitto:mosquitto /var/lib/mosquitto
+
+  echo "Installing mosquitto"
+  if [ "$(hassbian.info.version.osreleasename)" != "buster"  ]; then
+    echo "Installing repository key"
+    wget -O - http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
+
+    echo "Adding repository"
+    if [ ! -f /etc/apt/sources.list.d/mosquitto-stretch.list ]
+    then
+      curl -o /etc/apt/sources.list.d/mosquitto-stretch.list http://repo.mosquitto.org/debian/mosquitto-stretch.list
+    else
+      echo "Already present, skipping..."
+    fi
+  fi
+
+  hassbian.suite.helper.install.apt mosquitto mosquitto-clients
+
+  echo "Writing default configuration"
+  cd /etc/mosquitto || exit
+  mv mosquitto.conf mosquitto.conf.backup
+  cp /opt/hassbian/suites/mosquitto/files/mosquitto.conf /etc/mosquitto/mosquitto.conf
+  chown mosquitto:mosquitto mosquitto.conf
+
+  echo "Initializing password file"
+  touch pwfile
+  chown mosquitto:mosquitto pwfile
+  chmod 0600 pwfile
+
+  echo "Creating password entry for user $mqtt_username"
+  mosquitto_passwd -b pwfile "$mqtt_username" "$mqtt_password"
+
+  echo "Restarting Mosquitto service"
+  systemctl restart mosquitto.service
+
+  validation=$(hassbian.suite.verify.pgrep mosquitto)
+  if [ "$validation" == "0" ]; then
+    ip_address=$(hassbian.info.general.ipaddress)
+    hassbian.suite.helper.action.success
+    echo "Your MQTT broker is running at $ip_address:1883 or if preferred hassbian.local:1883"
+    echo
+    echo "To continue have a look at https://home-assistant.io/docs/mqtt/"
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

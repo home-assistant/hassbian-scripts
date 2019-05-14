@@ -1,0 +1,9 @@
+{
+  "name": "Hassbian manager",
+  "author": "Ludeeus <https://github.com/ludeeus>",
+  "short_description": "Hassbian manager script.",
+  "long_description": "Hassbian manager is a web UI tool that can help you manage your suites.",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

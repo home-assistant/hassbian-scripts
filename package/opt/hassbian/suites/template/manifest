@@ -1,0 +1,10 @@
+{
+  "name": "Suite Template",
+  "author": "Username <https://github.com/username>",
+  "short_description": "Suite Template.",
+  "long_description": "Can be used to test 'hassbian-config' or as a template to build new suites from.",
+  "unattended": true,
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

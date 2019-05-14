@@ -1,0 +1,102 @@
+#!/bin/bash
+# 
+# Upgrade script for Hassbian suite: Python
+#
+
+function upgrade {
+  local remotepyversion
+  local hapyversion
+  local isinstalled
+  local validation
+
+  remotepyversion=$(curl -s https://www.python.org/downloads/source/ | \
+    grep "Latest Python 3 Release" | cut -d "<" -f 3 | awk -F ' ' '{print $NF}')
+
+  echo "Checking current python version..."
+  hapyversion=$(hassbian.info.version.homeassistant.python)
+
+  if [ "$hapyversion" == "$remotepyversion" ]; then
+    echo "Python is already the highest stable version."
+    hassbian.suite.helper.action.success
+    return 0
+  fi
+
+  isinstalled=$(command -v python"${remotepyversion:0:3}")
+  if [ -z "${isinstalled}" ]; then
+    echo "Upgrading to Python $remotepyversion..."
+    hassbian.suite.helper.install.apt build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev
+    hassbian.suite.helper.install.apt libtcmalloc-minimal4
+  
+    echo "Setting build options..."
+    export LD_PRELOAD="/usr/lib/libtcmalloc_minimal.so.4"
+
+    echo "Downloading Python $remotepyversion..."  
+    wget -O /tmp/Python-"$remotepyversion".tar.xz \
+      https://www.python.org/ftp/python/"$remotepyversion"/Python-"$remotepyversion".tar.xz
+
+    echo "Unpacking Python $remotepyversion..." 
+    cd /tmp || return 1
+    tar xf Python-"$remotepyversion".tar.xz
+
+    echo "Running altinstall for Python $remotepyversion..."
+    cd Python-"$remotepyversion" || return 1
+    ./configure
+    make altinstall
+    apt -y autoremove
+
+    echo "Cleanup"
+    cd || return 1
+    rm -r /tmp/Python-"$remotepyversion"
+    rm /tmp/Python-"$remotepyversion".tar.xz
+    echo "Done"
+  fi
+
+  echo "Stopping Home Assistant...."
+  systemctl stop home-assistant@homeassistant.service
+
+  echo "Backing up previous virutal enviorment...."
+  mv "$HOME_ASSISTANT_VENV" "$HOME_ASSISTANT_VENV_$hapyversion"
+
+  echo "Creating new virutal environment using Python $remotepyversion..."
+  mkdir "$HOME_ASSISTANT_VENV"
+  python"${remotepyversion:: -2}" -m venv "$HOME_ASSISTANT_VENV"
+
+  echo "Copying hassbian from the old venv to the new..."
+  cp "$HOME_ASSISTANT_VENV"_"$hapyversion"/hassbian "$HOME_ASSISTANT_VENV"/hassbian || \
+    mkdir "$HOME_ASSISTANT_VENV"/hassbian \
+    mkdir "$HOME_ASSISTANT_VENV"/hassbian/control
+
+  echo "Setting permissions..."
+  chown homeassistant:homeassistant -R "$HOME_ASSISTANT_VENV"
+
+  echo "Reinstalling Home Assistant..."
+  hassbian.suite.helper.install.apt python3-pip python3-dev
+
+  pip"${remotepyversion:: -2}" install --upgrade virtualenv
+  hassbian.suite.helper.install.pip homeassistant
+
+  mv /home/homeassistant/.homeassistant/deps /home/homeassistant/.homeassistant/deps_"$hapyversion"
+
+  echo "Starting Home Assistant."
+  systemctl start home-assistant@homeassistant.service
+
+  echo "Checking the installation..."
+  validation=$(hassbian.info.version.homeassistant.installed)
+
+  if [ "$validation" == "$remotepyversion" ]; then
+    hassbian.suite.helper.action.success
+    echo "First time Home Assistant starts it will take a long time. This is normal."
+    echo "You can run the command 'halog' to see the live service log."
+  else
+    hassbian.suite.helper.action.failed
+    echo -e "\\e[31mReverting..."
+    systemctl stop home-assistant@homeassistant.service
+    rm -R "$HOME_ASSISTANT_VENV"
+    mv "$HOME_ASSISTANT_VENV"_"$hapyversion" "$HOME_ASSISTANT_VENV"
+    systemctl start home-assistant@homeassistant.service
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

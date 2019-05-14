@@ -1,0 +1,127 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+
+function hassbian.info.general.rootcheck {
+  # Check if the current user is root.
+  if (( EUID != 0 )); then
+    echo "Error: hassbian-config must be run as root (with sudo) for this to be possible."
+    return 1
+  fi
+}
+
+function hassbian.info.general.usage {
+  # Show usage in the console.
+  echo "
+  usage: hassbian-config [command] [suite] [options]  
+  run 'hassbian-config --help' to see all options"
+}
+
+function hassbian.info.general.ipaddress {
+  # Retrun the IP Address of the host.
+  local ipaddress
+  ipaddress=$(ifconfig | grep "inet.*broadcast" | grep -v 0.0.0.0 | awk '{print $2}')
+  if [ "$?" == "0" ];then
+    printf "%s" "$ipaddress"
+  else
+    return 1
+  fi
+}
+
+function hassbian.info.general.help {
+  # Show this help section in the console.
+  local hassbian_config_version
+  hassbian_config_version=$(hassbian.info.version.hassbian_config.installed)
+  echo "
+  hassbian-config
+    version: $hassbian_config_version
+  
+  usage: 
+    hassbian-config [command] [suite] [options]
+  where [command] is one of:
+    install            Installs a software [suite].
+    upgrade            Upgrades software [suite].
+    remove             Remove software [suite].
+    show               To see available [suite] for install/upgrade.
+    log                Displays an log of the last operation.
+    share-log          Generates an hastebin link of the last operation.
+    show-installed     Generates a list of installed suites.
+  
+  available optional [options]:
+    -Y | --accept      Accept defaults on scripts that allows this.
+    -F | --force       Force run an script, this is useful if you need to reinstall a package.
+    -D | --debug       This will output every comand to the console.
+    -B | --beta        This will install the current beta version if implemented.
+    --dev              This will install the current development version if implemented.
+  
+  other [command] available:
+    -V | --version     Prints the version of hassbian-config
+    -H | --help        Shows this help
+  "
+}
+
+function hassbian.info.general.systeminfo {
+  # Prints system information to the console.
+  # Usefull to call before scripts and as a standalone.
+  local haversion
+  local hapyversion
+  local hcversion
+  local hcversionremote
+
+  # Root check.
+  hassbian.info.general.rootcheck
+
+  echo "Generating system information..."
+  haversion=$(hassbian.info.version.homeassistant.installed)
+  hapyversion=$(hassbian.info.version.homeassistant.python)
+  hcversion=$(hassbian.info.version.hassbian_config.installed)
+  hcversionremote=$(hassbian.info.version.hassbian_config.remote)
+
+  echo "
+  Home Assistant:        $haversion
+  Home Assistant Python: $hapyversion
+  hassbian-config:       $hcversion
+
+  $(uname -a)
+  "
+
+  if [ "$hcversion" != "$hcversionremote" ]; then
+    printf "\\e[31m%s\\n\\e[0m" "
+    There is an update pending for 'hassbian-config'
+    You can upgrade by running this:
+      sudo hassbian-config upgrade hassbian-script
+    "
+  fi
+}
+
+function hassbian.info.general.all_suites {
+  # Return a list of all suites.
+  local allsuites
+  allsuites=$(find "$HASSBIAN_SUITE_DIR"/ -maxdepth 1 -type d | \
+    sort | awk -F'/' ' {print $NF}' | awk -F. '{print $1}')
+  echo "$allsuites"
+}
+
+function hassbian.info.general.isntalled_suites {
+  # Return a list of all installed suites.
+  local allsuites
+  local installed
+
+  allsuites=$(hassbian.info.general.all_suites)
+  echo "These suites are installed:"
+  for suite in $allsuites; do
+    installed=$(hassbian.suite.info.installed "$suite")
+    if [ "$installed" ]; then
+      echo "$suite"
+    fi
+  done
+}
+
+function hassbian.info.general.python.location {
+  # Return the full path of the newest python version.
+  local location
+  location=$(command -v "python$(hassbian.info.version.python)")
+
+  printf "%s" "$location"
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

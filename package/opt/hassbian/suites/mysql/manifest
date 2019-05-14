@@ -1,0 +1,9 @@
+{
+  "name": "MySQL",
+  "author": "Landrash <https://github.com/Landrash>",
+  "short_description": "MySQL install script for Hassbian.",
+  "long_description": "Installs the MySQL database engine and dependecies for use with the recorder component in Home Assistant.",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

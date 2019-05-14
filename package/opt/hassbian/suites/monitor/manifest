@@ -1,0 +1,9 @@
+{
+  "name": "Monitor",
+  "author": "Landrash <https://github.com/landrash>",
+  "short_description": "Setup for Monitor. Bluetooth-based passive presence detection.",
+  "long_description": "This script installs Monitor a script for Bluetooth-based passive presence detection.\\nThe Mosquitto suite will also be installed since it's a dependency for Monitor.\\nThis script also optionaly installs a service that can be enabled to run Monitor.",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

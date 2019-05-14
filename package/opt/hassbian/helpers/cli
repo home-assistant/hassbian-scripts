@@ -1,0 +1,98 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+#  The purpose of this is to provide support for commandline arguments.
+
+# shellcheck disable=SC2034
+
+declare argument
+declare suites
+declare suiteaction
+declare runfunction
+
+# Show usage if no arguments are given.
+if [ $# -lt 1 ]; then
+  hassbian.info.general.usage
+  exit 0
+fi
+
+for argument in "$@"; do
+    ## Flags
+    if [ "$argument" == "--accept" ] || [ "$argument" == "-Y" ]; then
+       HASSBIAN_RUNTIME_ACCEPT=true
+
+    elif [ "$argument" == "--force" ] || [ "$argument" == "-F" ]; then
+        HASSBIAN_RUNTIME_FORCE=true
+
+    elif [ "$argument" == "--debug" ] || [ "$argument" == "-D" ]; then
+        HASSBIAN_RUNTIME_DEBUG=true
+
+    elif [ "$argument" == "--beta" ] || [ "$argument" == "-B" ]; then
+        HASSBIAN_RUNTIME_BETA=true
+
+    elif [ "$argument" == "--dev" ]; then
+        HASSBIAN_RUNTIME_DEV=true
+
+    elif [ "$argument" == "--ci" ]; then
+        HASSBIAN_RUNTIME_CI=true
+
+    # Actions
+    elif [ "$argument" == "install" ]; then
+        suiteaction="$argument"
+
+    elif [ "$argument" == "upgrade" ]; then
+        suiteaction="$argument"
+
+    elif [ "$argument" == "remove" ]; then
+        suiteaction="$argument"
+
+    elif [ "$argument" == "show" ]; then
+        suiteaction="$argument"
+
+    elif [ "$argument" == "developer-test-pr" ]; then
+        runfunction="hassbian.developer.test.pr $2"
+
+    elif [ "$argument" == "developer-test-package" ]; then
+        runfunction="hassbian.developer.test.package"
+
+    elif [ "$argument" == "log" ]; then
+        runfunction="hassbian.log.show"
+
+    elif [ "$argument" == "share-log" ]; then
+        runfunction="hassbian.log.share"
+
+    elif [ "$argument" == "show-installed" ]; then
+        runfunction="hassbian.info.general.isntalled_suites"
+
+    elif [ "$argument" == "systeminfo" ]; then
+        runfunction="hassbian.info.general.systeminfo"
+
+    ## Spesial arguments.
+    elif [ "$argument" == "--help" ] || [ "$argument" == "-H" ]; then
+        runfunction="hassbian.info.general.help"
+
+    elif [ "$argument" == "--version" ] || [ "$argument" == "-V" ]; then
+        printf "%s\\n" "$(hassbian.info.version.hassbian_config.installed)"
+        exit 0
+
+    # If we got here we can assume that the argument is a suite.
+    else
+      suites+=" $argument"
+    fi
+done
+
+if [ -n "$runfunction" ]; then
+    $runfunction
+    exit 0
+fi
+
+if [ -n "$suites" ]; then
+
+  for suite in $suites; do
+    hassbian.suite.action "$suiteaction" "$suite"
+  done
+
+else
+  hassbian.info.general.usage
+fi
+exit 0
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

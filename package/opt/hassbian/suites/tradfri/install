@@ -1,0 +1,29 @@
+#!/bin/bash
+# 
+# Installation script for Hassbian suite: Tadfri
+#
+
+function install {
+  local validation
+
+  hassbian.suite.helper.install.apt dh-autoreconf
+  hassbian.suite.helper.install.pip Cython
+
+  echo "Checking the installation..."
+  validation=$(sudo -u homeassistant -H /bin/bash << EOF | grep Version | awk '{print $2}'
+  source /srv/homeassistant/bin/activate
+  pip3 show cython
+EOF
+  )
+  if [ ! -z "${validation}" ]; then
+    hassbian.suite.helper.action.success
+    echo "To continue have a look at https://home-assistant.io/components/tradfri/"
+    echo "It's recommended that you restart your Tradfri Gateway before continuing."
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

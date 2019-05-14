@@ -1,0 +1,54 @@
+#!/bin/bash
+#
+# Upgrade script for Hassbian suite: Hassbian scripts
+#
+
+function upgrade {
+  local branch
+  local infomsg
+  local response
+  local osrelease
+
+  if [ "$HASSBIAN_RUNTIME_DEV" = true  ]; then
+    infomsg="This script downloads new scripts directly from the dev branch on Github.
+    you can use this to be on the 'bleeding edge of the development of Hassbian.'
+    This is not recommended for daily use.
+
+    Are you really sure you want to continue?"
+    response=$(hassbian.input.bool "$infomsg")
+    if [ "$response" == "0" ]; then
+      branch="dev"
+    else
+      echo "Exiting..."
+      return 0
+    fi
+  else
+    branch='stable'
+  fi
+
+  osrelease=$(hassbian.info.version.osreleasename)
+  if [ ! -f /etc/apt/sources.list.d/hassbian.list ]; then
+    echo "Updating apt information..."
+    cat "$HASSBIAN_SUITE_DIR"/hassbian-script/files/"$branch" > /etc/apt/sources.list.d/hassbian.list
+    sed -i "s,%%OSRELEASE%%,${osrelease},g" /etc/apt/sources.list.d/hassbian.list
+    apt update
+  fi
+
+  echo "Checking installed version..."
+  current_version=$(apt list hassbian-scripts | tail -1 | awk -F'[' '{print $NF}' |  awk -F']' '{print $1}')
+  if [ "$current_version" != "installed" ]; then
+    echo "Installing newest version of hassbian-scripts..."
+    cat "$HASSBIAN_SUITE_DIR"/hassbian-script/files/"$branch" > /etc/apt/sources.list.d/hassbian.list
+    sed -i "s,%%OSRELEASE%%,${osrelease},g" /etc/apt/sources.list.d/hassbian.list
+    hassbian.suite.helper.install.apt hassbian-scripts
+  else
+    echo "Installed version is up to date, exiting..."
+    return 0
+  fi
+  systemctl daemon-reload
+
+  hassbian.suite.helper.action.success
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

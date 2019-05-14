@@ -1,0 +1,82 @@
+#!/bin/bash
+# 
+# Installation script for Hassbian suite: Cloud9 IDE
+#
+
+function install {
+  local ipaddress
+  local validation
+  local username
+  local password
+
+  if [ "$HASSBIAN_RUNTIME_ACCEPT" = true ]; then
+    username=pi
+    password=raspberry
+  else
+    hassbian.input.info "Please take the time to setup your account"
+    username=$(hassbian.input.text "Username:")
+    password=$(hassbian.input.text "Password:")
+    if [ "$username" == "0" ]; then
+      username=pi
+    fi
+    if [ "$password" == "0" ]; then
+      password=raspberry
+    fi
+  fi
+
+  #Installing NodeJS if not already installed.
+  hassbian.suite.helper.install.node
+
+  echo "Creating installation directory..."
+  mkdir /opt/c9sdk
+  chown homeassistant:homeassistant /opt/c9sdk
+
+  echo "Changing to the homeassistant user"
+  sudo -u homeassistant -H /bin/bash << EOF
+    echo "Downloading and installing Cloud9 SDK..."
+    git clone git://github.com/c9/core.git /opt/c9sdk
+    bash /opt/c9sdk/scripts/install-sdk.sh
+    echo "Creating workspace for Cloud9."
+    mkdir -p /home/homeassistant/c9workspace/.c9
+    echo "Create default config."
+    echo '{"projecttree": {"@showhidden": false,"@hiddenFilePattern": ".*,.n*,*c9*,.b*,.p*,.w*,*.db"}}' | tee /home/homeassistant/c9workspace/.c9/user.settings
+    echo "Symlinking /home/homeassistant/.homeassistant to the workspace."
+    ln -s /home/homeassistant/.homeassistant/ /home/homeassistant/c9workspace/homeassistant
+EOF
+
+  echo "Copying Cloud9 service file..."
+  cp "$HASSBIAN_SUITE_DIR"/cloud9/files/cloud9.service /etc/systemd/system/cloud9@homeassistant.service
+
+  sed -i "s,%%USERNAME%%,${username},g" /etc/systemd/system/cloud9@homeassistant.service
+  sed -i "s,%%PASSWORD%%,${password},g" /etc/systemd/system/cloud9@homeassistant.service
+
+  echo "Enabling Cloud9 service..."
+  systemctl enable cloud9@homeassistant.service
+  sync
+
+  echo "Starting Cloud9 service..."
+  systemctl start cloud9@homeassistant.service
+
+  validation=$(hassbian.suite.verify.service cloud9@homeassistant.service)
+  if [ "$validation" == "1" ]; then
+    echo "Using fallback installation."
+    echo "Installing npm"
+    apt install -y npm
+
+    cd /opt/c9sdk || return 1
+    npm install
+  fi
+
+  validation=$(hassbian.suite.verify.service cloud9@homeassistant.service)
+  if [ "$validation" == "0" ]; then
+    ipaddress=$(hassbian.info.general.ipaddress)
+    hassbian.suite.helper.action.success
+    echo "Your Cloud9 IDE is now avaiable at http://$ipaddress:8181"
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

@@ -1,0 +1,19 @@
+#!/bin/bash
+# 
+# Uninstallation script for Hassbian suite: Cloud9 IDE
+#
+
+function remove {
+  echo "Removing Cloud9 IDE..."
+  systemctl stop cloud9@homeassistant.service
+  systemctl disable cloud9@homeassistant.service
+  rm /etc/systemd/system/cloud9@homeassistant.service
+  sync
+  bash /opt/c9sdk/scripts/uninstall-c9.sh
+  rm -R /opt/c9sdk
+  rm -R /home/homeassistant/c9workspace
+
+  hassbian.suite.helper.action.success
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

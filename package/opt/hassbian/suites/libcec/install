@@ -1,0 +1,75 @@
+#!/bin/bash
+# 
+# Installation script for Hassbian suite: LibCEC
+#
+
+function install {
+  local pythonversion
+
+  pythonversion=$(hassbian.info.version.homeassistant.python)
+
+  hassbian.suite.helper.install.apt cmake libudev-dev libxrandr-dev swig
+
+  echo "Changing to homeassistant user"
+  sudo -u homeassistant -H /bin/bash <<EOF
+
+  echo "Creating source directory"
+  mkdir -p "$HOME_ASSISTANT_VENV"/src
+  chown -R homeassistant:homeassistant "$HOME_ASSISTANT_VENV"/src
+
+  echo "Cloning Pulse-Eight platform"
+  cd "$HOME_ASSISTANT_VENV"/src
+  git clone https://github.com/Pulse-Eight/platform.git
+  chown homeassistant:homeassistant platform
+
+  echo "Building Pulse-Eight platform"
+  mkdir platform/build
+  cd platform/build
+  cmake ..
+  make
+EOF
+
+  echo "Installing Pulse-Eight platform"
+  cd "$HOME_ASSISTANT_VENV"/src/platform/build || exit
+  make install
+  ldconfig
+
+  echo "Changing back to homeassistant user"
+  sudo -u homeassistant -H /bin/bash <<EOF
+
+  echo "Cloning Pulse-Eight libcec"
+  cd "$HOME_ASSISTANT_VENV"/src
+  git clone https://github.com/Pulse-Eight/libcec.git
+
+  echo "Building Pulse-Eight platform"
+  chown homeassistant:homeassistant libcec
+  mkdir libcec/build
+  cd libcec/build
+  cmake -DRPI_INCLUDE_DIR=/opt/vc/include -DRPI_LIB_DIR=/opt/vc/lib ..
+  make -j4
+EOF
+
+  echo "Installing Pulse-Eight libcec"
+  cd "$HOME_ASSISTANT_VENV"/src/libcec/build || exit
+  make install
+  ldconfig
+
+  echo "Linking libcec to venv site packages"
+  sudo -u homeassistant -H /bin/bash <<EOF
+  ln -s /usr/local/lib/${pythonversion:0:3}/dist-packages/cec "$HOME_ASSISTANT_VENV"/lib/${pythonversion:0:3}/site-packages/
+EOF
+
+  echo "Checking the installation..."
+  validation=$(command -v cec-client)
+  if [ ! -z "${validation}" ]; then
+    hassbian.suite.helper.action.success
+    echo "To continue have a look at https://home-assistant.io/components/hdmi_cec/"
+    echo "It's recommended that you restart your Pi before continuing with testing libcec."
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

@@ -1,0 +1,10 @@
+{
+  "name": "Hue",
+  "author": "Landrash <https://github.com/Landrash>",
+  "short_description": "Echo/Mycroft Emulated Hue install script for Hassbian.",
+  "long_description": "Configures the Python executable to allow usage of low numbered\\nports for use with Amazon Echo or Mycroft.ai.",
+  "unattended": true,
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

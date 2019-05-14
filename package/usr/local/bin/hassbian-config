@@ -1,375 +1,71 @@
 #!/bin/bash
-LOGFILE=/tmp/hassbian.log
-SUITE_INSTALL_DIR=/opt/hassbian/suites
-SUITE_CONTROL_DIR=/srv/homeassistant/hassbian/control
+# The base of hassbian-config, this should only contain source links to the helper scripts and global variables.
+# shellcheck disable=SC1090,SC1091,SC2034
 
-function usage {
-  printf "usage: hassbian-config [command] [suite] [options]\\n"
-  printf "run 'hassbian-config --help' to see all options\\n"
-  return 0
-}
+#####################################
+#  Locations
+#####################################
 
-function help {
-  printf "hassbian-config\\n"
-  printf "%s\\n" "version: $(hassbian-config -V)"
-  printf "\\n"
-  printf "usage: hassbian-config [command] [suite] [options]\\n"
-  printf "where [command] is one of:\\n"
-  printf "%-8s\\t%s\\n" "  install" "Installs a software [suite]."
-  printf "%-8s\\t%s\\n" "  upgrade" "Upgrades software [suite]."
-  printf "%-8s\\t%s\\n" "  remove" "Remove software [suite]."
-  printf "%-8s\\t%s\\n" "  show" "To see available [suite] for install/upgrade."
-  printf "%-8s\\t%s\\n" "  log" "Displays an log of the last operation."
-  printf "%-8s\\t%s\\n" "  share-log" "Generates an hastebin link of the last operation."
-  printf "%-8s\\t%s\\n" "  show-installed" "Generates a list of installed suites."
-  printf "\\n"
-  printf "available optional [options]:\\n"
-  printf "%-10s\\t%s\\n" " -Y | --accept" "Accept defaults on scripts that allows this."
-  printf "%-10s\\t%s\\n" " -F | --force" "Force run an script, this is useful if you need to reinstall a package."
-  printf "%-10s\\t%s\\n" " -D | --debug" "This will output every comand to the console."
-  printf "%-10s\\t%s\\n" " -B | --beta" "This will install the current beta version if implemented."
-  printf "%-10s\\t%s\\n" " --dev" "This will install the current development version if implemented."
-  printf "\\n"
-  printf "other [command] available:\\n"
-  printf "%-10s\\t%s\\n" " -V | --version" "Prints the version of hassbian-config"
-  printf "%-10s\\t%s\\n" " -H | --help" "Shows this help"
-  printf "\\n"
-  return 0
-}
+# Loggfile for 'hassbian-config' operations.
+declare HASSBIAN_LOG_FILE='/tmp/hassbian.log'
 
-function show-suite-info {
-  source $SUITE_INSTALL_DIR/"$1".sh
-  "$1"-show-short-info
-  return 0
-}
+# Suite directory for 'hassbian-config'.
+readonly HASSBIAN_SUITE_DIR='/opt/hassbian/suites'
 
-function get-all-suite-installers {
-  ALLSUITES=$(find $SUITE_INSTALL_DIR/ -maxdepth 1 -type f | sort | awk -F'/' ' {print $NF}' | awk -F. '{print $1}')
-  echo "$ALLSUITES"
-  return 0
-}
+# Helper scripts directory
+readonly HASSBIAN_HELPERS_DIR='/opt/hassbian/helpers'
 
-function show-suites {
-  printf "This is a list over all suites in hassbian-config\\n"
-  printf "If a \\e[1msuite\\e[0m has \\e[32mgreen color\\e[0m in the name, you have already installed it.\\n"
-  printf "\\n"
-  printf "Install scripts: (Usage 'sudo hassbian-config install \\e[1msuite\\e[0m')\\n"
-  installers=$(get-all-suite-installers)
-  for i in $installers
-  do
-    if [ -f $SUITE_CONTROL_DIR/"$i" ]; then
-      SUITESTATE=$(grep "SCRIPTSTATE" $SUITE_CONTROL_DIR/"$i" | awk -F'=' '{print $2}')
-    else
-      SUITESTATE=""
-    fi
-    INSTALLER=$(grep "$i"-install-package $SUITE_INSTALL_DIR/"$i".sh)
-    if [ "$INSTALLER" != "" ]; then
-      if [ "$SUITESTATE" == "installed" ]; then
-        printf "\\e[1m\\e[32m%-20s\\e[0m %s\\n" "$i" "$(show-suite-info "$i")"
-      else
-        printf "\\e[1m%-20s\\e[0m %s\\n" "$i" "$(show-suite-info "$i")"
-      fi
-    fi
-  done
-  printf "\\n"
-  printf "Upgrade scripts: (Usage 'sudo hassbian-config upgrade \\e[1msuite\\e[0m')\\n"
-  for i in $installers
-  do
-    UPGRADE=$(grep "$i"-upgrade-package $SUITE_INSTALL_DIR/"$i".sh)
-    if [ "$UPGRADE" != "" ]; then
-      printf "\\e[1m%-20s\\e[0m %s\\n" "$i" "$(show-suite-info "$i")"
-    fi
-  done
-  printf "\\n"
-  printf "To view more info about a suite type: 'hassbian-config show \\e[1msuite\\e[0m\\n"
-  return 0
-}
+# Controll directory for 'hassbian-config'.
+readonly HASSBIAN_CONTROL_DIR='/srv/homeassistant/hassbian/control'
 
-function show-suite-long-info {
-  source $SUITE_INSTALL_DIR/"$1".sh
-  "$1"-show-short-info
-  "$1"-show-long-info
-  "$1"-show-copyright-info
-  return 0
-}
+# Home Assistant venv directory.
+readonly HOME_ASSISTANT_VENV='/srv/homeassistant'
 
-function check-permission {
-  if (( EUID != 0 ))
-  then
-    echo "Error: hassbian-config must be run as root (with sudo) for this to be possible"
-    exit 1
-  fi
-  return 0
-}
+#####################################
+#  Runtime flags
+#####################################
 
-function developer-test-pr { # This function fetches a active PR and build a installation package from that and install it on the system.
-    # This should only be used by maintainers to test PR's!
-    check-permission
-    readonly PRNUMBER="$1"
-    readonly INSTALLDIR="/tmp/hassbian_config_install_${PRNUMBER}"
-    if [[ -z "$PRNUMBER" ]]; then
-        echo "Error: Missing PR argument."
-        echo ""
-        echo "Run: bash test_pr.sh PRNUMBER"
-        return 1
-    fi
-    git clone https://github.com/home-assistant/hassbian-scripts.git "$INSTALLDIR"
-    cd "$INSTALLDIR" || return 1
-    git fetch origin +refs/pull/"$PRNUMBER"/merge || return 1
-    git checkout FETCH_HEAD
+# Enabled by adding the --accept flag.
+declare HASSBIAN_RUNTIME_ACCEPT=false
 
-    chmod 755 -R package
-    dpkg-deb --build package/
-    apt install -y "$INSTALLDIR"/package.deb --reinstall --allow-downgrades
+# Enabled by adding the --debug flag.
+declare HASSBIAN_RUNTIME_DEBUG=false
 
-    cd || return 1
-    rm -r "$INSTALLDIR"
-}
+# Enabled by adding the --force flag.
+declare HASSBIAN_RUNTIME_FORCE=false
 
-function raspberry_pi_zero_check {
-## Start check for Raspberry Pi Zero
-if [ "$FORCE" != "true" ]; then
-  REVCODE=$(cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}' | sed 's/^ *//g' | sed 's/ *$//g')
-  if [ "$REVCODE" = "90092" ] || [ "$REVCODE" = "90093" ] || [ "$REVCODE" = "0x9000C1" ] || [ "$REVCODE" = "9000c1" ]; then
-    if [[ "$1" =~ ^(mosquitto|cloud9|zigbee2mqtt)$ ]]; then
-      echo "This suite can't be installed on Raspberry Pi Zero..."
-      exit 0
-    fi
-  fi
-fi
-## End check for Raspberry Pi Zero
+# Enabled by adding the --beta flag.
+declare HASSBIAN_RUNTIME_BETA=false
 
-}
-function share-log {
-  if [ ! -f $LOGFILE ];then
-    echo "No logfile, exiting..."
-    return 0
-  fi
-  if [ "$ACCEPT" == "true" ]; then
-    loglink=$(curl -X POST -s -d "$(cat "$LOGFILE")" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}')
-    if [[ $loglink != *"initial"*  ]]; then
-      echo "$loglink"
-    else
-      echo "There is an issue with your network connection, or with the Hastebin API."
-      echo "Try again later."
-      return 0
-    fi
-  else
-    echo "This will put the output from your last operation on hastebin."
-    echo "This could include sensitive information."
-    echo "If you are unsure about what it contains, you can run 'hassbian-config log' to check."
-    echo -n "Do you want to create an hastebin link? [N/y] : "
-    read -r  RESPONSE
-    if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == "Y" ]; then
-      loglink=$(curl -X POST -s -d "$(cat "$LOGFILE")" https://hastebin.com/documents | awk -F '"' '{print "https://hastebin.com/"$4}')
-      if [[ $loglink != *"initial"*  ]]; then
-        echo "$loglink"
-      else
-        echo
-        echo "There is an issue with your network connection, or with the Hastebin API."
-        echo "Try again later."
-        return 0
-      fi
-    fi
-  fi
-  return 0
-}
+# Enabled by adding the --dev flag.
+declare HASSBIAN_RUNTIME_DEV=false
 
-function run-suite { #This is the function the actually run install/upgrade.
-  source "$SUITE_INSTALL_DIR/$2".sh #Sourcing the script file.
-  "$2"-show-short-info && "$2"-show-copyright-info && printf "\\n" #Prints suite-show-short-info & suite-show-copyright-info to console.
-  if [ "$DEBUG" == "true" ]; then set -x; fi #Activating debug if --debug is used.
-  "$2"-"$1"-package #Running the script function install/upgrade SUITE.
-  RETURN=("$?") # Return value after script execution.
-  if [ "$DEBUG" == "true" ]; then set +x; fi #Deactivating debug if --debug is used.
-  if [ "$RETURN" == "0" ]; then STATE="installed"; else printf "\\e[0mIf you have issues with this script, please say something in the #devs_hassbian channel on Discord.\\n" && STATE="failed"; fi #Set suite state to installed if 0 is returned, failed otherwise.
-  if [ "$1" == "remove" ]; then 
-    rm "$SUITE_CONTROL_DIR/$2"
-  else
-    echo "SCRIPTSTATE=$STATE" > "$SUITE_CONTROL_DIR/$2" #Setting status in control file.
-  fi
-  return 0
-}
+# Enabled by adding the --ci flag.
+declare  HASSBIAN_RUNTIME_CI=false
 
-function install-suite { #This function do checks if we can/want to install.
-  check-permission
-  raspberry_pi_zero_check "$1"
-  INSTALL=$(grep "$1"-install-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has install function.
-  SUITESTATE=$(if [ -f "$SUITE_CONTROL_DIR/$1" ]; then grep "SCRIPTSTATE" "$SUITE_CONTROL_DIR/$1" | awk -F'=' '{print $2}'; else echo ""; fi) #Checking current suite state.
-  if [ "$FORCE" == "true" ]; then #Go straight to run-suite if --force is used.
-    run-suite install "$1" | tee "$LOGFILE" #Run if -F/-f/--force is used.
-  elif [ "$SUITESTATE" == "installed" ] || [ "$INSTALL" == "" ]; then #Try redirect to upgrade script if already installed.
-    printf "%s is already installed or install script is not available...\\n" "$1"
-    UPGRADE=$(grep "$1"-upgrade-package "$SUITE_INSTALL_DIR/$1".sh)
-    if [ "$UPGRADE" == "" ]; then
-      printf "Upgrade script is not available...\\n\\nYou can force run the install script like this:\\nsudo hassbian-config install %s --force\\n" "$1"
-      return 0
-    fi
-    printf "upgrade script for %s found, running that...\\n\\n" "$1"
-    run-suite upgrade "$1" | tee "$LOGFILE" #Redirects to upgrade script.
-  else
-    run-suite install "$1" | tee "$LOGFILE" #This is the default run, if no options is used.
-  fi
-  return 0
-}
+# Enabled by adding '=X.X.X' at the end of the suitename.
+declare HASSBIAN_RUNTIME_TARGET_VERSION
 
-function upgrade-suite { #This function do checks if we can upgrade.
-  check-permission
-  UPGRADE=$(grep "$1"-upgrade-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has upgrade function.
-  if [ "$UPGRADE" == "" ]; then
-    printf "Upgrade script is not available...\\n\\nYou can force run the install script like this:\\nsudo hassbian-config install %s --force\\n" "$1"
-    return 0
-  fi
-  run-suite upgrade "$1" | tee "$LOGFILE" #This is the default run.
-  return 0
-}
+#####################################
+#  Echoable messages
+#####################################
 
-function remove-suite { #This function do checks if we can remove.
-  check-permission
-  REMOVABLE=$(grep "$1"-remove-package "$SUITE_INSTALL_DIR/$1".sh) #Checking if suite has remove function.
-  if [ "$REMOVABLE" == "" ]; then
-    printf "Remove function not avaialable for this suite.\\n"
-    return 0
-  fi
-  run-suite remove "$1" | tee "$LOGFILE" #This is the default run.
-  return 0
-}
+readonly ECHO_HELPER_WARNING="hassbian-config helper script. Do not run directly, use 'hassbian-config' instead."
+readonly ECHO_ACTION_ERROR="If you have issues with this script, please say something in the #hassbian channel on Discord."
 
-function verify-suite {
-  if [ -f "$SUITE_INSTALL_DIR/$1.sh" ]; then
-    retval=0 # beware - 0 is true in bash.
-  else
-    retval=1
-  fi
-  return $retval
-}
+#####################################
+# Source links (alphabetical order)
+#####################################
+source "$HASSBIAN_HELPERS_DIR"/info/general
+source "$HASSBIAN_HELPERS_DIR"/info/version
+source "$HASSBIAN_HELPERS_DIR"/suite/action
+source "$HASSBIAN_HELPERS_DIR"/suite/helper
+source "$HASSBIAN_HELPERS_DIR"/suite/info
+source "$HASSBIAN_HELPERS_DIR"/suite/verify
+source "$HASSBIAN_HELPERS_DIR"/developer
+source "$HASSBIAN_HELPERS_DIR"/input
+source "$HASSBIAN_HELPERS_DIR"/log
+source "$HASSBIAN_HELPERS_DIR"/workaround
 
-function show-installed-suites {
-  INSTALLERS=$(find $SUITE_INSTALL_DIR/ -maxdepth 1 -type f | sort | awk -F'/' ' {print $NF}' | awk -F. '{print $1}')
-  echo "These suites are installed:"
-  for i in $INSTALLERS
-  do
-  if [ -f "$SUITE_CONTROL_DIR/$i" ]; then
-    STATE=$(grep "SCRIPTSTATE=installed" $SUITE_CONTROL_DIR/"$i" | awk -F'=' '{print $2}')
-    if [ "$STATE" != "" ]; then
-      echo "$i"
-    fi
-  fi
-  done
-  return 0
-}
-
-if [ $# -lt 1 ]; then
-  usage
-  exit 0
-fi
-
-while [[ $# -gt 0 ]]
-do
-COMMAND=$1
-SUITE=$2
-
-case $COMMAND in
-  "-F"|"-f"|"--force")
-    FORCE="true"
-    shift # past argument
-    ;;
-  "-Y"|"-y"|"--accept")
-    ACCEPT="true"
-    shift # past argument
-    ;;
-  "-D"|"--debug")
-    DEBUG="true"
-    shift # past argument
-    ;;
-  "--dev")
-    DEV="true"
-    shift # past argument
-    ;;
-  "-B"|"--beta")
-    BETA="true"
-    shift # past argument
-    ;;
-  "show")
-    if [ "$SUITE" != "" ]; then
-      if verify-suite "$SUITE"; then
-        RUN="show-suite-long-info $SUITE"
-      else
-        RUN="echo suite $SUITE doesn't exist."
-      fi
-    else
-      RUN="show-suites"
-    fi
-    shift # past argument
-    shift # past value
-    ;;
-  "install")
-    if verify-suite "$SUITE"; then
-      RUN="install-suite $SUITE"
-    else
-      RUN="echo suite $SUITE doesn't exist."
-    fi
-    shift # past argument
-    shift # past value
-    ;;
-  "upgrade")
-    if [[ "$SUITE" = *"="* ]]; then
-      VERSIONNUMBER=$(echo "$SUITE" | awk -F'=' '{print $2}')
-      SUITE=$(echo "$SUITE" | awk -F'=' '{print $1}')
-    else
-      VERSIONNUMBER=""
-    fi
-    if verify-suite "$SUITE"; then
-      RUN="upgrade-suite $SUITE"
-    else
-      RUN="echo suite $SUITE doesn't exist."
-    fi
-    shift # past argument
-    shift # past value
-    ;;
-  "remove")
-    if verify-suite "$SUITE"; then
-      RUN="remove-suite $SUITE"
-    else
-      RUN="echo suite $SUITE doesn't exist."
-    fi
-    shift # past argument
-    shift # past value
-    ;;
-  "developer-test-pr")
-    RUN="developer-test-pr $2"
-    shift # past argument
-    shift # past value
-    ;;
-  "log")
-    RUN="more $LOGFILE"
-    shift # past argument
-    ;;
-  "share-log")
-    RUN="share-log"
-    shift # past argument
-    ;;
-  "-V"|"--version")
-    VERSION=$(dpkg -s hassbian-scripts | grep 'Version:' | awk '{print $2}')
-    RUN="echo $VERSION"
-    shift # past argument
-    ;;
-  "show-installed")
-    RUN="show-installed-suites"
-    shift # past argument
-    ;;
-  "-H"|"--help")
-    RUN="help"
-    shift # past argument
-    ;;
-  *)
-    RUN="usage"
-    shift # past argument
-  ;;
-esac
-done
-if [ "$RUN" != "" ]; then
-  $RUN
-  exit 0
-fi
-exit 0
+# the CLI is dependant on other sources so we load that at the end.
+source "$HASSBIAN_HELPERS_DIR"/cli

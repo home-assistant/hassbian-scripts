@@ -1,0 +1,22 @@
+#!/bin/bash
+# Helper script for using LE certificates with Webterminal (shellinabox)
+declare certdir
+declare domain
+
+if [ -d "/etc/letsencrypt/live" ]; then
+  certdir="/etc/letsencrypt/live/"
+elif [ -d "/home/homeassistant/dehydrated/certs" ]; then
+  certdir="/home/homeassistant/dehydrated/certs/"
+else
+  echo "Could not find a valid cerification directory..."
+  return 1
+fi
+domain=$(ls "$certdir")
+cat "$certdir$domain/fullchain.pem" "$certdir$domain/privkey.pem" > /var/lib/shellinabox/certificate-"$domain".pem
+
+chown shellinabox:shellinabox -R /var/lib/shellinabox/
+
+service shellinabox reload
+service shellinabox stop
+service shellinabox start
+exit 0

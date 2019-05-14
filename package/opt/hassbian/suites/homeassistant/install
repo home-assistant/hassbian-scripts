@@ -1,0 +1,58 @@
+#!/bin/bash
+# 
+# Installation script for Hassbian suite: Home Assistant
+#
+
+function install {
+  local ip_address
+  local validation
+  local pythonversion
+
+  # Needs to be run for SSL Certificates to function
+  echo "Checking generation of local certificates "
+  c_rehash
+    
+  # Check if migration is needed.
+  if [ "$(hassbian.info.version.osreleasename)" != "buster"  ]; then
+    source "$HASSBIAN_SUITE_DIR/homeassistant/python-migration"
+    python-migration true # 'true' forces the migration to run.
+  fi
+
+  echo "Setting correct permissions"
+  chown homeassistant:homeassistant -R "$HOME_ASSISTANT_VENV"
+
+  pythonversion=$(hassbian.info.version.python)
+
+  echo "Creating Home Assistant venv"
+  sudo -u homeassistant -H /bin/bash << EOF
+    python"$pythonversion" -m venv $HOME_ASSISTANT_VENV
+EOF
+
+  hassbian.suite.helper.install.pip homeassistant
+
+  echo "Enabling Home Assistant service"
+  systemctl enable home-assistant@homeassistant.service
+  sync
+
+  echo "Disabling the Home Assistant install script"
+  systemctl disable install_homeassistant
+  systemctl daemon-reload
+
+  echo "Starting Home Assistant"
+  systemctl start home-assistant@homeassistant.service
+
+  echo "Checking the installation..."
+  validation=$(hassbian.suite.verify.service home-assistant@homeassistant.service)
+  if [ "$validation" == "0" ]; then
+    ip_address=$(hassbian.info.general.ipaddress)
+    hassbian.suite.helper.action.success
+    echo "Your Home Assistant installation is running at $ip_address:8123 or if preferred http://hassbian.local:8123"
+    echo "To continue have a look at https://home-assistant.io/getting-started/configuration/"
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

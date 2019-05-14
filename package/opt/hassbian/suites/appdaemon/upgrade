@@ -1,0 +1,43 @@
+#!/bin/bash
+# 
+# Upgrade script for Hassbian suite: AppDaemon
+#
+
+function upgrade {
+  local validation
+
+  echo "Stopping AppDaemon service..."
+  systemctl stop appdaemon@homeassistant.service
+
+  echo "Changing to the homeassistant user..."
+  sudo -u homeassistant -H /bin/bash << EOF
+    echo "Changing to AppDaemon venv..."
+    source /srv/appdaemon/bin/activate
+
+    echo "Installing latest version of AppDaemon..."
+    python -m pip install --upgrade setuptools wheel
+    python -m pip install --upgrade appdaemon
+
+    source "$HASSBIAN_HELPERS_DIR"/workaround
+    hassbian.workaround.check appdaemon
+
+    echo "Deactivating virtualenv..."
+    deactivate
+EOF
+
+  echo "Starting AppDaemon service..."
+  systemctl start appdaemon@homeassistant.service
+
+  validation=$(hassbian.suite.verify.service appdaemon@homeassistant.service)
+  if [ "$validation" == "0" ]; then
+    hassbian.suite.helper.action.success
+    echo "To continue have a look at http://appdaemon.readthedocs.io/en/latest/"
+
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

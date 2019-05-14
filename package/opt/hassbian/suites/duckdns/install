@@ -1,0 +1,92 @@
+#!/bin/bash
+# 
+# Installation script for Hassbian suite: DuckDNS
+#
+
+function install {
+  local DUCKDNS_DOMAIN
+  local DUCKDNS_TOKEN
+  local SSL_RESPONSE
+  local certvalidation
+  local dnsvalidation
+
+  hassbian.input.info "Please take a moment to setup autorenewal of duckdns, "\
+    "if no choice is made the installation will exit."
+
+  DUCKDNS_DOMAIN=$(hassbian.input.text "What is your DuckDNS subdomain?")
+  if [ ! "$DUCKDNS_DOMAIN" ]; then
+    exit
+  fi
+  if [[ $DUCKDNS_DOMAIN = *"duckdns"* ]]; then
+    DUCKDNS_DOMAIN=$(echo "$DUCKDNS_DOMAIN" | cut -d\. -f1)
+  fi
+  if [[ $DUCKDNS_DOMAIN = *"//"* ]]; then
+    DUCKDNS_DOMAIN=$(echo "$DUCKDNS_DOMAIN" | cut -d/ -f3)
+  fi
+
+  DUCKDNS_TOKEN=$(hassbian.input.text "What is your DuckDNS token?")
+  if [ ! "$DUCKDNS_TOKEN" ]; then
+    exit
+  fi
+
+  SSL_RESPONSE=$(hassbian.input.bool "Do you want to generate certificates to use SSL(https)?")
+
+  echo "Changing to homeassistant user..."
+  sudo -u homeassistant -H /bin/bash << EOF
+  cd
+  if [ "$SSL_RESPONSE" == "0" ]; then
+    git clone https://github.com/lukas2511/dehydrated.git
+    cd dehydrated  || exit
+    echo $DUCKDNS_DOMAIN".duckdns.org" | tee domains.txt
+    echo "CHALLENGETYPE='dns-01'" | tee -a config
+    echo "HOOK='./hook.sh'" | tee -a config
+    cp $HASSBIAN_SUITE_DIR/duckdns/files/hook.sh ./hook.sh
+    sed -i 's/myhome/'$DUCKDNS_DOMAIN'/g' ./hook.sh
+    sed -i 's/your-duckdns-token/'$DUCKDNS_TOKEN'/g' ./hook.sh
+    chmod 755 hook.sh
+    ./dehydrated --register  --accept-terms
+    ./dehydrated -c
+  fi
+
+  echo "Creating duckdns folder..."
+  cd /home/homeassistant || exit
+  mkdir duckdns
+  cd duckdns || exit
+EOF
+
+  echo "Creating cron jobs..."
+  cp /"$HASSBIAN_SUITE_DIR"/duckdns/files/cron/duckdns /etc/cron.hourly/duckdns
+  sed -i "s,%%DOMAIN%%,${DUCKDNS_DOMAIN},g" /etc/cron.hourly/duckdns
+  sed -i "s,%%TOKEN%%,${DUCKDNS_TOKEN},g" /etc/cron.hourly/duckdns
+  chmod +x /etc/cron.hourly/duckdns
+
+  if [ "$SSL_RESPONSE" == "0" ]; then
+    cp "$HASSBIAN_SUITE_DIR"/duckdns/files/cron/dehydrated /etc/cron.daily/dehydrated
+    chmod +x /etc/cron.daily/dehydrated
+  fi
+
+  echo "Restarting cron service..."
+  systemctl restart cron.service
+
+  echo "Checking the installation..."
+  if [ "$SSL_RESPONSE" == "0" ]; then
+    certvalidation=$(find /home/homeassistant/dehydrated/certs/"$DUCKDNS_DOMAIN".duckdns.org/ -maxdepth 1 -type f | sort | grep privkey)
+  else
+    certvalidation="The Force will be with you. Always."
+  fi
+
+  if [ ! -z "${certvalidation}" ]; then
+    hassbian.hassbian.suite.helper.action.success
+    if [ "$SSL_RESPONSE" == "0" ]; then
+      echo "Remember to update your configuration.yaml to take advantage of SSL!"
+      echo "Documentation for this can be found here <https://home-assistant.io/components/http/>."
+      echo
+    fi
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING" 

@@ -1,0 +1,53 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+
+# shellcheck disable=SC2034
+
+function hassbian.suite.verify.service {
+  # Example usage: 
+  # hassbian.suite.verify.service home-assistant@homeassistant.service
+  local servicename
+  local retrunvalue
+
+  servicename="$1"
+  retrunvalue=1
+
+  if [ "$HASSBIAN_RUNTIME_CI" = true ];then
+    printf "0"
+    return
+  fi
+
+  for i in {1..5}; do
+    if [ "$(systemctl is-active "$servicename")" == "active" ]; then
+      retrunvalue=0
+      break
+    fi
+    sleep 1s
+  done
+  printf "%s" "$retrunvalue"
+}
+
+function hassbian.suite.verify.pgrep {
+  # Example usage: 
+  # hassbian.suite.verify.pgrep pihole
+  local prosessename
+  local retrunvalue
+
+  prosessename="$1"
+  retrunvalue=1
+
+  if [ "$HASSBIAN_RUNTIME_CI" = true ];then
+    printf "0"
+    return
+  fi
+
+  for i in {1..5}; do
+    if [ ! -z  "$(pgrep -f "$prosessename")" ]; then
+      retrunvalue=0
+      break
+    fi
+      sleep 1s
+  done
+  printf "%s" "$retrunvalue"
+}
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

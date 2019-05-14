@@ -1,0 +1,18 @@
+#!/bin/bash
+# 
+# Upgrade script for Hassbian suite: Hassbian
+#
+
+function upgrade {
+  echo "Updating package list"
+  apt update
+
+  echo "Upgrading base operating system"
+  apt upgrade -y
+
+  hassbian.suite.helper.action.success
+  echo "Note that you may need to reboot the raspberry Pi for some updates to take effect."
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

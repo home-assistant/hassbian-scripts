@@ -1,0 +1,19 @@
+#!/bin/bash
+# 
+# Uninstallation script for Hassbian suite: Hassbian manager
+#
+
+function remove {
+  echo "Removing Hassbian manager..."
+  systemctl stop hassbian-manager@homeassistant.service
+  systemctl disable hassbian-manager@homeassistant.service
+  rm /etc/systemd/system/hassbian-manager@homeassistant.service
+  sync
+
+  echo "Removing Hassbian manager"
+  python3 -m pip uninstall --yes pyhassbian
+
+  hassbian.suite.helper.action.success
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

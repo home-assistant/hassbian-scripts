@@ -1,0 +1,40 @@
+#!/bin/bash
+# 
+# Installation script for Hassbian suite: Zigbee2mqtt
+#
+
+function install {
+  local validation
+
+  hassbian.suite.helper.install.node
+
+  echo "Cloning Zigbee2mqtt git repository"
+  git clone https://github.com/Koenkk/zigbee2mqtt.git /opt/zigbee2mqtt
+  chown -R pi:pi /opt/zigbee2mqtt
+
+  echo "Running install. This might take a while and can produce som expected errors"
+  cd /opt/zigbee2mqtt || exit
+  su pi -c "npm install"
+
+  echo "Creating service file zigbee2mqtt.service"
+  cp "$HASSBIAN_SUITE_DIR"/zigbee2mqtt/files/zigbee2mqtt.service /etc/systemd/system/zigbee2mqtt.service
+
+
+  echo "Checking the installation..."
+  if [ -f /opt/zigbee2mqtt/data/configuration.yaml ]; then
+    validation="ok"
+  fi
+
+  if [ ! -z "${validation}" ]; then
+    hassbian.suite.helper.action.success
+    echo "Update of configuration.yaml is required found at /opt/zigbee2mqtt/data/"
+    echo "Some further configuration is required and details can be found here https://github.com/Koenkk/zigbee2mqtt/wiki/Running-the-bridge "
+    echo "Service can be started after configuration but running sudo systemctl start zigbee2mqtt"
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

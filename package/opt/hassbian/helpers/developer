@@ -1,0 +1,228 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+
+function hassbian.developer.test.pr {
+  # This function fetches a active PR and build a installation package from that and install it on the system.
+  # This should only be used by maintainers to test PR's!
+  local INSTALLDIR
+  local PRNUMBER
+
+  # Root check
+  hassbian.info.general.rootcheck
+
+  PRNUMBER="$1"
+  INSTALLDIR="/tmp/hassbian_config_install_${PRNUMBER}"
+
+  if [[ -z "$PRNUMBER" ]]; then
+    echo "Error: Missing PR argument.
+
+    Run: hassbian-config developer-test-pr PRNUMBER"
+    exit
+  fi
+
+  git clone https://github.com/home-assistant/hassbian-scripts.git "$INSTALLDIR"
+
+  cd "$INSTALLDIR" || return 1
+
+  git fetch origin +refs/pull/"$PRNUMBER"/merge || return 1
+  git checkout FETCH_HEAD
+
+  chmod 755 -R package
+  dpkg-deb --build package/
+
+  apt install -y "$INSTALLDIR"/package.deb --reinstall --allow-downgrades
+
+  cd || return 1
+
+  rm -R "$INSTALLDIR"
+}
+
+function hassbian.developer.test.package {
+  # Run a test on all functions.
+  # This should only be used by maintainers!
+  local -i pass=0
+  local -i fail=0
+  local function
+  local -a operations
+  local -a failedtests
+  local returncode
+  local testsuite=template
+  local test
+  local unattended
+
+
+  if [ "$HASSBIAN_RUNTIME_CI" = true ];then
+    # Only try this if running in a CI env.
+
+    HASSBIAN_RUNTIME_ACCEPT=true
+
+    echo "
+    ------------------------------------------
+    TESTING HOMEASSISTANT INSTALLATION
+    ------------------------------------------
+    "
+    printf "\\e[36mTesting Suite: 'homeassistant'.................."
+    test=$(hassbian.suite.action install homeassistant)
+    if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
+      ((pass+=1))
+      printf "\\e[32mPASS"
+    else
+      ((fail+=1))
+      failedtests+=("hassbian.suite.action install homeassistant")
+      printf "\\e[31mFAIL"
+      printf "\n%s\\n" "$test"
+    fi
+    printf "\\e[0m\\n"
+  fi
+
+  echo "
+  ------------------------------------------
+  TESTING HASSBIAN-CONFIG FUNCTIONS
+  ------------------------------------------
+  "
+
+  for function in $(declare -F | grep "hassbian\\."); do
+    if [[ "$function" = *"."* ]]; then
+      printf "\\e[36mTesting '%s'..............." "$function"
+
+      # Exclude functions from test:
+      if [ "$function" == "hassbian.developer.test.package" ] || \
+        [ "$function" == "hassbian.developer.test.pr" ] || \
+        [ "$function" == "hassbian.input.bool" ] || \
+        [ "$function" == "hassbian.input.info" ] || \
+        [ "$function" == "hassbian.input.text" ] || \
+        [ "$function" == "hassbian.log.share" ] || \
+        [ "$function" == "hassbian.suite.action.execute" ] || \
+        [ "$function" == "hassbian.suite.action" ] || \
+        [ "$function" == "hassbian.suite.helper.blockcheck" ] || \
+        [ "$function" == "hassbian.suite.helper.exist" ] || \
+        [ "$function" == "hassbian.suite.helper.install.node" ] || \
+        [ "$function" == "hassbian.suite.helper.manifest" ] || \
+        [ "$function" == "hassbian.suite.info.installed" ] || \
+        [ "$function" == "hassbian.suite.info.print" ] || \
+        [ "$function" == "hassbian.workaround.pip.typeerror" ]; then
+        printf "\\e[33mSKIP\\n"
+
+      # Run tests:
+      else
+        test=$("$function" >> /dev/null 2>&1)
+        returncode="$?"
+        if [ "$returncode" == "0" ];then
+          ((pass+=1))
+          printf "\\e[32mPASS\\n"
+        else
+          ((fail+=1))
+          failedtests+=("$function")
+          printf "\\e[31mFAIL\\n"
+          printf "%s\\n" "$test"
+        fi
+      fi
+    fi
+  done
+  printf "\\e[0m\\n"
+
+  echo "
+  ------------------------------------------
+  TESTING HASSBIAN-CONFIG CLI OPERATIONS
+  ------------------------------------------
+  "
+  operations=()
+  operations+=('--version' '-V')
+  operations+=('--help' '-H')
+  operations+=('show-installed')
+  operations+=('systeminfo')
+  operations+=('log')
+
+  for operation in "${operations[@]}"; do
+    printf "\\e[36mTesting 'hassbian-config %s'.................." "$operation"
+    hassbian-config "$operation" >> /dev/null 2>&1
+    returncode="$?"
+    if [ "$returncode" == "0" ];then
+      ((pass+=1))
+      printf "\\e[32mPASS\\n"
+    else
+      ((fail+=1))
+      failedtests+=("hassbian-config $operation")
+      printf "\\e[31mFAIL\\n"
+      printf "%s\\n" "$test"
+    fi
+  done
+  printf "\\e[0m\\n"
+
+  if [ "$HASSBIAN_RUNTIME_CI" = true ];then
+    # Only try this if running in a CI env.
+    echo "
+    ------------------------------------------
+    TESTING HASSBIAN-CONFIG SUITES
+    ------------------------------------------
+    "
+    for suite in $(hassbian.info.general.all_suites); do
+      printf "\\e[36mTesting Suite: '%s'.................." "$suite"
+      unattended=$(hassbian.suite.helper.manifest "$suite" unattended)
+      if [ "$unattended" == "true" ];then
+        # Install test...
+        if [ "$suite" == "homeassistant" ]; then
+          printf "\\e[33mSKIP(install)\\e[36m..."
+        else
+          test=$(hassbian.suite.action install "$suite")
+          if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
+            ((pass+=1))
+            printf "\\e[32mPASS(install)\\e[36m..."
+          else
+            ((fail+=1))
+            failedtests+=("hassbian.suite.action install $suite")
+            printf "\\e[31mFAIL(install)\\e[36m..."
+            printf "\\n%s\\n" "$test"
+          fi
+        fi
+
+        # Upgrade test...
+        test=$(hassbian.suite.action upgrade "$suite")
+        if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
+          ((pass+=1))
+          printf "\\e[32mPASS(upgrade)\\e[36m..."
+        else
+          ((fail+=1))
+          failedtests+=("hassbian.suite.action upgrade $suite")
+          printf "\\e[31mFAIL(upgrade)\\e[36m..."
+          printf "\\n%s\\n" "$test"
+        fi
+
+        # Remove test...
+        test=$(hassbian.suite.action remove "$suite")
+        if [ ! -z "$(echo $test | grep 'Operation completed...')" ];then
+          ((pass+=1))
+          printf "\\e[32mPASS(remove)\\e[36m"
+        else
+          ((fail+=1))
+          failedtests+=("hassbian.suite.action remove $suite")
+          printf "\\e[31mFAIL(remove)\\e[36m"
+          printf "\\n%s\\n" "$test"
+        fi
+      else
+        printf "\\e[33mSKIP"
+      fi
+      printf "\\n"
+    done
+    printf "\\e[0m\\n"
+  fi
+
+ # Testing is done.
+  echo "
+  Total passed:......$pass
+  Total failed:......$fail
+  "
+
+  # Exit the test
+  if [ "$fail" == "0" ];then
+    exit 0
+  else
+    printf "\\e[31mFailed tests:\\n"
+    for test in "${failedtests[@]}"; do
+      printf "\\e[31m  %s\\n" "$test"
+    done
+    printf "\\e[0m\\n"
+    exit 1
+  fi
+}
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

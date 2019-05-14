@@ -1,0 +1,10 @@
+{
+  "name": "Home Assistant",
+  "author": "Lindqvist <https://github.com/Landrash>",
+  "short_description": "Home Assistant install script for Hassbian.",
+  "long_description": "Installs the base homeassistant package onto this system.",
+  "unattended": true,
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

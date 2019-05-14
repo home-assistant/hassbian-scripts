@@ -1,0 +1,25 @@
+#!/bin/bash
+# 
+# Installation script for Hassbian suite: Hue
+#
+
+function install {
+  local pythonlocation
+
+  echo "Setting permissions for Python..."
+  pythonlocation=$(hassbian.info.general.python.location)
+  setcap 'cap_net_bind_service=+ep' "$pythonlocation"
+
+  echo "Checking the installation..."
+  validation=$(getcap "$pythonlocation" | awk -F'= ' '{print $NF}')
+  if [ ! -z "${validation}" ]; then
+    hassbian.suite.helper.action.success
+    echo "To continue have a look at https://home-assistant.io/components/emulated_hue/"
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

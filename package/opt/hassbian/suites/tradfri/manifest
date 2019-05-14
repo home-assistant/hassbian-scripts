@@ -1,0 +1,9 @@
+{
+  "name": "Tradfri",
+  "author": "Landrash <https://github.com/Landrash>",
+  "short_description": "Tradfri install script for Hassbian",
+  "long_description": "Installs the libraries needed to control IKEA Tradfri devices from this Pi.",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

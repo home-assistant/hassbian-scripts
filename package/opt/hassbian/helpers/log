@@ -1,0 +1,50 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+
+function hassbian.log.show {
+  # Show the logfile in the console.
+  more "$HASSBIAN_LOG_FILE"
+  if [ "$?" != "0" ];then
+    return 1
+  fi
+}
+
+
+function hassbian.log.share {
+  # Upload the logfile to hastebin.
+  local loglink
+  local response
+
+  if [ ! -f "$HASSBIAN_LOG_FILE" ];then
+    echo "No logfile exists, exiting..."
+  fi
+
+  if [ "$HASSBIAN_RUNTIME_ACCEPT" = false ]; then
+    local message="
+    This will put the output from your last operation on hastebin.
+    This could include sensitive information.
+    If you are unsure about what it contains, you can run 'hassbian-config log' to check.
+
+    Do you want to create an hastebin link?: "
+
+    response=$(hassbian.input.bool "$message")
+
+    if [ "$response" == "1" ]; then
+      return
+    fi
+  fi
+  echo "Publishing logfile to hastebin..."
+  loglink=$(curl -X POST -s -d "$(cat "$HASSBIAN_LOG_FILE")" \
+    https://hastebin.com/documents | \
+    awk -F '"' '{print "https://hastebin.com/"$4}')
+
+  if [[ $loglink != *"initial"*  ]]; then
+    echo "$loglink"
+  else
+    echo "
+    There is an issue with your network connection, or with the Hastebin API.
+    Try again later."
+  fi
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

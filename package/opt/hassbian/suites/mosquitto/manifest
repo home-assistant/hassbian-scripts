@@ -1,0 +1,10 @@
+{
+  "name": "Mosquitto",
+  "author": "Landrash <https://github.com/Landrash>",
+  "short_description": "Mosquitto Installer for Hassbian.",
+  "long_description": "Installs the Mosquitto package for setting up a local MQTT server.",
+  "unattended": true,
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

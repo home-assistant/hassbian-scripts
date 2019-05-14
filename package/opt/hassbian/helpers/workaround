@@ -1,0 +1,44 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+#  This particular helper is here to give us some flexibility.
+
+# shellcheck disable=SC2086,SC2124
+
+# Loggfile for 'hassbian-config' operations.
+HASSBIAN_LOG_FILE='/tmp/hassbian.log'
+
+function hassbian.workaround.check {
+  # Check the logfile for known issues.
+  local logcontent
+  local packages
+
+  packages=$@
+
+  logcontent=$(cat "$HASSBIAN_LOG_FILE")
+
+  if [[ "$logcontent" == *"unsupported operand type(s) for -=: 'Retry' and 'int'"* ]]; then
+    hassbian.workaround.pip.typeerror $packages
+  fi
+}
+
+
+
+function hassbian.workaround.pip.typeerror {
+  # Workaround for known debian issue.
+  # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=880472
+  local packages
+
+  packages=$@
+
+  echo "Found known issue about the TypeError above... applying fix..."
+  wget -O /tmp/get-pypi.py https://bootstrap.pypa.io/get-pip.py
+  python /tmp/get-pypi.py
+
+  echo "Fix have been applied to the system, trying to run the previous command again..."
+
+  echo "Installing Python packages..."
+  python -m pip install --upgrade $packages
+  
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

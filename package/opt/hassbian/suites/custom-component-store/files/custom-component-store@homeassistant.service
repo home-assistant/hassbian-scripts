@@ -1,0 +1,16 @@
+#
+# Service file for systems with systemd to run custom-component-store as the homeassistant user.
+#
+
+[Unit]
+Description=custom-component-store for %i
+After=network.target
+
+[Service]
+Type=simple
+User=%i
+ExecStart=/srv/homeassistant/bin/componentstore --port 8120 --nocache --username %%USERNAME%% --password %%PASSWORD%% --ha_path /home/homeassistant/.homeassistant
+SendSIGKILL=no
+
+[Install]
+WantedBy=multi-user.target

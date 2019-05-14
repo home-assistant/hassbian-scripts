@@ -1,0 +1,9 @@
+{
+  "name": "Pi-Hole",
+  "author": "Landrash <https://github.com/landrash>",
+  "short_description": "Downloads and runs the Pi-hole install script.",
+  "long_description": "This script downloads and runs the Pi-hole install script.\\nAll credit for the install script goes to the Pi-hole authors.",
+  "blocked": true,
+  "blocked_releasename": "buster",
+  "blocked_message": "Due to an upstream issue with pihole we can not install this suite at this time.\\nFor more information about this, see https://github.com/home-assistant/hassbian-scripts/issues/286"
+}

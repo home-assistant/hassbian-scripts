@@ -1,0 +1,108 @@
+#!/bin/bash
+# 
+# Upgrade script for Hassbian suite: Template
+#
+
+function upgrade {
+  local ip_address
+  local validation
+  local pythonversion
+  local infomsg
+  local response
+  local newversion
+  local current_version
+  local config_check_lines
+
+  # Check if migration is needed.
+  source "$HASSBIAN_SUITE_DIR/homeassistant/python-migration"
+  python-migration
+
+  if [ "$HASSBIAN_RUNTIME_DEV" = true  ]; then
+    infomsg="This script downloads Home Assistant directly from the dev branch on Github.
+    you can use this to be on the 'bleeding edge of the development of Home Assistant.'
+    This is not recommended for daily use.
+
+    Are you really sure you want to continue?"
+    response=$(hassbian.input.bool "$infomsg")
+    if [ "$response" != "0" ]; then
+      hassbian.suite.helper.action.failed
+      exit
+    fi
+  fi
+
+  echo "Checking current version"
+  if [ "$HASSBIAN_RUNTIME_BETA" = true  ]; then
+    newversion=$(hassbian.info.version.homeassistant.github)
+
+  elif [ ! -z "${HASSBIAN_RUNTIME_TARGET_VERSION}" ]; then
+    verify=$(curl -s https://pypi.org/pypi/homeassistant/"$HASSBIAN_RUNTIME_TARGET_VERSION"/json)
+    if [[ "$verify" = *"Not Found"* ]]; then
+      echo "Version $HASSBIAN_RUNTIME_TARGET_VERSION not found..."
+      hassbian.suite.helper.action.failed
+      exit
+    else
+      newversion="$HASSBIAN_RUNTIME_TARGET_VERSION"
+    fi
+
+  else
+    newversion=$(hassbian.info.version.homeassistant.pypi)
+  fi
+
+  # Check if we need an update.
+  if [ "$HASSBIAN_RUNTIME_BETA" = false  ] && [ "$HASSBIAN_RUNTIME_DEV" = false  ]; then
+    if [[ "$newversion" == "$(hassbian.info.version.homeassistant.installed)" ]]; then 
+      echo "You already have version: $newversion"
+      hassbian.suite.helper.action.success
+      exit
+    fi
+  fi
+
+  echo "Setting correct permissions"
+  chown homeassistant:homeassistant -R /srv/homeassistant
+
+  echo "Upgrading Home Assistant"
+  if [ "$HASSBIAN_RUNTIME_DEV" = true  ]; then
+    hassbian.suite.helper.install.pip git+https://github.com/home-assistant/home-assistant@dev
+  elif [ "$HASSBIAN_RUNTIME_BETA" = true  ]; then
+    hassbian.suite.helper.install.pip --pre homeassistant
+  else
+    hassbian.suite.helper.install.pip homeassistant=="$newversion"
+  fi
+
+  if [ "$HASSBIAN_RUNTIME_FORCE" = false  ]; then
+    current_version=$(cat /home/homeassistant/.homeassistant/.HA_VERSION)
+    config_check=$(sudo -u homeassistant -H /bin/bash << EOF
+    source $HOME_ASSISTANT_VENV/bin/activate
+    hass --script check_config -c /home/homeassistant/.homeassistant/
+EOF
+    )
+    config_check_lines=$(echo "$config_check" | wc -l)
+    if (( config_check_lines > 2 ));then
+      if [ "$HASSBIAN_RUNTIME_ACCEPT" = false ]; then
+        echo "$config_check"
+        hassbian.input.info "$config_check"
+        infomsg="Config check failed for new version, do you want to revert?"
+        response=$(hassbian.input.bool "$infomsg")
+        if [ "$response" == "0" ]; then
+          hassbian.suite.helper.install.pip homeassistant=="$current_version"
+        fi
+      fi
+    fi
+  fi
+
+  echo "Restarting Home Assistant"
+  systemctl restart home-assistant@homeassistant.service
+
+  echo "Checking the installation..."
+  validation=$(hassbian.suite.verify.service home-assistant@homeassistant.service)
+  if [ "$validation" == "0" ]; then
+    hassbian.suite.helper.action.success
+    echo "Note that it may take some time to start up after an upgrade."
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

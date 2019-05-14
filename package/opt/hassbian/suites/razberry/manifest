@@ -1,0 +1,9 @@
+{
+  "name": "RaZberry",
+  "author": "Landrash, based from http://razberry.z-wave.me/install",
+  "short_description": "Disables Bluetooth for the use of a RaZberry with Hassbian.",
+  "long_description": "This will disable the use of Bluetooth and BLE devices.\\n\\nOriginal script from http://razberry.z-wave.me/install",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

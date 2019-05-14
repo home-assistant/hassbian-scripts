@@ -1,0 +1,44 @@
+#!/bin/bash
+# 
+# Installation script for Hassbian suite: DuckDNS
+#
+
+function install {
+  local FAIL2BANFILTER
+  local FAIL2BANJAIL
+
+  hassbian.suite.helper.install.apt fail2ban
+
+  FAIL2BANFILTER="/etc/fail2ban/filter.d/ha.conf"
+  FAIL2BANJAIL="/etc/fail2ban/jail.d/ha.conf"
+
+  echo "Creating configuration files..."
+  if [ -f $FAIL2BANFILTER ] ; then
+      echo "Configuration file exists. Skipping..."
+  else
+    cat "$HASSBIAN_SUITE_DIR/fail2ban/files/filter" > "$FAIL2BANFILTER"
+  fi
+
+  if [ -f $FAIL2BANJAIL ] ; then
+      echo "Configuration file exists. Skipping.."
+  else
+    cat "$HASSBIAN_SUITE_DIR/fail2ban/files/jail" > "$FAIL2BANJAIL"
+  fi
+
+  echo "Restarting fail2ban service"
+  systemctl restart fail2ban
+
+  echo "Checking the installation..."
+  validation=$(command -v fail2ban-client)
+  if [ ! -z "${validation}" ]; then
+    hassbian.suite.helper.action.success
+    echo "To continue have a look at https://www.home-assistant.io/cookbook/fail2ban/"
+    echo
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

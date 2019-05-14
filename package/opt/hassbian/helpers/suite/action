@@ -1,0 +1,108 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+
+# shellcheck disable=SC1090,SC2034
+
+declare suitename
+declare suitestate
+declare suiteaction
+declare -i returnvalue
+
+function hassbian.suite.action {
+  suiteaction="$1"
+  suitename="$2"
+
+  # Split suitename if needed.
+  if [[ "$suitename" = *"="* ]]; then
+    suitename=$(echo "$suitename" | awk -F'=' '{print $1}')
+    HASSBIAN_RUNTIME_TARGET_VERSION=$(echo "$suitename" | awk -F'=' '{print $2}')
+  fi
+
+  # Root check.
+  hassbian.info.general.rootcheck
+
+  # Verify that the suite exist.
+  hassbian.suite.helper.exist "$suitename"
+
+  # Show info
+  if [ "$suiteaction" == "show" ]; then
+    hassbian.suite.info.print "$suitename"
+    exit
+  fi
+
+  # Do checks to see if the suite can be run.
+  hassbian.suite.helper.blockcheck "$suitename"
+  hassbian.suite.helper.pizerocheck "$suitename"
+
+  # Run the suite action.
+  if [[ "$suiteaction" =~ ^(install|upgrade|remove)$ ]]; then
+    # Generate systeminfo
+    hassbian.info.general.systeminfo
+
+    # Echo metadata
+    hassbian.suite.info.print "$suitename"
+
+    # check if suiteaction is 'installed' and that the suite is not allready installed.
+    if [ "$suiteaction" == "install" ]; then
+      installed=$(hassbian.suite.info.installed "$suitename")
+      if [ "$installed" == "true" ]  && [ "$HASSBIAN_RUNTIME_FORCE" = false ]; then
+        echo "Suite $suitename, is allready installed."
+        echo "You can force a reinstallation by running:"
+        echo "sudo hassbian-config install $suitename --force"
+
+        # Check if upgrade is available.
+        if [ -f "$HASSBIAN_SUITE_DIR/$suitename/upgrade" ]; then
+          printf "\\n\\n"
+          echo "Or run the upgrdade script by running:"
+          echo "sudo hassbian-config upgrade $suitename"
+        fi
+        return 0
+      fi
+    fi
+
+    # Run the suite action.
+    hassbian.suite.action.execute "$suiteaction" "$suitename" 2>&1 | tee "$HASSBIAN_LOG_FILE"
+  else
+    echo "$suiteaction is not a valid suite action."
+    return 1
+  fi
+}
+
+function hassbian.suite.action.execute {
+  # We need this extra function to keep logging and be able to use the return value.
+  suiteaction="$1"
+  suitename="$2"
+  returnvalue=0
+
+  # Activate debug
+  if [ "$HASSBIAN_RUNTIME_DEBUG" = true ]; then set -x; fi
+
+  if [ -f "$HASSBIAN_SUITE_DIR/$suitename/$suiteaction" ]; then
+    source "$HASSBIAN_SUITE_DIR/$suitename/$suiteaction"
+    "$suiteaction"
+    returnvalue="$?"
+  else
+    echo "$suiteaction script does not exist for this suite."
+    hassbian.suite.helper.action.success
+  fi
+
+  # Post action
+  if [ "$returnvalue" == "0" ]; then
+    suitestate="installed"
+  else
+    echo "$ECHO_ACTION_ERROR"
+    suitestate="failed"
+  fi
+
+  if [ "$suiteaction" == "remove" ]; then 
+    rm "$HASSBIAN_CONTROL_DIR/$suitename"
+  else
+    echo "SCRIPTSTATE=$suitestate" > "$HASSBIAN_CONTROL_DIR/$suitename"
+  fi
+
+  # Deactivate debug
+  if [ "$HASSBIAN_RUNTIME_DEBUG" = true ]; then set +x; fi
+
+  return "$returnvalue"
+}
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"s

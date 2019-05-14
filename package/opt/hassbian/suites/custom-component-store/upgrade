@@ -1,0 +1,23 @@
+#!/bin/bash
+# 
+# Upgrade script for Hassbian suite: Custom component store
+#
+
+function upgrade {
+  echo "Upgrading Custom component store"
+  hassbian.suite.helper.install.pip componentstore
+
+  echo "Restarting Custom component store"
+  systemctl restart custom-component-store@homeassistant.service
+
+  validation=$(hassbian.suite.verify.service custom-component-store@homeassistant.service)
+  if [ "$validation" == "0" ]; then
+    hassbian.suite.helper.action.success
+  else
+    hassbian.suite.helper.action.failed
+    return 1
+  fi
+  return 0
+}
+
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

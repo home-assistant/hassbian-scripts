@@ -1,0 +1,38 @@
+#!bin/bash
+#  Helper script for hassbian-config.
+
+declare message
+
+function hassbian.input.bool {
+  # Present a pretty GUI for your question.
+  # Usage example:
+  # hassbian.input.bool "Do you want to generate SSL certificates?"
+
+  message="$1"
+
+  whiptail --title "hassbian-config" --yesno "$message" 0 0 3>&1 1>&2 2>&3
+  printf "%s" "$?"
+}
+
+function hassbian.input.info {
+  # Present a pretty GUI for your info.
+  # Usage example:
+  # hassbian.input.info "Please take the time to setup your account"
+
+  message="$1"
+
+  whiptail --title "hassbian-config" --msgbox "$message" 0 0 3>&1 1>&2 2>&3
+}
+
+function hassbian.input.text {
+  # Present a pretty GUI for your question.
+  # Usage example:
+  # hassbian.input.text "Define a username:"
+  local result
+
+  message="$1"
+  whiptail --title "hassbian-config" --inputbox "$message" 0 0 3>&1 1>&2 2>&3
+  result=$?
+  printf "%s" "${result::-1}"
+}
+[[ "$_" == "$0" ]] && echo "$ECHO_HELPER_WARNING"

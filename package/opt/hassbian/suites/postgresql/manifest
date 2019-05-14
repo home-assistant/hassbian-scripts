@@ -1,0 +1,9 @@
+{
+  "name": "PostgreSQL",
+  "author": "Landrash <https://github.com/Landrash>",
+  "short_description": "PostgreSQL install script for Hassbian.",
+  "long_description": "Installs the PostgreSQL database engine and dependencies for use with the recorder component in Home Assistant.",
+  "blocked": false,
+  "blocked_releasename": "",
+  "blocked_messages": ""
+}

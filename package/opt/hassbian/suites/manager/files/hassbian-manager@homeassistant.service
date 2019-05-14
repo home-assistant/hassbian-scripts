@@ -1,0 +1,16 @@
+#
+# Service file for systems with systemd to run Hassbian manager as the homeassistant user.
+#
+
+[Unit]
+Description=Hassbian manager for %i
+After=network.target
+
+[Service]
+Type=simple
+User=%i
+ExecStart=/srv/homeassistant/bin/pyhassbian --username %%USERNAME%% --password %%PASSWORD%%
+SendSIGKILL=no
+
+[Install]
+WantedBy=multi-user.target
