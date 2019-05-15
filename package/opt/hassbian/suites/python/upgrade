@@ -81,7 +81,7 @@ function upgrade {
   systemctl start home-assistant@homeassistant.service
 
   echo "Checking the installation..."
-  validation=$(hassbian.info.version.homeassistant.installed)
+  validation=$(hassbian.info.version.homeassistant.python)
 
   if [ "$validation" == "$remotepyversion" ]; then
     hassbian.suite.helper.action.success
