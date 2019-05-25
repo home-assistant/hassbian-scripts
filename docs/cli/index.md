@@ -2,10 +2,10 @@ _Scripts used in the Hassbian image._
 
 ***
 
-[HOME](/) | [SUITES](/suites) | [**HASSBIAN-CONFIG (CLI)**](/cli) | [CONTRIBUTE](/contribute)
+[HOME](/hassbian-scripts/) | [SUITES](/hassbian-scripts/suites) | [**HASSBIAN-CONFIG (CLI)**](/hassbian-scripts/cli) | [CONTRIBUTE](/hassbian-scripts/contribute)
 
 ***
 
-[CLI()](/cli/cli) | [HELPER FUNCTIONS](/cli/helpers)
+[CLI](/hassbian-scripts/cli/cli) | [HELPER FUNCTIONS](/hassbian-scripts/cli/helpers)
 
 ***
