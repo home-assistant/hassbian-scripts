@@ -2,11 +2,11 @@ _Scripts used in the Hassbian image._
 
 ***
 
-[HOME](/) | [SUITES](/suites) | [HASSBIAN-CONFIG (CLI)](/cli) | [**CONTRIBUTE**](/contribute)
+[HOME](/hassbian-scripts/) | [SUITES](/hassbian-scripts/suites) | [HASSBIAN-CONFIG (CLI)](/hassbian-scripts/cli) | [**CONTRIBUTE**](/hassbian-scripts/contribute)
 
 ***
 
-[**SUITES**](/contribute/suites) | [FUNCTIONS](/contribute/functions) | [DOCUMENTATION](/contribute/documentation)
+[**SUITES**](/hassbian-scripts/contribute/suites) | [FUNCTIONS](/hassbian-scripts/contribute/functions)
 
 ***
 
@@ -22,10 +22,10 @@ When creating a new suite it is a good idea to reuse the template suite.
 
 ## Table of content
 
-- [Directory structure](#directory_structure)
+- [Directory structure](#directory-structure)
 - [Manifest](#manifest)
 - [Validation](#validation)
-- [User inputs](#user_inputs)
+- [User inputs](#user-inputs)
 
 # Directory structure
 

@@ -2,7 +2,7 @@ _Scripts used in the Hassbian image._
 
 ***
 
-[HOME](/) | [**SUITES**](/suites) | [HASSBIAN-CONFIG (CLI)](/cli) | [CONTRIBUTE](/contribute)
+[HOME](/hassbian-scripts/) | [**SUITES**](/hassbian-scripts/suites) | [HASSBIAN-CONFIG (CLI)](/hassbian-scripts/cli) | [CONTRIBUTE](/hassbian-scripts/contribute)
 
 ***
 
@@ -14,24 +14,24 @@ and the included Home Assistant instance.
 
 <!--- When adding stuff here, please keep it alphabetical --->
 
-- [AppDaemon](/suites/appdaemon)
-- [Cloud9](/suites/cloud9)
-- [custom-component-store](/suites/custom-component-store)
-- [Duck DNS](/suites/duckdns)
-- [Fail2ban](/suites/fail2ban)
-- [Hassbian](/suites/hassbian)
-- [Home Assistant](/suites/homeassistant)
-- [HUE](/suites/hue)
-- [LibCEC](/suites/libcec)
-- [Manager](/suites/manager)
-- [MariaDB](/suites/mariadb)
-- [Monitor](/suites/monitor)
-- [Mosquitto](/suites/mosquitto)
-- [Pi-hole](/suites/pihole)
-- [PostgreSQL](/suites/postgresql)
-- [MS SQL](/suites/mssql)
-- [RaZberry](/suites/razberry)
-- [Samba](/suites/samba)
-- [Trådfri](/suites/tradfri)
-- [Webterminal](/suites/webterminal)
-- [Zigbee2mqtt](/suites/zigbee2mqtt)
+- [AppDaemon](/hassbian-scripts/suites/appdaemon)
+- [Cloud9](/hassbian-scripts/suites/cloud9)
+- [custom-component-store](/hassbian-scripts/suites/custom-component-store)
+- [Duck DNS](/hassbian-scripts/suites/duckdns)
+- [Fail2ban](/hassbian-scripts/suites/fail2ban)
+- [Hassbian](/hassbian-scripts/suites/hassbian)
+- [Home Assistant](/hassbian-scripts/suites/homeassistant)
+- [HUE](/hassbian-scripts/suites/hue)
+- [LibCEC](/hassbian-scripts/suites/libcec)
+- [Manager](/hassbian-scripts/suites/manager)
+- [MariaDB](/hassbian-scripts/suites/mariadb)
+- [Monitor](/hassbian-scripts/suites/monitor)
+- [Mosquitto](/hassbian-scripts/suites/mosquitto)
+- [Pi-hole](/hassbian-scripts/suites/pihole)
+- [PostgreSQL](/hassbian-scripts/suites/postgresql)
+- [MS SQL](/hassbian-scripts/suites/mssql)
+- [RaZberry](/hassbian-scripts/suites/razberry)
+- [Samba](/hassbian-scripts/suites/samba)
+- [Trådfri](/hassbian-scripts/suites/tradfri)
+- [Webterminal](/hassbian-scripts/suites/webterminal)
+- [Zigbee2mqtt](/hassbian-scripts/suites/zigbee2mqtt)
