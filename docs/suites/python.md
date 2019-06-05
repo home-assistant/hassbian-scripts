@@ -6,7 +6,7 @@ _Scripts used in the Hassbian image._
 
 ***
 
-# Pyhton
+# Python
 
 This script will upgrade Python and Home Assistant to the latest stable version.\
 It will also create a new virtual environment to be used for Home Assistant.\
