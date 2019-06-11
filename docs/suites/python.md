@@ -2,11 +2,11 @@ _Scripts used in the Hassbian image._
 
 ***
 
-[HOME](/) | [**SUITES**](/suites) | [HASSBIAN-CONFIG (CLI)](/cli) | [CONTRIBUTE](/contribute)
+[HOME](/hassbian-scripts/) | [**SUITES**](/hassbian-scripts/suites) | [HASSBIAN-CONFIG (CLI)](/hassbian-scripts/cli) | [CONTRIBUTE](/hassbian-scripts/contribute)
 
 ***
 
-# Pyhton
+# Python
 
 This script will upgrade Python and Home Assistant to the latest stable version.\
 It will also create a new virtual environment to be used for Home Assistant.\
