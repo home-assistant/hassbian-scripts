@@ -3,7 +3,7 @@
   "author": "Ludeeus <https://github.com/ludeeus>",
   "short_description": "Upgrades python3 and virtual environment to the newest stable version.",
   "long_description": "Upgrades python3 and virtual environment to the newest stable version.",
-  "blocked": false,
-  "blocked_releasename": "",
-  "blocked_messages": ""
+  "blocked": true,
+  "blocked_releasename": "ALL",
+  "blocked_messages": "To upgrade python have a look here https://www.home-assistant.io/blog/2019/07/19/piwheels/#option-1"
 }
