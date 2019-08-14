@@ -8,16 +8,14 @@ _Scripts used in the Hassbian image._
 
 # Python
 
-This script will upgrade Python and Home Assistant to the latest stable version.\
+~~This script will upgrade Python and Home Assistant to the latest stable version.\
 It will also create a new virtual environment to be used for Home Assistant.\
 _This upgrade takes long time to finish, on an Raspberry Pi 3
-this takes about 1 hour._
+this takes about 1 hour._~~
 
-## Upgrade
+To upgrade python have a look here https://www.home-assistant.io/blog/2019/07/19/piwheels/#option-1
 
-```bash
-sudo hassbian-config upgrade python
-```
+
 
 ## Additional info
 

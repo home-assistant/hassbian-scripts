@@ -11,12 +11,9 @@ function install {
   # Needs to be run for SSL Certificates to function
   echo "Checking generation of local certificates "
   c_rehash
-    
-  # Check if migration is needed.
-  if [ "$(hassbian.info.version.osreleasename)" != "buster"  ]; then
-    source "$HASSBIAN_SUITE_DIR/homeassistant/python-migration"
-    python-migration true # 'true' forces the migration to run.
-  fi
+
+  echo "Creating the venv directory"
+  mkdir -p /srv/homeassistant
 
   echo "Setting correct permissions"
   chown homeassistant:homeassistant -R "$HOME_ASSISTANT_VENV"
