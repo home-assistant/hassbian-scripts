@@ -19,6 +19,11 @@ sudo hassbian-config install pihole
 
 Upgrades are handled by the Pi-hole software
 
+## Notice
+
+Due to an ongoing upstream issue, PiHole is currently unavailable in Debian Buster based systems.
+See: https://github.com/home-assistant/hassbian-scripts/issues/286
+
 ## Additional info
 
 Description | Command/value
