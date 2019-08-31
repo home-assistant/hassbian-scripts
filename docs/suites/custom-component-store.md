@@ -29,7 +29,7 @@ sudo hassbian-config upgrade custom-component-store
 ## Remove to beta channel
 
 ```bash
-sudo hassbian-config remoev custom-component-store
+sudo hassbian-config remove custom-component-store
 ```
 
 ## Additional info
